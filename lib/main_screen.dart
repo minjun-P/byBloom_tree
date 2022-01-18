@@ -1,4 +1,5 @@
 import 'package:bybloom_tree/main_controller.dart';
+import 'package:bybloom_tree/pages/other_tree_page.dart';
 import 'package:bybloom_tree/CustomIcon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,14 @@ class MainScreen extends GetView<MainController> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(360, 690),
+        context: context,
+        minTextAdapt: true,
+        orientation: Orientation.portrait);
     return Obx(()=>Scaffold(
       body: IndexedStack(
         index: controller.navigationBarIndex.value,
@@ -37,6 +46,15 @@ class MainScreen extends GetView<MainController> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
       ),
-    ));
+      floatingActionButton: controller.navigationBarIndex==0
+        ?FloatingActionButton(
+          onPressed: (){
+            Get.to(()=>OtherTreePage());
+          },
+        backgroundColor: Colors.lightGreenAccent,
+          )
+          :null,
+    )
+    );
   }
 }
