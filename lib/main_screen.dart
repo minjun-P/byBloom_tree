@@ -33,15 +33,15 @@ class MainScreen extends GetView<MainController> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree ,color:Colors.lightGreen,), label: '',backgroundColor:Colors.lightGreen, ),
+          BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree ), label: '',backgroundColor:Colors.lightGreen, ),
           BottomNavigationBarItem(
-              icon: Icon(MyFlutterApp.event_note, color:Colors.lightGreen), label: '', backgroundColor:Colors.lightGreen ),
+              icon: Icon(MyFlutterApp.event_note), label: '', backgroundColor:Colors.lightGreen ),
         ],
         onTap: (index) {
           controller.changeNavigationBarIndex(index);
         },
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.lightGreen,
+        unselectedItemColor: Colors.green[100],
         currentIndex: controller.navigationBarIndex.value,
         showSelectedLabels: false,
         showUnselectedLabels: false,
