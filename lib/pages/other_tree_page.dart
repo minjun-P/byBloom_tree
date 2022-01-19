@@ -5,6 +5,23 @@ class OtherTreePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('OtherTree'));
+    return Material(
+      child: PageView.builder(
+        itemCount: 4,
+        itemBuilder: (BuildContext context, int index){
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/tree${index+1}.gif'),
+                SizedBox(height: 10,),
+                Text('${index+1}번 나무')
+              ],
+            )
+          );
+        },
+
+      ),
+    );
   }
 }
