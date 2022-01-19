@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
               backgroundColor: Color(0xFFf1f8f7),
               elevation: 0,
               titleTextStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-              titleSpacing: 40.w,
-              toolbarHeight: 60.h,
+              titleSpacing: 40,
+              toolbarHeight: 60,
               iconTheme: IconThemeData(
                   color: Colors.grey
               )
