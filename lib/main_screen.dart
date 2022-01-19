@@ -1,12 +1,10 @@
 import 'package:bybloom_tree/main_controller.dart';
-import 'package:bybloom_tree/CustomIcon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'pages/mission_page.dart';
 import 'pages/tree_page.dart';
-import 'CustomIcon.dart';
 import 'my_flutter_app_icons.dart';
 
 class MainScreen extends GetView<MainController> {
