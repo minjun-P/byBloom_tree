@@ -1,5 +1,6 @@
 import 'package:bybloom_tree/main_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +13,15 @@ class MainScreen extends GetView<MainController> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+      BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width,
+        maxHeight: MediaQuery.of(context).size.height),
+      designSize: Size(360,690),
+      context: context,
+      minTextAdapt: true,
+      orientation: Orientation.portrait);
+
     return Obx(()=>Scaffold(
       body: IndexedStack(
         index: controller.navigationBarIndex.value,
