@@ -8,14 +8,41 @@ class MissionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:Text('미션!'),
+        title:Text('미션!',textAlign:TextAlign.left,),
       ),
-      body: Container(
+      body: Column(
+      children:<Widget>[
+      Container( height: 350.h,
         padding: EdgeInsets.symmetric(horizontal: 0.05.sw),
-        child: ListView(
+        child:Column(
+          children: <Widget>[
+            Text('오늘의 미션',textAlign: TextAlign.left),
+             Container(
+               height: 300.h,
+               child:
+             ListView(
           children: List.generate(6, (index) => _buildMissionContainer(index))
+        )
+             )
+        ]
         ),
       ),
+     Container(
+       child: Column(
+         children: <Widget>[
+           Text('나의기록'),
+           Container(
+             child: Text('달력페이지'),
+             color: Colors.lime,
+             height: 150.h,
+             width: 350.w,
+           )
+         ],
+       )
+
+     )
+      ]
+    )
     );
   }
 
