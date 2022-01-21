@@ -7,20 +7,31 @@ class TreePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 1.sw,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/tree_background2.png'),
+            fit: BoxFit.fill
+          )
+        ),
+      alignment: Alignment(0,0.7),
+      child: Stack(
         children: [
-          Image.asset(
-            'assets/tree3.gif',
-            height: 300,
-            fit: BoxFit.cover,
+          ShaderMask(
+            shaderCallback: (Rect bound){
+              return LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.white,Colors.transparent],
+                stops: [0.5,0.75]
+              ).createShader(bound);
+            },
+              blendMode: BlendMode.dstIn,
+              child: Image.asset('assets/tree_main.png',width: 500,fit: BoxFit.fitWidth,)
           ),
-          SizedBox(height: 10,),
-          Text('나의 나무',)
-        ],
-      ),
+
+        ]),
     );
 
   }

@@ -49,7 +49,7 @@ class MissionPage extends StatelessWidget {
   Widget _buildMissionContainer(int index) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      width: 0.8.sw,
+      width: 300,
       height: 100,
       decoration: BoxDecoration(
         color: Colors.lightGreenAccent,
