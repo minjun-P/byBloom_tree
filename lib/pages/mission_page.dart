@@ -11,7 +11,7 @@ class MissionPage extends StatelessWidget {
         title:Text('미션!'),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 0.05.sw),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
           children: List.generate(6, (index) => _buildMissionContainer(index))
         ),
@@ -22,7 +22,7 @@ class MissionPage extends StatelessWidget {
   Widget _buildMissionContainer(int index) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      width: 0.8.sw,
+      width: 300,
       height: 100,
       decoration: BoxDecoration(
         color: Colors.lightGreenAccent,
