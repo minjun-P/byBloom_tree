@@ -24,6 +24,7 @@ class MainScreen extends GetView<MainController> {
       orientation: Orientation.portrait);
 
     return Obx(()=>Scaffold(
+      extendBody: true,
       body: IndexedStack(
         index: controller.navigationBarIndex.value,
         children: [
@@ -32,21 +33,30 @@ class MainScreen extends GetView<MainController> {
           ForestPage()
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree ,color:Colors.lightGreen,), label: '',backgroundColor:Colors.lightGreen, ),
-          BottomNavigationBarItem(
-              icon: Icon(MyFlutterApp.event_note, color:Colors.lightGreen), label: '', backgroundColor:Colors.lightGreen ),
-          BottomNavigationBarItem(icon: Icon(Icons.message, color:Colors.lightGreen),label: '', backgroundColor:Colors.lightGreen )
-        ],
-        onTap: (index) {
-          controller.changeNavigationBarIndex(index);
-        },
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        currentIndex: controller.navigationBarIndex.value,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+      bottomNavigationBar: ClipRRect(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
+        child: SizedBox(
+          height: 100,
+          child: BottomNavigationBar(
+
+            backgroundColor: Colors.grey,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree), label: '',backgroundColor:Colors.lightGreen, ),
+              BottomNavigationBarItem(
+                  icon: Icon(MyFlutterApp.event_note), label: '', backgroundColor:Colors.lightGreen ),
+              BottomNavigationBarItem(icon: Icon(Icons.message),label: '', backgroundColor:Colors.lightGreen )
+            ],
+            onTap: (index) {
+              controller.changeNavigationBarIndex(index);
+            },
+            selectedItemColor: Colors.black87,
+            unselectedItemColor: Colors.white,
+            currentIndex: controller.navigationBarIndex.value,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            iconSize: 35,
+          ),
+        ),
       ),
     ));
   }
