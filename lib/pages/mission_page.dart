@@ -16,7 +16,7 @@ class MissionPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 0.05.sw),
         child:Column(
           children: <Widget>[
-            Text('오늘의 미션',textAlign: TextAlign.left,),
+            Text('오늘의 미션',textAlign: TextAlign.left),
              Container(
                height: 300.h,
                child:
