@@ -1,4 +1,5 @@
 import 'package:bybloom_tree/main_controller.dart';
+import 'package:bybloom_tree/pages/Forest_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +28,8 @@ class MainScreen extends GetView<MainController> {
         index: controller.navigationBarIndex.value,
         children: [
           TreePage(),
-          MissionPage()
+          MissionPage(),
+          ForestPage()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -35,6 +37,7 @@ class MainScreen extends GetView<MainController> {
           BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree ,color:Colors.lightGreen,), label: '',backgroundColor:Colors.lightGreen, ),
           BottomNavigationBarItem(
               icon: Icon(MyFlutterApp.event_note, color:Colors.lightGreen), label: '', backgroundColor:Colors.lightGreen ),
+          BottomNavigationBarItem(icon: Icon(Icons.message, color:Colors.lightGreen),label: '', backgroundColor:Colors.lightGreen )
         ],
         onTap: (index) {
           controller.changeNavigationBarIndex(index);
