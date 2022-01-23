@@ -18,7 +18,7 @@ class MainScreen extends GetView<MainController> {
       BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width,
         maxHeight: MediaQuery.of(context).size.height),
-      designSize: Size(360,600),
+      designSize: Size(360,690),
       context: context,
       minTextAdapt: true,
       orientation: Orientation.portrait);
