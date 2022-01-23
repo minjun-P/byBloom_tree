@@ -6,6 +6,7 @@ import 'main_controller.dart';
 import 'main_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -17,13 +18,20 @@ class MyApp extends StatelessWidget {
     // ScreenUtilInit => 반응형 사이즈 위한 위젯. 최상위 위젯으로 만들어준다
     return ScreenUtilInit(
       designSize: Size(410,680),
+      minTextAdapt: true,
+      splitScreenMode: true,
       builder: () => GetMaterialApp(
         title: 'byBloom_tree',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         initialBinding: BindingsBuilder.put(()=>MainController()),
-        home: MainScreen(),
+        builder: (context, widget) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: MainScreen(),
+          );
+        },
       ),
     );
   }
