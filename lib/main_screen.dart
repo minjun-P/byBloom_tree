@@ -37,7 +37,10 @@ class MainScreen extends GetView<MainController> {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
         child: SizedBox(
           height: 80,
-          child: BottomNavigationBar(
+          child: Expanded(
+            flex:1,
+            child:
+          BottomNavigationBar(
 
             backgroundColor: Colors.grey,
             items: const [
@@ -56,6 +59,7 @@ class MainScreen extends GetView<MainController> {
             showUnselectedLabels: false,
             iconSize: 35,
           ),
+          )
         ),
       ),
     ));

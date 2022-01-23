@@ -3,10 +3,15 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'auth/login_page.dart';
 import 'main_controller.dart';
 import 'main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+
+
+FirebaseAuth auth = FirebaseAuth.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +26,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+        getPages: [
+          GetPage(name: '/main', page:()=> MainScreen()),
+          GetPage(name: '/login', page:()=> loginScreen())
+        ],
         title: 'byBloom MVP',
         initialBinding: BindingsBuilder.put(() => MainController()),
+        initialRoute: auth.currentUser!=null ? '/main':'/login',
         home: MainScreen(),
         theme: ThemeData(
           appBarTheme: AppBarTheme(
