@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import 'pages/mission_page.dart';
+import 'pages/mission_page/mission_page.dart';
 import 'pages/tree_page.dart';
 import 'my_flutter_app_icons.dart';
 
@@ -36,7 +36,7 @@ class MainScreen extends GetView<MainController> {
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
         child: SizedBox(
-          height: 100,
+          height: 80,
           child: BottomNavigationBar(
 
             backgroundColor: Colors.grey,
