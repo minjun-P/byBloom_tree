@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
         title: 'byBloom MVP',
         initialBinding: BindingsBuilder.put(() => MainController()),
         home: MainScreen(),
-
         theme: ThemeData(
           appBarTheme: AppBarTheme(
               backgroundColor: Color(0xFFf1f8f7),

@@ -32,6 +32,7 @@ class MissionPage extends GetView<MissionController> {
           Text('나의 기록',style: context.textTheme.headline1,),
           SizedBox(height: 10,),
           Calendar(),
+          SizedBox(height: 10,),
           Calendar2()
 
         ],
@@ -53,11 +54,11 @@ class MissionPage extends GetView<MissionController> {
         children: [
           Container(
             //명시적으로 text가 차지할 영역 정해주기
-            width: 250,
+            width: Get.width*0.6,
               padding: EdgeInsets.only(left: 40),
               child: Text(controller.missionList[index])
           ),
-          SizedBox(width: 40,),
+          SizedBox(width: Get.width*0.1),
           _buildMissitonCompleteBox(index),
           SizedBox(width: Get.width*0.1,)
 

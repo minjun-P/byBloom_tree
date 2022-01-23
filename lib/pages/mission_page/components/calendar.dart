@@ -22,6 +22,7 @@ class _CalendarState extends State<Calendar> {
         color: Colors.white
       ),
       child: TableCalendar(
+        availableGestures: AvailableGestures.none,
         headerVisible: false,
         daysOfWeekStyle: DaysOfWeekStyle(
 
