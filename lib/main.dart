@@ -1,12 +1,15 @@
+import 'package:bybloom_tree/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'main_controller.dart';
 import 'main_screen.dart';
 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -19,7 +22,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         title: 'byBloom MVP',
         initialBinding: BindingsBuilder.put(() => MainController()),
-        home: MainScreen(),
+        getPages: [  GetPage(name: '/main', page: ()=>MainScreen()),
+                     GetPage(name: '/login', page: ()=>LoginScreen())
+        ],
+        initialRoute: '/main',
 
         theme: ThemeData(
           appBarTheme: AppBarTheme(
