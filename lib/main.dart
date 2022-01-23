@@ -5,34 +5,40 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'main_controller.dart';
 import 'main_screen.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
+
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  initializeDateFormatting().then((_)=>runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // ScreenUtilInit => 반응형 사이즈 위한 위젯. 최상위 위젯으로 만들어준다
-    return ScreenUtilInit(
-      designSize: Size(410,680),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: () => GetMaterialApp(
-        title: 'byBloom_tree',
+    return GetMaterialApp(
+        title: 'byBloom MVP',
+        initialBinding: BindingsBuilder.put(() => MainController()),
+        home: MainScreen(),
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          appBarTheme: AppBarTheme(
+              backgroundColor: Color(0xFFf1f8f7),
+              elevation: 0,
+              titleTextStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+              titleSpacing: 40,
+              toolbarHeight: 60,
+              iconTheme: IconThemeData(
+                  color: Colors.grey
+              )
+          ),
+          textTheme: TextTheme(
+            bodyText2: TextStyle(fontSize: 16),
+            headline1: TextStyle(fontWeight: FontWeight.bold,fontSize: 28,color: Colors.black),
+            headline2: TextStyle(fontWeight: FontWeight.w400,fontSize: 22,color: Colors.grey)
+          )
         ),
-        initialBinding: BindingsBuilder.put(()=>MainController()),
-        builder: (context, widget) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: MainScreen(),
-          );
-        },
-      ),
     );
   }
 }
