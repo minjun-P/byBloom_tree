@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/pages/other_tree_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,7 +16,7 @@ class TreePage extends StatelessWidget {
             fit: BoxFit.fill
           )
         ),
-      alignment: Alignment(0,0.7),
+      alignment: Alignment(0,0.6),
       child: Stack(
         children: [
           ShaderMask(
@@ -33,6 +34,5 @@ class TreePage extends StatelessWidget {
 
         ]),
     );
-
   }
 }

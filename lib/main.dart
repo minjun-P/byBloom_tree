@@ -5,9 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'main_controller.dart';
 import 'main_screen.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  initializeDateFormatting().then((_)=>runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +22,6 @@ class MyApp extends StatelessWidget {
         title: 'byBloom MVP',
         initialBinding: BindingsBuilder.put(() => MainController()),
         home: MainScreen(),
-
         theme: ThemeData(
           appBarTheme: AppBarTheme(
               backgroundColor: Color(0xFFf1f8f7),
@@ -33,7 +34,9 @@ class MyApp extends StatelessWidget {
               )
           ),
           textTheme: TextTheme(
-            bodyText2: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)
+            bodyText2: TextStyle(fontSize: 16),
+            headline1: TextStyle(fontWeight: FontWeight.bold,fontSize: 28,color: Colors.black),
+            headline2: TextStyle(fontWeight: FontWeight.w400,fontSize: 22,color: Colors.grey)
           )
         ),
     );
