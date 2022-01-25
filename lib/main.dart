@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         getPages: [
           GetPage(name: '/main', page:()=> MainScreen()),
-          GetPage(name: '/login', page:()=> loginScreen())
+          GetPage(name: '/login', page:()=> loginScreen()),
+          GetPage(name:'/signup', page:()=>RegisterPage())
         ],
         title: 'byBloom MVP',
         initialBinding: BindingsBuilder.put(() => MainController()),

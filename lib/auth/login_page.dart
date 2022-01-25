@@ -28,7 +28,7 @@ class loginScreen extends StatelessWidget {
                   child: Text('회원가입'),
                   onPressed: () {
                     // 라우팅 - Get으로 변경
-                    Get.toNamed('/register');
+                    Get.toNamed('/signup');
                   },
                 )
               ],
