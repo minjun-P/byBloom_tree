@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-FirebaseDatabase database=FirebaseDatabase(databaseURL: 'https://bybloommvp-default-rtdb.asia-southeast1.firebasedatabase.app/');
-
+FirebaseDatabase database=FirebaseDatabase.instance;
 class authservice {// 로그인관련 서비스총괄하는 클래스
   //유저로그
   static Future<User?> signin( String email, String password ) async {
