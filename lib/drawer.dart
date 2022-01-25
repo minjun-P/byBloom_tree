@@ -6,14 +6,30 @@ class MainDrawer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child:ListView(
-       children: <Widget>[
-         IconButton(onPressed: (){
-           Get.toNamed('/login');
-         }
-         , icon: Icon(Icons.logout))
-       ],
-      )
+        child:ListView(
+          children: <Widget>[
+            IconButton(onPressed: (){
+              Get.toNamed('/login');
+            }
+                , icon: Icon(Icons.logout))
+          ],
+        )
+    );
+  }
+}
+
+class chatDrawer extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+        child:ListView(
+          children: <Widget>[
+            IconButton(onPressed: (){
+              Get.toNamed('/login');
+            }
+                , icon: Icon(Icons.logout))
+          ],
+        )
     );
   }
 }

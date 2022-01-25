@@ -31,9 +31,7 @@ class MissionPage extends GetView<MissionController> {
           SizedBox(height: 15,),
           Text('나의 기록',style: context.textTheme.headline1,),
           SizedBox(height: 10,),
-          Calendar(),
-          SizedBox(height: 10,),
-          Calendar2()
+          Calendar2(),
 
         ],
       ),
