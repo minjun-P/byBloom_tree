@@ -1,6 +1,4 @@
-import 'package:bybloom_tree/pages/mission_page/components/claendar2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'mission_controller.dart';
 import 'components/calendar.dart';
@@ -14,17 +12,18 @@ class MissionPage extends GetView<MissionController> {
     return Container(
       color: Colors.grey[200],
       child: ListView(
-        padding: EdgeInsets.symmetric(horizontal: Get.width*0.05,vertical: 100),
+        padding: EdgeInsets.fromLTRB(Get.width*0.05, 40, Get.width*0.05, 100),
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('오늘의 영성',style: context.textTheme.headline1,),
+              Text('데일리 블룸',style: context.textTheme.headline1,),
               SizedBox(width: 15,),
               Text('12.23',style: context.textTheme.headline2,)
             ],
           ),
           SizedBox(height: 10,),
+          // 당일의 미션 3개 - 컨테이너 - 메소드로 구현해놓음
           _buildMissionContainer(0),
           _buildMissionContainer(1),
           _buildMissionContainer(2),
@@ -32,8 +31,6 @@ class MissionPage extends GetView<MissionController> {
           Text('나의 기록',style: context.textTheme.headline1,),
           SizedBox(height: 10,),
           Calendar(),
-          SizedBox(height: 10,),
-          Calendar2()
 
         ],
       ),

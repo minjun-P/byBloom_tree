@@ -36,7 +36,7 @@ class MainScreen extends GetView<MainController> {
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
         child: SizedBox(
-          height: 80,
+          height: GetPlatform.isIOS?100:80,
           child: BottomNavigationBar(
 
             backgroundColor: Colors.grey,
