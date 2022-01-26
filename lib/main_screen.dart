@@ -55,7 +55,6 @@ class MainScreen extends GetView<MainController> {
         child: SizedBox(
           height: GetPlatform.isIOS? 100:80,
           child: BottomNavigationBar(
-
             backgroundColor: Colors.grey,
             items: const [
               BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree), label: '',backgroundColor:Colors.lightGreen, ),
