@@ -1,4 +1,5 @@
 import 'package:bybloom_tree/pages/mission_page/components/calendar_controller.dart';
+import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -109,6 +110,7 @@ class Calendar extends GetView<CalendarController> {
                   /** 날짜 터치시 상호작용 */
                   onDaySelected: (DateTime selectedDay, _){
                     controller.updateSelectedDay(selectedDay);
+                    Get.find<MissionController>().moveScroll();
                     },
                   selectedDayPredicate: (day){
                     return isSameDay(controller.selectedDay.value,day);
@@ -120,48 +122,62 @@ class Calendar extends GetView<CalendarController> {
           SizedBox(height: 8,),
           GetBuilder<CalendarController>(
             builder: (controller) {
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('${controller.selectedDay.value.day}',style: TextStyle(fontSize: 25),),
-                        Text(controller.getWeekDay(),style: TextStyle(fontSize: 20,color: Colors.blueGrey),),
-                        SizedBox(width: 15,),
-                        Text('달성목표 ${controller.eventsCompleteListLength()} |',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-                        SizedBox(width: 5,),
-                        Text('미달성 목표 ${controller.getEventsForDay().length-controller.eventsCompleteListLength()}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),)
-                      ],
-                    ),
-                    SizedBox(height: 10,),
+              return AnimatedSwitcher(
+                // 자연스러운 위젯 전환을 위해 AnimatedSwitcher 위젯 추가!
+                duration: Duration(milliseconds: 200),
+                child: Container(
+                  key: ValueKey<int>(controller.selectedDay.value.day),
+                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              width:35,
+                              height: 30,
+                              child: Text('${controller.selectedDay.value.day}',style: TextStyle(fontSize: 25),)
+                          ),
+                          SizedBox(
+                              width: 40,
+                              height: 20,
+                              child: Text(controller.getWeekDay(), style: TextStyle(fontSize: 18,color: Colors.blueGrey),)
+                          ),
+                          SizedBox(width: 15,),
+                          Text('달성목표 ${controller.eventsCompleteListLength()} |',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                          SizedBox(width: 5,),
+                          Text('미달성 목표 ${controller.getEventsForDay().length-controller.eventsCompleteListLength()}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),)
+                        ],
+                      ),
+                      SizedBox(height: 10,),
 
-                    Table(
-                      defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
-                      defaultColumnWidth: IntrinsicColumnWidth(),
-                      children: [
-                        TableRow(
-                            children: [
-                              _buildTableCell(0),
-                              _buildTableCell(1),
-                            ]
-                        ),
-                        TableRow(
-                            children: [
-                              _buildTableCell(2),
-                              _buildTableCell(3)
-                            ]
-                        )
-                      ],
-                    )
-                  ],
+                      Table(
+                        defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
+                        defaultColumnWidth: IntrinsicColumnWidth(),
+                        children: [
+                          TableRow(
+                              children: [
+                                _buildTableCell(0),
+                                _buildTableCell(1),
+                              ]
+                          ),
+                          TableRow(
+                              children: [
+                                _buildTableCell(2),
+                                _buildTableCell(3)
+                              ]
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              );
+              )
+                ;
             },
           )
         ]);

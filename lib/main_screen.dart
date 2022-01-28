@@ -1,12 +1,14 @@
 import 'package:bybloom_tree/main_controller.dart';
-import 'package:bybloom_tree/pages/Forest_page.dart';
+import 'package:bybloom_tree/pages/forest_page/forest_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'pages/forest_page/forest_page.dart';
 import 'pages/mission_page/mission_page.dart';
-import 'pages/tree_page.dart';
+import 'pages/tree_page/tree_page.dart';
 import 'my_flutter_app_icons.dart';
 
 class MainScreen extends GetView<MainController> {
@@ -44,7 +46,7 @@ class MainScreen extends GetView<MainController> {
               BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree), label: '',backgroundColor:Colors.lightGreen, ),
               BottomNavigationBarItem(
                   icon: Icon(MyFlutterApp.event_note), label: '', backgroundColor:Colors.lightGreen ),
-              BottomNavigationBarItem(icon: Icon(Icons.message),label: '', backgroundColor:Colors.lightGreen )
+              BottomNavigationBarItem(icon: Icon(MdiIcons.forest),label: '', backgroundColor:Colors.lightGreen )
             ],
             onTap: (index) {
               controller.changeNavigationBarIndex(index);

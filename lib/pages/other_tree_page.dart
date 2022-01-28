@@ -13,7 +13,7 @@ class OtherTreePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/tree${index+1}.gif'),
+                Image.asset('assets/tree_page${index+1}.gif'),
                 SizedBox(height: 10,),
                 Text('${index+1}번 나무')
               ],

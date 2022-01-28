@@ -12,6 +12,7 @@ class MissionPage extends GetView<MissionController> {
     return Container(
       color: Colors.grey[200],
       child: ListView(
+        controller: controller.scrollController,
         padding: EdgeInsets.fromLTRB(Get.width*0.05, 40, Get.width*0.05, 100),
         children: [
           Row(

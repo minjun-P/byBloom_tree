@@ -1,3 +1,5 @@
+import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
+import 'package:bybloom_tree/pages/forest_page/forest_detail_page/forest_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +30,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
         getPages: [
           GetPage(name: '/main', page:()=> MainScreen()),
-          GetPage(name: '/login', page:()=> loginScreen())
+          GetPage(name: '/login', page:()=> loginScreen()),
+          GetPage(name: '/forest_detail/:uid', page: () => ForestDetailPage(),binding: BindingsBuilder.put(()=>ForestController()))
         ],
         title: 'byBloom MVP',
         initialBinding: BindingsBuilder.put(() => MainController()),
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
         home: MainScreen(),
         theme: ThemeData(
           appBarTheme: AppBarTheme(
-              backgroundColor: Color(0xFFf1f8f7),
+              backgroundColor: Colors.transparent,
               elevation: 0,
               titleTextStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
               titleSpacing: 40,
