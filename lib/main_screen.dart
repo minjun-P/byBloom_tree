@@ -5,14 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
+import 'drawer.dart';
 import 'pages/forest_page/forest_page.dart';
 import 'pages/mission_page/mission_page.dart';
 import 'pages/tree_page/tree_page.dart';
 import 'my_flutter_app_icons.dart';
 
 class MainScreen extends GetView<MainController> {
-  const MainScreen({Key? key}) : super(key: key);
+  final GlobalKey<ScaffoldState> _scaffoldKey= GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,14 @@ class MainScreen extends GetView<MainController> {
       orientation: Orientation.portrait);
 
     return Obx(()=>Scaffold(
+      key: _scaffoldKey,
       extendBody: true,
-      body: IndexedStack(
+      endDrawer:MainDrawer(),
+      body: Stack(
+        children:
+        <Widget>[
+
+          IndexedStack(
         index: controller.navigationBarIndex.value,
         children: [
           TreePage(),
@@ -35,12 +41,21 @@ class MainScreen extends GetView<MainController> {
           ForestPage()
         ],
       ),
+          Positioned(
+              top:40,
+              right: 10,
+              child: IconButton(
+                icon:Icon(Icons.menu),
+                iconSize: 30,
+                onPressed: (){
+                  _scaffoldKey.currentState!.openEndDrawer();
+                },)),]
+      ),
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
         child: SizedBox(
-          height: GetPlatform.isIOS?100:80,
+          height: GetPlatform.isIOS? 100:80,
           child: BottomNavigationBar(
-
             backgroundColor: Colors.grey,
             items: const [
               BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree), label: '',backgroundColor:Colors.lightGreen, ),

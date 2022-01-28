@@ -1,5 +1,9 @@
+
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_detail_page/forest_detail_page.dart';
+
+import 'package:bybloom_tree/auth/signup_page.dart';
+import 'package:bybloom_tree/pages/chatpage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +35,9 @@ class MyApp extends StatelessWidget {
         getPages: [
           GetPage(name: '/main', page:()=> MainScreen()),
           GetPage(name: '/login', page:()=> loginScreen()),
-          GetPage(name: '/forest_detail/:uid', page: () => ForestDetailPage(),binding: BindingsBuilder.put(()=>ForestController()))
+          GetPage(name: '/forest_detail/:uid', page: () => ForestDetailPage(),binding: BindingsBuilder.put(()=>ForestController())),
+          GetPage(name:'/signup', page:()=>RegisterPage()),
+          GetPage(name: '/chat', page:()=> chatpage())
         ],
         title: 'byBloom MVP',
         initialBinding: BindingsBuilder.put(() => MainController()),

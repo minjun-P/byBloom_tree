@@ -32,7 +32,6 @@ class MissionPage extends GetView<MissionController> {
           Text('나의 기록',style: context.textTheme.headline1,),
           SizedBox(height: 10,),
           Calendar(),
-
         ],
       ),
     );
