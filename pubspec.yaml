@@ -42,17 +42,11 @@ dependencies:
   firebase_core: ^1.11.0
   firebase_auth: ^3.3.5
   firebase_database: ^9.0.5
-<<<<<<< HEAD
   material_design_icons_flutter: 5.0.6595
-=======
   cloud_firestore: ^3.1.6
   firebase_storage: ^10.2.5
   shared_preferences: ^2.0.12
   cached_network_image: ^3.2.0
-
-
->>>>>>> 4286135ebf1731ce53b97f55c608fdbadfa70103
-
 
 dev_dependencies:
   flutter_test:
