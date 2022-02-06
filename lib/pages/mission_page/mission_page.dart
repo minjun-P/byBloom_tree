@@ -10,7 +10,7 @@ class MissionPage extends GetView<MissionController> {
   Widget build(BuildContext context) {
     Get.put(MissionController());
     return Container(
-      color: Colors.grey[200],
+      color: Colors.grey.shade100,
       child: ListView(
         controller: controller.scrollController,
         padding: EdgeInsets.fromLTRB(Get.width*0.05, 40, Get.width*0.05, 100),
