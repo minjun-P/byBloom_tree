@@ -32,28 +32,39 @@ class MainScreen extends GetView<MainController> {
             ],
           ),
         ),
-        bottomNavigationBar: ClipRRect(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(15),topLeft: Radius.circular(15)),
-          child: SizedBox(
-            height: 80,
-            child: BottomNavigationBar(
-              backgroundColor: Colors.red,
-              items: const [
-                BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree), label: ''),
-                BottomNavigationBarItem(
-                    icon: Icon(MyFlutterApp.event_note), label: ''),
-                BottomNavigationBarItem(icon: Icon(MdiIcons.forest),label: ''),
-                BottomNavigationBarItem(icon: Icon(MdiIcons.folder),label: '')
-              ],
-              onTap: (index) {
-                controller.changeNavigationBarIndex(index);
-              },
-              selectedItemColor: Colors.black87,
-              unselectedItemColor: Colors.grey[300],
-              currentIndex: controller.navigationBarIndex.value,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              iconSize: 35,
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  blurRadius: 8,
+                spreadRadius: 0
+              )
+            ]
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(topRight: Radius.circular(15),topLeft: Radius.circular(15)),
+            child: Container(
+              height: 80,
+              child: BottomNavigationBar(
+                elevation: 200,
+                items: const [
+                  BottomNavigationBarItem(icon: Icon(MyFlutterApp.tree), label: ''),
+                  BottomNavigationBarItem(
+                      icon: Icon(MyFlutterApp.event_note), label: ''),
+                  BottomNavigationBarItem(icon: Icon(MdiIcons.forest),label: ''),
+                  BottomNavigationBarItem(icon: Icon(MdiIcons.folder),label: '')
+                ],
+                onTap: (index) {
+                  controller.changeNavigationBarIndex(index);
+                },
+                selectedItemColor: Colors.black87,
+                unselectedItemColor: Colors.grey[300],
+                currentIndex: controller.navigationBarIndex.value,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                iconSize: 35,
+              ),
             ),
           ),
         ),

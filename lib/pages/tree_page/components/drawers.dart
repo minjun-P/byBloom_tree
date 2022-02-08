@@ -1,5 +1,7 @@
+import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 Widget buildCustomDrawer({required Widget child, bool left=true}){
   return Drawer(
@@ -62,6 +64,9 @@ class FriendDrawer extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             children: List.generate(10, (index) {
               return ListTile(
+                onTap: (){
+                  Get.to(ProfilePage());
+                },
                 contentPadding: const EdgeInsets.all(10),
                 dense: true,
                 title: Row(
@@ -89,15 +94,42 @@ class NoticeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: const EdgeInsets.all(10),
-        children: List.generate(20, (index) => Container(
-          height: 50,
-          width: double.infinity,
-          color: index.isEven?Colors.grey[500]:Colors.grey[200],
-        )),
-      ),
+    return Column(
+      children: [
+        SizedBox(height: 20,),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            children: List.generate(20, (index) =>
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                  height: 50,
+                  color: Colors.transparent,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(child: Text('+$index'), width: 30,),
+                      const SizedBox(width: 10,),
+                      const Flexible(
+                        flex: 8,
+                        child: Text(
+                            '이상구님이 방문해 물을 주고 가셨습니다.',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                      const SizedBox(width: 10,),
+                      const Flexible(
+                        flex: 1,
+                          child: Text('2/2', style: TextStyle(color: Colors.grey,fontSize: 12),)
+                      )
+                    ],
+                  ),
+            )),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -10,69 +10,77 @@ class ForestPage extends GetView<ForestController> {
   @override
   Widget build(BuildContext context) {
     Get.put(ForestController());
-    return Container(
-      color: Colors.grey[200],
-      child: ListView(
-        padding: EdgeInsets.fromLTRB(Get.width*0.05, 40, Get.width*0.05, 100),
-        children: [
-          Text('숲',style: context.textTheme.headline1,),
-          Wrap(
-            children: List.generate(forests.length, (index) => _buildForestContainer(index))
-          ),
-        ]
-      )
-    );
-  }
-  Widget _buildForestContainer(int index) {
-    return GestureDetector(
-      onTap: (){
-        Get.toNamed('/forest_detail/${index}',arguments: forests[index]);
-      },
-      child: Column(
-        children: [
-          Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('숲',style: TextTheme().headline1,),
+        backgroundColor: Colors.white,
+      ),
+      backgroundColor: Colors.white,
+      body: ListView.builder(
+        padding: EdgeInsets.zero,
+        itemCount: 5,
+        itemBuilder: (context,index){
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 20),
             decoration: BoxDecoration(
-                color: Color.fromRGBO(Random().nextInt(255),Random().nextInt(255), Random().nextInt(255), 0.2),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white,width: 3)
             ),
-            height: 300,
-            width: Get.width*0.4,
-            margin: EdgeInsets.fromLTRB(Get.width*0.025, Get.width*0.05, Get.width*0.025, 5),
-            padding: EdgeInsets.all(8),
-            alignment: Alignment.topCenter,
-            child: Column(
+            height: 120,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 0.2),
+                        Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 0.2)
+                      ]
+                    )
+                  ),
+                ),
+                SizedBox(width: 15,),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Visibility(
-                          visible: forests[index].isStar,
-                          child: Icon(Icons.star,color: Colors.white,size: 25,)),
-                      Visibility(
-                        visible: forests[index].chatCount>0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.redAccent,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 3,horizontal: 6),
-                          child: Text('${forests[index].chatCount}',style: TextStyle(color: Colors.white)),
-                        ),
+                      Text('가족방',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                      Text(
+                          '오늘 집에 몇시에 올겨아야? 나는 좀 늦게 들어올 것 같아. 바쁜 일이 생겼거든',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 14),
                       )
                     ],
                   ),
                 ),
-                SizedBox(height: 50,),
-                Hero(child: Image.asset('assets/tree.png'),tag: index,)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('오후 5:23',style: TextStyle(color: Colors.grey,fontSize: 13),),
+                    SizedBox(height: 5,),
+                    Container(
+                      width: 25,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle
+                      ),
+                      alignment: Alignment.center,
+                      child: Text('10',style: TextStyle(color: Colors.white,fontSize: 14),),
+                    )
+                  ],
+                )
               ],
             ),
-          ),
-          Text('${forests[index].title}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),)
-        ],
+          );
+        },
       ),
     );
   }
+
 }
