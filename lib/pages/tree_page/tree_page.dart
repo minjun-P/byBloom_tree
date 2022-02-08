@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/pages/tree_page/components/tree_status.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +50,13 @@ class TreePage extends GetView<TreeController> {
         endDrawer: buildCustomDrawer(child: NoticeDrawer(),left: false),
 
         // 나무 페이지 화면을 Tree 객체로 통합하여 관리
-          // scale이 무슨 의미인지는 잘 모르겠음.
-        body: Tree(scale: 0.5,)
+          // scale 작동 원리가 뭔지 잘 모르겠음.
+        body: Stack(
+          children: [
+            Tree(scale: 0.5,),
+            Align(alignment: Alignment.bottomCenter,child: TreeStatus())
+          ],
+        )
       )
     );
   }

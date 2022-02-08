@@ -41,9 +41,9 @@ class ProfilePage extends StatelessWidget {
                 height: 300,
                 width: 300,
                 child: FittedBox(
-                  alignment: Alignment.bottomCenter,
-                  fit: BoxFit.fitWidth,
-                    child: Tree(scale: 1,)
+                  alignment: Alignment.center,
+                  fit: BoxFit.none,
+                    child: Tree(scale: 1.2,)
                 ),
               ),
             )

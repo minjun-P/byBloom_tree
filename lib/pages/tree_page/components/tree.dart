@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Tree extends StatelessWidget {
   const Tree({
@@ -10,11 +11,13 @@ class Tree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: Get.width,
+      height: Get.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xffF6F4DD), Colors.yellow, Color(0xffF6F4DD)]
+            colors: [Color(0xffF6F4DD), Color(0xffFFF8A5), Color(0xffF6F4DD),Color(0xffFFF8A5),Color(0xffF6F4DD),]
         ),
       ),
       child: Stack(
