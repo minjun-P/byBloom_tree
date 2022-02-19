@@ -1,12 +1,7 @@
 
-import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
-import 'package:bybloom_tree/pages/forest_page/forest_detail_page/forest_detail_page.dart';
-
 import 'package:bybloom_tree/auth/signup_page.dart';
-import 'package:bybloom_tree/pages/chatpage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'auth/login_page.dart';
@@ -14,6 +9,8 @@ import 'main_controller.dart';
 import 'main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'pages/siginup_page/pages/signup_page1.dart';
 
 
 
@@ -32,23 +29,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+
       // overScroll 시 생기는 파란색 glow를 지워주기 위함. 전역적으로 해당 설정을 적용하는 코드
+      // 맨 아래 정의한 class를 참고하자!
         builder: (context, child){
           return ScrollConfiguration(behavior: MyScrollBehavior(), child: child!);
         },
+        // 페이지 목록 - 여기서 initial binding 즉, 종속성 주입도 같이 해주면 된다.
         getPages: [
-          GetPage(name: '/main', page:()=> MainScreen()),
+          GetPage(name: '/main', page:()=> MainScreen(),binding: BindingsBuilder.put(()=>MainController())),
           GetPage(name: '/login', page:()=> loginScreen()),
-          GetPage(name: '/forest_detail/:uid', page: () => ForestDetailPage(),binding: BindingsBuilder.put(()=>ForestController())),
           GetPage(name:'/signup', page:()=>RegisterPage()),
-          GetPage(name: '/chat', page:()=> chatpage())
+          // 회원 가입 첫 화면
+          GetPage(name:'/first', page: () => const SignupPage1())
         ],
+
         title: 'byBloom MVP',
-        initialBinding: BindingsBuilder.put(() => MainController()),
-        initialRoute: auth.currentUser!=null ? '/main':'/login',
-        home: MainScreen(),
+      /// initialRoute를 설정할 때는 따로 home 파라미터를 설정해 주지 않아도 된다.
+      /// 로그인이 안되어 있으면 회원가입 첫 화면으로 이동하게 해놨음. - 로그인 화면은 여기서 또 이동 버튼 만들어 놓음
+
+        initialRoute: auth.currentUser != null ? '/main' : '/first',
+      // 나중에 디자인이 픽스되면 한번 갈아 엎어야 할 듯.
         theme: ThemeData(
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
               backgroundColor: Colors.transparent,
               elevation: 0,
               titleTextStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
@@ -58,16 +62,18 @@ class MyApp extends StatelessWidget {
                   color: Colors.grey
               )
           ),
-          textTheme: TextTheme(
+          textTheme: const TextTheme(
             bodyText2: TextStyle(fontSize: 16),
             headline1: TextStyle(fontWeight: FontWeight.bold,fontSize: 28,color: Colors.black),
             headline2: TextStyle(fontWeight: FontWeight.w400,fontSize: 22,color: Colors.grey)
-          )
+          ),
         ),
     );
   }
 }
 
+/// ListView에서 overScroll 시 생기는 파란색 glow를 지워주기 위함. 전역적으로 해당 설정을 적용하는 코드.
+/// 굳이 알 필요 없다. 그냥 무시하면 됨.
 class MyScrollBehavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(

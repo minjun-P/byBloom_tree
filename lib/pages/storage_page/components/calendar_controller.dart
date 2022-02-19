@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'calendar_model.dart';
+/// 달력 내부 로직에 필요한 여러 코드를 모아놓음.
 class CalendarController extends GetxController {
 
   // 중요한 변수 두개를 Observalbe 변수로 만든다.

@@ -9,7 +9,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
+        actions: const[
           Icon(Icons.message,color: Colors.black,size: 30,),
           SizedBox(width: 20,)
         ],
@@ -17,16 +17,16 @@ class ProfilePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               backgroundColor: Colors.yellow,
               radius: 50,
             ),
-            SizedBox(height: 10,),
-            Text('박민준',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
+            const Text('박민준',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+            const SizedBox(height: 10,),
             SizedBox(
               width: Get.width*0.8,
-              child: Text(
+              child: const Text(
                 '안녕하세요 시민의교회 이여온입니다! 찬양부와 미디어 팀에서'
                     '봉사하고 있어요.',
                 style: TextStyle(
@@ -34,19 +34,19 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: SizedBox(
-                height: 300,
-                width: 300,
+              child: const SizedBox(
+                height: 250,
+                width: 250,
                 child: FittedBox(
                   alignment: Alignment.center,
-                  fit: BoxFit.none,
-                    child: Tree(scale: 1.2,)
+                  fit: BoxFit.fitWidth,
+                    child: Tree()
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

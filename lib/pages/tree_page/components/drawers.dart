@@ -1,8 +1,8 @@
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+/// drawer는 모두 이 함수를 통해 만드는 것으로 통일 child 인수로 받음.
 Widget buildCustomDrawer({required Widget child, bool left=true}){
   return Drawer(
     backgroundColor: Colors.grey[200],
@@ -19,6 +19,7 @@ Widget buildCustomDrawer({required Widget child, bool left=true}){
   );
 }
 
+/// 좌측 친구 drawer - db 연결 필요
 class FriendDrawer extends StatelessWidget {
   const FriendDrawer({Key? key}) : super(key: key);
 
@@ -65,7 +66,8 @@ class FriendDrawer extends StatelessWidget {
             children: List.generate(10, (index) {
               return ListTile(
                 onTap: (){
-                  Get.to(ProfilePage());
+                  /// db 연결 시, 각 친구에 맞는 프로필 페이지로 이동해야 할 듯.
+                  Get.to(()=>const ProfilePage());
                 },
                 contentPadding: const EdgeInsets.all(10),
                 dense: true,
@@ -89,6 +91,7 @@ class FriendDrawer extends StatelessWidget {
   }
 }
 
+/// 우측 첫번째 알림 drawer - db 연결 필요
 class NoticeDrawer extends StatelessWidget {
   const NoticeDrawer({Key? key}) : super(key: key);
 
@@ -96,7 +99,7 @@ class NoticeDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 20,),
+        const SizedBox(height: 20,),
         Expanded(
           child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -134,12 +137,13 @@ class NoticeDrawer extends StatelessWidget {
   }
 }
 
+/// 우측 2번째 menu drawer
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Drawer();
+    return const Drawer();
   }
 }
 

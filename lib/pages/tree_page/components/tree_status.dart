@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 
 class TreeStatus extends StatelessWidget {
   const TreeStatus({Key? key}) : super(key: key);
@@ -7,23 +7,26 @@ class TreeStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          /// 임시 물 받기 아이콘
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: IconButton(
-              icon: Icon(
+              icon: const Icon(
                   Icons.check_circle_outline,
                 color: Colors.white,
                 size: 60,
               ),
-              onPressed: (){},),
+              onPressed: (){
+              },),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
+          /// 경험치 바, 어떻게 코드 짤지 고민을 좀 더 해보겠음
           Container(
             width: double.infinity,
             height: 30,
@@ -31,7 +34,20 @@ class TreeStatus extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               color: Colors.white
             ),
-          )
+            alignment: Alignment.centerLeft,
+            child: FractionallySizedBox(
+              widthFactor: 0.7,
+              heightFactor: 1,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.green
+                ),
+              ),
+            ),
+          ),
+
         ],
       ),
     );

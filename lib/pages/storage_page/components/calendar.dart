@@ -1,11 +1,11 @@
-import 'package:bybloom_tree/pages/mission_page/components/calendar_controller.dart';
+import 'calendar_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'dart:collection';
 import 'calendar_model.dart';
 
+/// 달력 위젯!!
 class Calendar extends GetView<CalendarController> {
   const Calendar({Key? key}) : super(key: key);
 
@@ -13,9 +13,12 @@ class Calendar extends GetView<CalendarController> {
   Widget build(BuildContext context) {
     Get.put(CalendarController());
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 20,),
+          Text('${DateTime.now().month}월',style: const TextStyle(fontSize: 35,color: Colors.grey,fontWeight: FontWeight.bold),),
+          const SizedBox(height: 20,),
           Container(
-            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20)
@@ -40,12 +43,12 @@ class Calendar extends GetView<CalendarController> {
                       leftChevronVisible: false,
                       rightChevronVisible: false
                   ),
-                  headerVisible: true,
+                  headerVisible: false,
                   /** <상단 요일 영역> */
                   daysOfWeekHeight: 30,
                   daysOfWeekStyle: const DaysOfWeekStyle(
-                      weekdayStyle: TextStyle(fontSize: 17),
-                      weekendStyle: TextStyle(fontSize: 17)
+                      weekdayStyle: TextStyle(fontSize: 19,color: Colors.grey,fontWeight: FontWeight.bold),
+                      weekendStyle: TextStyle(fontSize: 19,color: Colors.grey,fontWeight: FontWeight.bold)
                   ),
 
                   /** <달력 기본 스타일,날짜 영역>-------- start*/
@@ -54,7 +57,7 @@ class Calendar extends GetView<CalendarController> {
                     weekendTextStyle: const TextStyle(color: Colors.grey),
                     outsideDaysVisible: false,
                     // selectedDay 동그라미 영역 크기 정하기
-                    cellMargin: EdgeInsets.all(10),
+                    cellMargin: const EdgeInsets.all(10),
 
                     todayDecoration: BoxDecoration(
                         color: Colors.transparent,
@@ -70,7 +73,7 @@ class Calendar extends GetView<CalendarController> {
                       color: Colors.green.withOpacity(0.5),
                       shape: BoxShape.circle,
                     ),
-                    selectedTextStyle: TextStyle(
+                    selectedTextStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white
                     ),
@@ -83,7 +86,7 @@ class Calendar extends GetView<CalendarController> {
                       defaultBuilder: (context,day,_) {
                         if (controller.eventsCompleteListLength(day)>0) {
                           // event가 존재하고 true인게 있는 날은 초록색으로 날짜 표시하기
-                          return Center(child: Text('${day.day}',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),));
+                          return Center(child: Text('${day.day}',style: const TextStyle(color: Colors.green,fontWeight: FontWeight.bold),));
                         }
                       },
                       // 이벤트 표시 마커를 어떻게 build 할지 커스터마징.
@@ -91,7 +94,7 @@ class Calendar extends GetView<CalendarController> {
                         return Container(
                           width: 5.5,
                           height: 5.5,
-                          margin: EdgeInsets.all(0.5),
+                          margin: const EdgeInsets.all(0.5),
                           decoration: BoxDecoration(
                             // 손쉽게 event 값을 불러들여서 해결
                               color: event.complete?Colors.green:Colors.grey,
@@ -119,17 +122,18 @@ class Calendar extends GetView<CalendarController> {
               }
             )
           ),
-          SizedBox(height: 8,),
+          const SizedBox(height: 8,),
           GetBuilder<CalendarController>(
             builder: (controller) {
               return AnimatedSwitcher(
                 // 자연스러운 위젯 전환을 위해 AnimatedSwitcher 위젯 추가!
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 child: Container(
+                  height: 400,
                   key: ValueKey<int>(controller.selectedDay.value.day),
-                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
+                  padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 30),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20)
                   ),
                   child: Column(
@@ -140,24 +144,19 @@ class Calendar extends GetView<CalendarController> {
                           SizedBox(
                               width:35,
                               height: 30,
-                              child: Text('${controller.selectedDay.value.day}',style: TextStyle(fontSize: 25),)
+                              child: Text('${controller.selectedDay.value.day}',style: const TextStyle(fontSize: 25),)
                           ),
                           SizedBox(
                               width: 40,
                               height: 20,
-                              child: Text(controller.getWeekDay(), style: TextStyle(fontSize: 18,color: Colors.blueGrey),)
+                              child: Text(controller.getWeekDay(), style: const TextStyle(fontSize: 18,color: Colors.blueGrey),)
                           ),
-                          SizedBox(width: 15,),
-                          Text('달성목표 ${controller.eventsCompleteListLength()} |',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-                          SizedBox(width: 5,),
-                          Text('미달성 목표 ${controller.getEventsForDay().length-controller.eventsCompleteListLength()}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),)
                         ],
                       ),
-                      SizedBox(height: 10,),
-
+                      const SizedBox(height: 10,),
                       Table(
                         defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
-                        defaultColumnWidth: IntrinsicColumnWidth(),
+                        defaultColumnWidth: const IntrinsicColumnWidth(),
                         children: [
                           TableRow(
                               children: [
@@ -187,15 +186,15 @@ class Calendar extends GetView<CalendarController> {
     return TableCell(
       child:
       Container(
-          margin: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+          margin: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
           height: 40,
           alignment: Alignment.center,
           child: Builder(
               builder: (context) {
                 if (controller.makeTable(index)==null){
-                  return Text('');
+                  return const Text('');
                 } else {
-                  return Text('${controller.makeTable(index)!.title}', style: TextStyle(color: controller.makeTable(index)!.complete?Colors.green:Colors.grey, fontWeight: FontWeight.bold),);
+                  return Text(controller.makeTable(index)!.title, style: TextStyle(color: controller.makeTable(index)!.complete?Colors.green:Colors.grey, fontWeight: FontWeight.bold),);
                 }
 
               }

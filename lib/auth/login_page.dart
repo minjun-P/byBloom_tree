@@ -19,7 +19,7 @@ class loginScreen extends StatelessWidget {
           children: [
             _loginIconBuilder('로그인하기', 150),
             LoginForm(),
-            ElevatedButton(onPressed: (){Get.toNamed('/main');}, child: Text('로그인 귀찮아')),
+            ElevatedButton(onPressed: (){Get.offAllNamed('/main');}, child: Text('로그인 귀찮아')),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

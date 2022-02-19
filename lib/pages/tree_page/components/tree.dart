@@ -4,9 +4,7 @@ import 'package:get/get.dart';
 class Tree extends StatelessWidget {
   const Tree({
     Key? key,
-    required this.scale
   }) : super(key: key);
-  final double scale;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +27,13 @@ class Tree extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [Colors.white,Colors.transparent],
-                    stops: [0.7,0.9]
+                    stops: [0.7,0.85]
                 ).createShader(bound);
               },
               blendMode: BlendMode.dstIn,
-              child: Image.asset('assets/new1.png',scale: scale,)
+              child: Image.asset('assets/new1.png',width: Get.width,fit: BoxFit.fitWidth,)
           ),
-          Image.asset('assets/new3.png',scale: scale,)
+          Image.asset('assets/new3.png',width: Get.width,fit: BoxFit.fitWidth,)
         ],
       ),
 
