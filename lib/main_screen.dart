@@ -62,9 +62,9 @@ class MainScreen extends GetView<MainController> {
               index: controller.navigationBarIndex.value,
               children: [
                 TreePage(),
-                MissionPage(),
-                ForestPage(),
-                StoragePage()
+                const MissionPage(),
+                const ForestPage(),
+                const StoragePage()
               ],
             ),
           ),

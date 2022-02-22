@@ -1,5 +1,4 @@
 import 'calendar_controller.dart';
-import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -113,7 +112,6 @@ class Calendar extends GetView<CalendarController> {
                   /** 날짜 터치시 상호작용 */
                   onDaySelected: (DateTime selectedDay, _){
                     controller.updateSelectedDay(selectedDay);
-                    Get.find<MissionController>().moveScroll();
                     },
                   selectedDayPredicate: (day){
                     return isSameDay(controller.selectedDay.value,day);
