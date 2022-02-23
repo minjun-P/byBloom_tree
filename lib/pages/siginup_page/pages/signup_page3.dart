@@ -3,12 +3,18 @@ import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../components/signup_gauge.dart';
 import 'signup_page4.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 
 /// 전화번호
+bool phoneauthsucc=false;
 class SignupPage3 extends GetView<SignupController> {
   const SignupPage3({Key? key}) : super(key: key);
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +28,13 @@ class SignupPage3 extends GetView<SignupController> {
           child: Align(
             alignment: Alignment.center,
             child: OutlinedButton(
-              child: const  Text('넘어가기',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
-              onPressed: (){
-                if (controller.page3Key.currentState!.validate()){
-                  Get.to(()=>SignupPage4(),transition: Transition.rightToLeftWithFade);
-                }
 
-              },
+              child: const  Text('넘어가기',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600),),
+              onPressed: phoneauthsucc==true?(){} :null,
               style: OutlinedButton.styleFrom(
-                  primary: Colors.grey,
+                  primary: phoneauthsucc==true?Colors.blue :Colors.grey,
                   padding: EdgeInsets.symmetric(horizontal: 30,vertical: 10),
-                  side: BorderSide(color: Colors.grey,width: 2),
+                  side: BorderSide(width: 2),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)
                   )
@@ -78,6 +80,37 @@ class SignupPage3 extends GetView<SignupController> {
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       )
                     ),
+                    TextButton(
+
+                        onPressed: (){
+
+                          showDialog(context: context, builder: (BuildContext context){
+                            return  AlertDialog(
+                              title: Text('전화번호인증'),
+                              content: PinPut(
+                                eachFieldHeight: 50,
+                                fieldsCount: 6,
+                                submittedFieldDecoration: _pinPutDecoration.copyWith(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                selectedFieldDecoration: _pinPutDecoration,
+                                followingFieldDecoration: _pinPutDecoration.copyWith(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border: Border.all(
+                                    color: Colors.deepPurpleAccent.withOpacity(.5),
+                                  ),
+                                ),
+                              ),
+
+
+                              actions: [
+
+                              ],
+                            );
+                          });
+                        },
+                        child:
+                    Text('인증하기'))
                   ],
                 ),
               ),
@@ -87,4 +120,19 @@ class SignupPage3 extends GetView<SignupController> {
       ),
     );
   }
+  bool? verifyphone(){
+
+    controller.phoneCon.text;
+    return null;
+  }
+
+
+
+  BoxDecoration get _pinPutDecoration {
+    return BoxDecoration(
+      border: Border.all(color: Colors.deepPurpleAccent),
+      borderRadius: BorderRadius.circular(15.0),
+    );
+  }
+
 }

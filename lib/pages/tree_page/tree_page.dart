@@ -1,3 +1,5 @@
+import 'package:bybloom_tree/auth/authservice.dart';
+
 import '../siginup_page/pages/signup_page1.dart';
 import 'package:bybloom_tree/pages/tree_page/components/tree_status.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
@@ -24,7 +26,15 @@ class TreePage extends GetView<TreeController> {
       key: _outsideScaffoldKey,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('bybloom',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),),
+
+        title: InkWell(
+        child: const Text('bybloom',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),),
+        onTap: (){authservice.logout();
+        Get.toNamed('./first');
+
+
+        },
+        ),
         /// 친구 목록 drawer - db 연결 필요 - 하단 Scaffold의 drawer 파라미터 참조
         leading: IconButton(
           key: tutorialKey3,
