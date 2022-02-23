@@ -6,8 +6,8 @@ class Mission2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('2'),
+    return Scaffold(
+
     );
   }
 }
