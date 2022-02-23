@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'pages/mission1.dart';
-import 'pages/mission2.dart';
+import 'pages/mission1/mission1.dart';
+import 'pages/mission2/mission2.dart';
 import 'pages/mission3.dart';
 
 

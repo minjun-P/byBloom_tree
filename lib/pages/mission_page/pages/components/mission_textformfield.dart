@@ -1,4 +1,4 @@
-import 'package:bybloom_tree/pages/mission_page/pages/mission1_controller.dart';
+import 'package:bybloom_tree/pages/mission_page/pages/mission1/mission1_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -76,17 +76,6 @@ class MissionTextForm extends GetView<Mission1Controller> {
             ),
           ),
         ),
-
-
-        Align(
-          alignment: Alignment.bottomRight,
-          child: TextButton(
-            onPressed: (){
-              Get.find<Mission1Controller>().updateSubmitted();
-            },
-            child: Text('제출'),
-          ),
-        )
       ],
     );
   }
