@@ -9,12 +9,13 @@ import 'main_controller.dart';
 import 'main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'pages/siginup_page/pages/signup_page1.dart';
 
 
 
 FirebaseAuth auth = FirebaseAuth.instance;
+FirebaseMessaging messaging = FirebaseMessaging.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
