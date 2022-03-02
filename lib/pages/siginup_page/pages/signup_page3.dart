@@ -10,8 +10,14 @@ import 'package:pinput/pin_put/pin_put.dart';
 
 /// 전화번호
 bool phoneauthsucc=false;
+enum Status{Waiting, Error}
 class SignupPage3 extends GetView<SignupController> {
-  const SignupPage3({Key? key}) : super(key: key);
+  SignupPage3({Key? key}) : super(key: key);
+
+  var _status=Status.Waiting;
+  var phonenumber;
+  var verificationId;
+  TextEditingController _textEditingController;
 
 
 
@@ -82,33 +88,42 @@ class SignupPage3 extends GetView<SignupController> {
                     ),
                     TextButton(
 
-                        onPressed: (){
+                        onPressed: () {
+                          if (_status == Status.Waiting) {
+                            showDialog(context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('전화번호인증'),
+                                    content: PinPut(
+                                      controller: _textEditingController,
+                                      eachFieldHeight: 50,
+                                      fieldsCount: 6,
+                                      submittedFieldDecoration: _pinPutDecoration
+                                          .copyWith(
+                                        borderRadius: BorderRadius.circular(
+                                            20.0),
+                                      ),
+                                      selectedFieldDecoration: _pinPutDecoration,
+                                      followingFieldDecoration: _pinPutDecoration
+                                          .copyWith(
+                                        borderRadius: BorderRadius.circular(
+                                            5.0),
+                                        border: Border.all(
+                                          color: Colors.deepPurpleAccent
+                                              .withOpacity(.5),
+                                        ),
+                                      ),
+                                    ),
 
-                          showDialog(context: context, builder: (BuildContext context){
-                            return  AlertDialog(
-                              title: Text('전화번호인증'),
-                              content: PinPut(
-                                eachFieldHeight: 50,
-                                fieldsCount: 6,
-                                submittedFieldDecoration: _pinPutDecoration.copyWith(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                selectedFieldDecoration: _pinPutDecoration,
-                                followingFieldDecoration: _pinPutDecoration.copyWith(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border: Border.all(
-                                    color: Colors.deepPurpleAccent.withOpacity(.5),
-                                  ),
-                                ),
-                              ),
 
+                                    actions: [
+                                    ],
+                                  );
+                                });
+                          }
 
-                              actions: [
-
-                              ],
-                            );
-                          });
-                        },
+                        }
+                          ,
                         child:
                     Text('인증하기'))
                   ],
