@@ -10,12 +10,11 @@ class Calendar extends GetView<CalendarController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(CalendarController());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 20,),
-          Text('${DateTime.now().month}월',style: const TextStyle(fontSize: 35,color: Colors.grey,fontWeight: FontWeight.bold),),
+          Text('${DateTime.now().month}월',style: const TextStyle(fontSize: 35,color: Colors.black,fontWeight: FontWeight.bold),),
           const SizedBox(height: 20,),
           Container(
             decoration: BoxDecoration(
@@ -90,17 +89,22 @@ class Calendar extends GetView<CalendarController> {
                       },
                       // 이벤트 표시 마커를 어떻게 build 할지 커스터마징.
                       singleMarkerBuilder: (context, day,Event event){
-                        return Container(
-                          width: 5.5,
-                          height: 5.5,
-                          margin: const EdgeInsets.all(0.5),
-                          decoration: BoxDecoration(
-                            // 손쉽게 event 값을 불러들여서 해결
-                              color: event.complete?Colors.green:Colors.grey,
-                              shape: BoxShape.circle
-                          ),
-                        );
-                      }
+                        if (event.complete) {
+                          return Container(
+                            width: 5.5,
+                            height: 5.5,
+                            margin: const EdgeInsets.all(0.5),
+                            decoration: BoxDecoration(
+                              // 손쉽게 event 값을 불러들여서 해결
+                                color: Colors.green,
+                                shape: BoxShape.circle
+                            ),
+                          );
+                        } else  {
+                          // complete false 인 애들은 일단 임시로 빈컨테이너 리턴하게 해서 없는 것처럼 보이게 하자
+                          return Container();
+                        }
+                      },
                   ),
                   /** <달력 내부 커스터마징 builder사용해서 뜯어 고치기-----------end >*/
 
@@ -121,83 +125,9 @@ class Calendar extends GetView<CalendarController> {
             )
           ),
           const SizedBox(height: 8,),
-          GetBuilder<CalendarController>(
-            builder: (controller) {
-              return AnimatedSwitcher(
-                // 자연스러운 위젯 전환을 위해 AnimatedSwitcher 위젯 추가!
-                duration: const Duration(milliseconds: 200),
-                child: Container(
-                  height: 400,
-                  key: ValueKey<int>(controller.selectedDay.value.day),
-                  padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 30),
-                  decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                              width:35,
-                              height: 30,
-                              child: Text('${controller.selectedDay.value.day}',style: const TextStyle(fontSize: 25),)
-                          ),
-                          SizedBox(
-                              width: 40,
-                              height: 20,
-                              child: Text(controller.getWeekDay(), style: const TextStyle(fontSize: 18,color: Colors.blueGrey),)
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10,),
-                      Table(
-                        defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
-                        defaultColumnWidth: const IntrinsicColumnWidth(),
-                        children: [
-                          TableRow(
-                              children: [
-                                _buildTableCell(0),
-                                _buildTableCell(1),
-                              ]
-                          ),
-                          TableRow(
-                              children: [
-                                _buildTableCell(2),
-                                _buildTableCell(3)
-                              ]
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              )
-                ;
-            },
-          )
+
         ]);
   }
 
-  _buildTableCell(index) {
-    return TableCell(
-      child:
-      Container(
-          margin: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-          height: 40,
-          alignment: Alignment.center,
-          child: Builder(
-              builder: (context) {
-                if (controller.makeTable(index)==null){
-                  return const Text('');
-                } else {
-                  return Text(controller.makeTable(index)!.title, style: TextStyle(color: controller.makeTable(index)!.complete?Colors.green:Colors.grey, fontWeight: FontWeight.bold),);
-                }
 
-              }
-          )
-      ),
-    );
-  }
 }

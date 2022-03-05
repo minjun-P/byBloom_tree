@@ -61,7 +61,7 @@ class TreePage extends GetView<TreeController> {
           ),
         ],
       ),
-      /// 3개의 drawer는 모두 components 폴더의 drawers 파일에서 확인 가능
+      /// 3개의 drawer는 모두 tab_pages 폴더의 drawers 파일에서 확인 가능
       endDrawer: const MenuDrawer(),
       body: Scaffold(
         key: _insideScaffoldKey,
@@ -71,9 +71,15 @@ class TreePage extends GetView<TreeController> {
         // 나무 페이지 화면을 Tree 객체로 통합하여 관리
           // scale 작동 원리가 뭔지 잘 모르겠음.
         body: Stack(
+          alignment: Alignment.center,
           children: const [
             Tree(),
-            Align(alignment: Alignment.bottomCenter,child: TreeStatus())
+            Positioned(
+              bottom: 20,
+                left: 10,
+                right: 10,
+                child: TreeStatus()
+            )
           ],
         )
       )

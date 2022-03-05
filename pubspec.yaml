@@ -50,6 +50,8 @@ dependencies:
   tutorial_coach_mark: ^1.2.1
   awesome_dialog: ^2.1.2
   firebase_messaging: ^11.2.6
+  flutter_local_notifications: ^9.3.2
+  sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:

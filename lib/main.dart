@@ -1,5 +1,6 @@
 
 import 'package:bybloom_tree/auth/signup_page.dart';
+import 'package:bybloom_tree/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -9,24 +10,24 @@ import 'main_controller.dart';
 import 'main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'pages/siginup_page/pages/signup_page1.dart';
 
 
 
 FirebaseAuth auth = FirebaseAuth.instance;
-FirebaseMessaging messaging = FirebaseMessaging.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // 파이어베이스 서비스 객체 초기화
   await Firebase.initializeApp();
+
+  // 국제화 사용하기 위해선 date formatting 필수
   initializeDateFormatting().then((_)=>runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
       /// 로그인이 안되어 있으면 회원가입 첫 화면으로 이동하게 해놨음. - 로그인 화면은 여기서 또 이동 버튼 만들어 놓음
 
         initialRoute: auth.currentUser != null ? '/main' : '/first',
+      initialBinding: BindingsBuilder.put(()=>NotificationController(),permanent: true),
       // 나중에 디자인이 픽스되면 한번 갈아 엎어야 할 듯.
         theme: ThemeData(
           appBarTheme: const AppBarTheme(
