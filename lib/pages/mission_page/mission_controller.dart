@@ -1,45 +1,52 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'pages/mission1/mission1.dart';
-import 'pages/mission2/mission2.dart';
-import 'pages/mission3.dart';
 
+enum MissionType {qt, surveyA, surveyB }
 
-class Mission<T> {
+class Mission {
   String title;
-  Widget Function() route;
-  bool complete;
-  String desc;
-  Mission({required this.title,required this.route, required this.complete, required this.desc});
+  String question;
+  MissionType type;
+  Map? contents;
+  Mission({required this.title, required this.question, required this.type, this.contents});
 }
+
+List<Mission> missionList = [
+  Mission(
+    title: '성경 미니 큐티',
+    question: '무엇보다 열심으로 \n서로 사랑할찌니\n 사랑은 허다한 죄를 덮느니라',
+    type: MissionType.qt,
+    contents: {
+      'from':'창세기 3:3'
+    }
+  ),
+  Mission(
+    title: '오늘의 질문',
+    question: '가장 좋아하는\n찬양이 있으신가요?\n이유를 알려주세요.',
+    type: MissionType.surveyA
+  ),
+  Mission(
+    title: '오늘의 질문',
+    question: '우리 교회의 \n가장 큰 장점을\n알려주세요.',
+    type: MissionType.surveyA
+  ),
+  Mission(
+    title: '바이블룸 앙케이트',
+    question: '가장 좋아하는\n성경인물을\n골라주세요!',
+    type: MissionType.surveyB,
+    contents: {
+      'choices':['모세','아브라함','사도바울','베드로']
+    }
+  )
+];
 
 /// 그냥 각 미션 별로 체크 박스만 만들어놓음.
 /// db 연결하면서 미션 목록 불러오고, 완료 여부 확인도 할 수 있도록 해야할 듯.
 class MissionController {
-  var mission1 = Mission<Mission1>(
-    title: '미션1 - 묵상',
-    route: ()=>Mission1(),
-    complete: false,
-    desc: '주어진 말씀을 같이 읽어보고 간단히 QT를 해봐요.'
-  ).obs;
-  var mission2 = Mission<Mission2>(
-      title: '미션2 - 앙케이트',
-      route: ()=>Mission2(),
-      complete: false,
-      desc: '바이블룸 앙케이트! 매일 다른 질문이 주어져요. ~~쏼라쏼라라라라랄'
-  ).obs;
-  var mission3 = Mission<Mission3>(
-      title: '미션3 - 교회연계',
-      route: ()=>Mission3(),
-      complete: false,
-      desc: '이번 주, 시민의 교회 담임목사님께서 직접 내신 미션입니다. ~~ 쏼라라라라라랄'
-  ).obs;
 
-  RxList<bool> missionComplete = [false,false,false].obs;
+  RxList<bool> missionComplete = [false,false,false,false,false,false].obs;
   void updateMissionComplete(int index) {
     missionComplete[index] = !missionComplete[index];
   }
-
-
 }

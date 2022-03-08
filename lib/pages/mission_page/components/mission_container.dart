@@ -1,58 +1,61 @@
+import 'package:bybloom_tree/pages/mission_page/pages/draggable.dart';
+import 'package:bybloom_tree/pages/mission_page/pages/mission_exexcute_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../mission_controller.dart';
+import '../pages/draggable_page.dart';
 class MissionContainer extends GetView<MissionController> {
   final int index;
   const MissionContainer({
     Key? key,
-    required this.index
+    required this.index,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Rx<Mission>> missionList = [controller.mission1,controller.mission2,controller.mission3];
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 10),
-      decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(20)
-      ),
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Flexible(
-            flex: 4,
-            child: GestureDetector(
-              onTap: (){
-                Get.to(missionList[index].value.route);
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    //명시적으로 text가 차지할 영역 정해주기
-                      child: Text(
-                          missionList[index].value.title,
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      )
-                  ),
-                  SizedBox(
-                      child: Text(missionList[index].value.desc)
-                  )
-                ],
+    Mission mission = missionList[index];
+    return GestureDetector(
+      onTap: (){
+        Get.to(()=>MissionExecutePage(mission: mission));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(2,2),
+              blurRadius: 3,
+              spreadRadius: 0
+            )
+          ]
+        ),
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              flex: 4,
+              child: Text(
+                mission.title,
+                style: TextStyle(
+                  color: Colors.grey.shade500,
+                  fontSize: 20
+                ),
               ),
             ),
-          ),
-          SizedBox(width: Get.width*0.1),
-          Flexible(
-            flex: 1,
-              child: _buildMissionCompleteBox(index)
-          ),
+            Flexible(
+              flex: 1,
+                child: _buildMissionCompleteBox(index)
+            ),
 
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -63,8 +66,8 @@ class MissionContainer extends GetView<MissionController> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
-        width: controller.missionComplete[index]?33:32,
-        height: controller.missionComplete[index]?33:32,
+        width: 32,
+        height: 32,
         decoration: BoxDecoration(
           border: controller.missionComplete[index]
               ?Border.all(color:Colors.green,width: 2)

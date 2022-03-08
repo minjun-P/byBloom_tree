@@ -1,7 +1,9 @@
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
-class TreeStatus extends StatelessWidget {
+class TreeStatus extends GetView<TreeController> {
   const TreeStatus({Key? key}) : super(key: key);
 
   @override
@@ -23,13 +25,14 @@ class TreeStatus extends StatelessWidget {
                 size: 60,
               ),
               onPressed: (){
+                controller.treeUpgrade();
               },),
           ),
           const SizedBox(height: 10,),
           /// 경험치 바, 어떻게 코드 짤지 고민을 좀 더 해보겠음
           Container(
             width: double.infinity,
-            height: 30,
+            height: 20,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: Colors.white
@@ -42,7 +45,7 @@ class TreeStatus extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Colors.green
+                    color: Colors.green.shade100
                 ),
               ),
             ),

@@ -16,21 +16,20 @@ class MissionPage extends GetView<MissionController> {
   @override
   Widget build(BuildContext context) {
     Get.put(MissionController());
-    List missionList = [controller.mission1, controller.mission2, controller.mission3];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('오늘의 미션',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+        title: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),
       backgroundColor: Colors.white,
       body: ListView(
-        padding: EdgeInsets.fromLTRB(Get.width*0.05, 40, Get.width*0.05, 100),
+        padding: EdgeInsets.fromLTRB(Get.width*0.05, 20, Get.width*0.05, 100),
         children: [
-          // 당일의 미션 3개 - 컨테이너 - 아래 메소드로 구현해놓음
           MissionContainer(index:0),
-          MissionContainer(index: 1),
-          MissionContainer(index: 2)
+          MissionContainer(index: 1,),
+          MissionContainer(index: 2),
+          MissionContainer(index:3),
         ],
       ),
     );
