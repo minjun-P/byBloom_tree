@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -25,6 +26,10 @@ class NotificationController extends GetxController {
     _getToken();
     _onMessage();
     super.onInit();
+    /// 임시로 precache해보기
+    precacheImage(AssetImage('assets/tree/background_3.jpg'), Get.context!);
+
+
   }
   /// 디바이스 고유 토큰을 얻기 위한 메소드, 처음 한번만 사용해서 토큰을 확보하자.
   /// 이는 파이어베이스 콘솔에서 손쉽게 디바이스에 테스팅을 할 때 쓰인다.
