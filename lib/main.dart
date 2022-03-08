@@ -14,6 +14,7 @@ import 'pages/siginup_page/pages/signup_page1.dart';
 
 
 
+
 FirebaseAuth auth = FirebaseAuth.instance;
 
 void main() async {
@@ -22,14 +23,16 @@ void main() async {
   await Firebase.initializeApp();
 
   // 국제화 사용하기 위해선 date formatting 필수
-  initializeDateFormatting().then((_)=>runApp(const MyApp()));
+  initializeDateFormatting().then((_)=>runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
 

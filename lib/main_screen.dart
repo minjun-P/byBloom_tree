@@ -55,13 +55,17 @@ class MainScreen extends GetView<MainController> {
           extendBody: true,
           body: Padding(
             padding: const EdgeInsets.only(bottom: 60),
-            child: IndexedStack(
-              index: controller.navigationBarIndex.value,
+            child: Stack(
               children: [
-                TreePage(),
-                const MissionPage(),
-                const ForestPage(),
-                const ProfilePage()
+                IndexedStack(
+                  index: controller.navigationBarIndex.value,
+                  children: [
+                    TreePage(),
+                    const MissionPage(),
+                    const ForestPage(),
+                    const ProfilePage()
+                  ],
+                ),
               ],
             ),
           ),

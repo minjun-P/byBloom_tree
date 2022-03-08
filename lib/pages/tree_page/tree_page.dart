@@ -22,6 +22,7 @@ class TreePage extends GetView<TreeController> {
   @override
   Widget build(BuildContext context) {
     Get.put(TreeController());
+    var a = precacheImage(const AssetImage('assets/tree/background_1.jpg'), context);
     return Scaffold(
       key: _outsideScaffoldKey,
       appBar: AppBar(

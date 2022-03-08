@@ -1,7 +1,9 @@
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
-class TreeStatus extends StatelessWidget {
+class TreeStatus extends GetView<TreeController> {
   const TreeStatus({Key? key}) : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class TreeStatus extends StatelessWidget {
                 size: 60,
               ),
               onPressed: (){
+                controller.treeUpgrade();
               },),
           ),
           const SizedBox(height: 10,),
