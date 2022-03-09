@@ -7,9 +7,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../components/signup_gauge.dart';
 import 'signup_page4.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import '';
 
 /// 전화번호
 bool phoneauthsucc=false;
+FirebaseAuth auth =FirebaseAuth.instance;
+TextEditingController smscontroller= new TextEditingController();
 enum Status{Waiting, Error}
 class SignupPage3 extends GetView<SignupController> {
   SignupPage3({Key? key}) : super(key: key);
@@ -90,11 +93,13 @@ class SignupPage3 extends GetView<SignupController> {
 
                         onPressed: () {
                           if (_status == Status.Waiting) {
+                            verifyphone();
                             showDialog(context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: Text('전화번호인증'),
                                     content: PinPut(
+                                      controller: smscontroller,
                                       eachFieldHeight: 50,
                                       fieldsCount: 6,
                                       submittedFieldDecoration: _pinPutDecoration
@@ -124,7 +129,7 @@ class SignupPage3 extends GetView<SignupController> {
                         }
                           ,
                         child:
-                    Text('인증하기'))
+                    TextButton(child:Text('인증하기'),onPressed: (),)
                   ],
                 ),
               ),
@@ -135,8 +140,20 @@ class SignupPage3 extends GetView<SignupController> {
     );
   }
   bool? verifyphone(){
+    auth.verifyPhoneNumber(
+        phoneNumber: "+82"+controller.phoneCon.text,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await auth.signInWithCredential(credential).then((value)=>{
+            print("logged in")
+          });
+        },
+        verificationFailed: (FirebaseAuthException exception){},
+        codeSent: (String verificationID, int? resendToken) async {
+          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode:smscontroller.text );
+          await auth.signInWithCredential(credential);
+          },
+        codeAutoRetrievalTimeout: (String verificationID){});
 
-    controller.phoneCon.text;
     return null;
   }
 
