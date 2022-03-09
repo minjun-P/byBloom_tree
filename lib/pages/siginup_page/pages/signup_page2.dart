@@ -34,7 +34,7 @@ class SignupPage2 extends GetView<SignupController> {
               controller.page2Key.currentState!.validate();
               // 유효성 검사 값이 모두 true일 경우,
               if (controller.validateSex()&&controller.page2Key.currentState!.validate()){
-                Get.to(()=>const SignupPage3(),transition: Transition.rightToLeftWithFade);
+                Get.to(()=>SignupPage3(),transition: Transition.rightToLeftWithFade);
                 }
               },
             // 버튼 스타일 설정

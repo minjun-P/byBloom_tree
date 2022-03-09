@@ -17,7 +17,7 @@ class SignupPage3 extends GetView<SignupController> {
   var _status=Status.Waiting;
   var phonenumber;
   var verificationId;
-  TextEditingController _textEditingController;
+
 
 
 
@@ -95,7 +95,6 @@ class SignupPage3 extends GetView<SignupController> {
                                   return AlertDialog(
                                     title: Text('전화번호인증'),
                                     content: PinPut(
-                                      controller: _textEditingController,
                                       eachFieldHeight: 50,
                                       fieldsCount: 6,
                                       submittedFieldDecoration: _pinPutDecoration
