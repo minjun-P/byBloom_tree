@@ -4,6 +4,7 @@ import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+
 import 'signup_page6.dart';
 
 /// 직분, 교회 활동 적극도 정도

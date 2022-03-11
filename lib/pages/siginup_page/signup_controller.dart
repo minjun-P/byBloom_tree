@@ -38,9 +38,13 @@ class SignupController extends GetxController{
   // form 제어용 global key
   GlobalKey<FormState> page3Key = GlobalKey();
   final FocusNode page3FocusNode1 = FocusNode();
+  final FocusNode page3FocusNode2 = FocusNode();
 
   // 전화번호 제어
   TextEditingController phoneCon = TextEditingController();
+  TextEditingController smsCon = TextEditingController();
+  //전화번호로그인제어
+  Rx<bool> phonesuc=false.obs;
 
   // --------------------------------------------------------
   /// SignupPage4
@@ -70,6 +74,7 @@ class SignupController extends GetxController{
     nameCon.dispose();
     birthCon.dispose();
     phoneCon.dispose();
+    smsCon.dispose();
     nicknameCon.dispose();
     super.onClose();
   }

@@ -2,6 +2,7 @@ import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 class Tree extends GetView<TreeController>{
   const Tree({
     Key? key,

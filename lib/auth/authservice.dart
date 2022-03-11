@@ -16,15 +16,18 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
     }
   }
   //유저등록
-  static Future<User?> register( String email, String password ,String nickname) async {
+  static Future<User?> register( String phonenumber, String name, String Sex, String nickname,String birth,double slidevalue) async {
     User? user;
 
 
     try {
-      UserCredential s= await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-      await s.user!.updateDisplayName(nickname);
-      database.ref("users/${s.user!.uid}").set({"usernickname":nickname});
-      return s.user;
+      user= await FirebaseAuth.instance.currentUser;
+      print("users/${user?.uid}");
+      database.ref("users/${user?.uid}").set({"username":name,"birthdate":birth,"Sex":Sex,"nickname":nickname,"phonenumber":phonenumber,"slidevalue":slidevalue})
+          .then((value) => print("User Added"))
+          .catchError((error) => print("Failed to add user: $error"));
+      ;
+      return user;
     }catch(e){
       print(e);
       return null;

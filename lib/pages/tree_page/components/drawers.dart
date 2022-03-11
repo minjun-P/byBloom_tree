@@ -1,5 +1,11 @@
+import 'package:bybloom_tree/auth/login_page.dart';
+import 'package:bybloom_tree/auth/signup_page.dart';
+import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
+import 'package:bybloom_tree/pages/siginup_page/pages/signup_page1.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:get/get.dart';
 
 /// drawer는 모두 이 함수를 통해 만드는 것으로 통일 child 인수로 받음.
@@ -143,7 +149,17 @@ class MenuDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Drawer();
+    return Container(
+      child: IconButton(
+        icon: Icon(Icons.logout),
+        onPressed: (){
+          authservice.logout();
+          Get.to(() => SignupPage1(),
+              transition: Transition.rightToLeftWithFade);
+
+        },
+      ),
+    );
   }
 }
 

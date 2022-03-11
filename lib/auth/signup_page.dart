@@ -104,34 +104,11 @@ class RegisterForm extends StatelessWidget {
           CustomTextField(type: '비밀번호'),
           CustomTextField(type: '비밀번호 확인'),
           CustomTextField(type: '닉네임'),
-          SizedBox(height: 10,),
-          TextButton(
-            onPressed: () async {
-              if(_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                User? suc= await authservice.register(s!['아이디'],s!['비밀번호'],s!['닉네임']);
+          SizedBox(height: 10,)
 
-                if(suc!=null){
-                  // Get으로 라우팅 변경
-                  Get.offAllNamed('/main');
-                }
 
-              }
-            }
-            ,
-            child: Container(
-              height: 50,
-              width: 200,
-              child: Text('등록', style: TextStyle(color: Colors.white, fontSize: 20),),
-              alignment: Alignment(0,0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black
-              ),
 
-            ),
 
-          )
         ],
       ),
     );

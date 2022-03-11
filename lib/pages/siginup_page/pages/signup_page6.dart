@@ -1,9 +1,12 @@
 import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bybloom_tree/auth/authservice.dart';
 
 /// 입력 결과값 확인하기 위해 만든 임시 페이지
+CollectionReference users = FirebaseFirestore.instance.collection('users');
 class SignupPage6 extends GetView<SignupController> {
   const SignupPage6({Key? key}) : super(key: key);
 
@@ -34,6 +37,12 @@ class SignupPage6 extends GetView<SignupController> {
                     /// offAll로 이전 라우트 Stack 다 없애주고
                     /// main으로 이동하는데, 이 때 tutorial 모드로 돌입하기 위해
                     /// argument를 하나 넘겨 준다. 더 안전한 방법이 있을지도 모르겠당.
+                    authservice.register(controller.phoneCon.text
+                        , controller.nameCon.text
+                        ,controller.userSex.value==Sex.man?'남성':'여성'
+                        ,controller.nicknameCon.text,
+                        controller.birthCon.text,
+                        controller.sliderValue.value);
                     Get.offAllNamed('/main',arguments: 'tutorial');
                   },
                   child: const Text('메인 페이지로 가기')
@@ -45,3 +54,4 @@ class SignupPage6 extends GetView<SignupController> {
     );
   }
 }
+

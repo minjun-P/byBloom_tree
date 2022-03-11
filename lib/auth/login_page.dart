@@ -68,7 +68,7 @@ class LoginForm extends StatelessWidget {
       key: _formKey,
       child: Column(
         children: [
-          CustomTextField(type: '아이디'),
+          CustomTextField(type: '전화번호'),
           CustomTextField(type: '비밀번호'),
           SizedBox(height: 10,),
           TextButton(
