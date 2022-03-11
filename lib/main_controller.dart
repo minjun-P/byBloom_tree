@@ -7,6 +7,13 @@ import 'dart:io';
 
 class MainController extends GetxController{
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+
+    super.onInit();
+  }
+
   /// 네비게이션 바 컨트롤 변수
   var navigationBarIndex = 0.obs;
   /// 네비게이션 바 컨트롤 메소드
