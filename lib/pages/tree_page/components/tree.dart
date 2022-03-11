@@ -14,7 +14,7 @@ class Tree extends GetView<TreeController>{
       alignment: Alignment.center,
       children: [
         Image.asset('assets/tree/background_3.jpg',width: Get.width,fit: BoxFit.fitWidth,),
-        Lottie.asset('assets/data2.json',width: Get.width,fit: BoxFit.fitWidth),
+        Lottie.asset('assets/tree/tree.json',width: Get.width,fit: BoxFit.fitWidth),
         //Lottie.asset('assets/plane.json')
         /**
         Image.asset(
