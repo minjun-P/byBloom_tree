@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 /// Tree 페이지의 컨트롤러
 /// - 경험치 제어
@@ -23,7 +24,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     Image.asset('assets/tree/tree_6.png',width: Get.width,fit: BoxFit.fitWidth,),
   ];
 
-
+  late GlobalKey<FormState> formKey;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -43,6 +44,8 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
       begin: 0.0,
       end: 1.0,
     ).animate(rainController);
+
+    formKey = GlobalKey();
 
   }
 
@@ -69,6 +72,77 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     } else {
       treeGrade(treeGrade.value+1);
     }
+  }
+  /// 알림보내기
+  var title = ''.obs;
+  var body = ''.obs;
+
+  FirebaseFunctions functions = FirebaseFunctions.instanceFor(region: 'asia-northeast3');
+
+  Future<void> sendFcm({required String token, required String title, required String body}) async {
+    HttpsCallable callable = functions.httpsCallable('sendFCM');
+    final resp = await callable.call(<String, dynamic> {
+      'token': token,
+      'title': title,
+      'body': body
+    });
+    print(resp.data);
+  }
+
+  void show() {
+    showDialog(
+      context: Get.overlayContext!,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('메시지 보내기'),
+          content: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'title'
+                  ),
+                  initialValue: '',
+                  onSaved: (text) {
+                    title(text);
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'body'
+                  ),
+                  initialValue: '',
+
+                    onSaved: (text) {
+                      title(text);
+                    }
+                ),
+                ElevatedButton(
+                  child: Text('에뮬레이터 보내기'),
+                  onPressed: (){
+                    formKey.currentState!.save();
+                    formKey.currentState!.reset();
+                    sendFcm(
+                      token: 'fjYFENbtSXSvgPyc7bBl5p:APA91bHkyMmxFR3u56XLU7ypMA7Te4knctP3Pgb1vfI-mr8A7az5ptolz0RRrASxWlzssAbUhUVrWYDxX1cMe0WDYOfd3EgMjwEkwxqd3pqIFXvo5q3izhH5fRtr4qowgFL5B1bG7kXx',
+                      title: title.value,
+                      body: body.value
+                    );
+                  },
+                ),
+                ElevatedButton(
+                  child: Text('에뮬레이터 보내기'),
+                  onPressed: (){
+
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      }
+
+    );
   }
 
 }
