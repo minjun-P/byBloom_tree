@@ -51,11 +51,11 @@ class Calendar extends GetView<CalendarController> {
 
                   /** <달력 기본 스타일,날짜 영역>-------- start*/
                   calendarStyle: CalendarStyle(
-                    defaultTextStyle: const TextStyle(color: Colors.grey,),
-                    weekendTextStyle: const TextStyle(color: Colors.grey),
+                    defaultTextStyle: const TextStyle(color: Colors.grey,fontSize: 14),
+                    weekendTextStyle: const TextStyle(color: Colors.grey,fontSize: 14),
                     outsideDaysVisible: false,
                     // selectedDay 동그라미 영역 크기 정하기
-                    cellMargin: const EdgeInsets.all(10),
+                    cellMargin: const EdgeInsets.all(5),
 
                     todayDecoration: BoxDecoration(
                         color: Colors.transparent,
@@ -64,7 +64,8 @@ class Calendar extends GetView<CalendarController> {
                     ),
                     todayTextStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey
+                        color: Colors.grey,
+                      fontSize: 14
                     ),
 
                     selectedDecoration: BoxDecoration(

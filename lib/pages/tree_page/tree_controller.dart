@@ -98,6 +98,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
           content: Form(
             key: formKey,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
                   decoration: InputDecoration(
@@ -115,25 +116,31 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
                   initialValue: '',
 
                     onSaved: (text) {
-                      title(text);
+                      body(text);
                     }
                 ),
                 ElevatedButton(
                   child: Text('에뮬레이터 보내기'),
                   onPressed: (){
                     formKey.currentState!.save();
-                    formKey.currentState!.reset();
                     sendFcm(
                       token: 'fjYFENbtSXSvgPyc7bBl5p:APA91bHkyMmxFR3u56XLU7ypMA7Te4knctP3Pgb1vfI-mr8A7az5ptolz0RRrASxWlzssAbUhUVrWYDxX1cMe0WDYOfd3EgMjwEkwxqd3pqIFXvo5q3izhH5fRtr4qowgFL5B1bG7kXx',
                       title: title.value,
                       body: body.value
                     );
+                    formKey.currentState!.reset();
                   },
                 ),
                 ElevatedButton(
-                  child: Text('에뮬레이터 보내기'),
+                  child: Text('폰으로 보내기'),
                   onPressed: (){
-
+                    formKey.currentState!.save();
+                    sendFcm(
+                        token: 'eSKXF4mtTiide6s7IVnrUF:APA91bGSBvnupeRinLKxlgaAqu6hr4C8parXrCAy0lRtHP_w2Zbv8sjsKr5PGND659XldAahSTvPPMse8BEyZo7Is87a3p5raFE_GL3oG1IIEfHPBSPhEn_fNwbQXQ-ABAbV4yM2eqoN',
+                        title: title.value,
+                        body: body.value
+                    );
+                    formKey.currentState!.reset();
                   },
                 )
               ],
