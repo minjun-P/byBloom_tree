@@ -25,7 +25,7 @@ class TreeStatus extends GetView<TreeController> {
                 size: 60,
               ),
               onPressed: (){
-                controller.treeUpgrade();
+                controller.show();
               },),
           ),
           const SizedBox(height: 10,),
