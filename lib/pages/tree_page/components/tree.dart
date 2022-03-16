@@ -14,9 +14,7 @@ class Tree extends GetView<TreeController>{
     return Stack(
       alignment: Alignment.center,
       children: [
-        Image.asset('assets/tree/background_3.jpg',width: Get.width,fit: BoxFit.fitWidth,),
-        Lottie.asset('assets/tree/tree.json',width: Get.width,fit: BoxFit.fitWidth),
-        //Lottie.asset('assets/plane.json')
+        Image.asset('assets/tree/background_3.jpg',width: Get.width,height: Get.height,fit: BoxFit.fill,),
         /**
         Image.asset(
           'assets/real_tree_background.jpg',
@@ -24,7 +22,7 @@ class Tree extends GetView<TreeController>{
           height: Get.height,
           width: Get.width,
         ),*/
-        //Image.asset('assets/tree/tree_2_moving.gif'),
+        Image.asset('assets/tree/tree_2_moving.gif',width: Get.width,height: Get.height,fit: BoxFit.fill,),
         /**
             Obx(()=> Image.asset(
             'assets/tree/tree_${Get.find<TreeController>().treeGrade.value}.png',

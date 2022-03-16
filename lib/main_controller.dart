@@ -1,18 +1,38 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'tutorial.dart';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// 메인 컨트롤러
+/// 1. 네비게이션 바, 메인스크린 컨트롤
+/// 2. 종료 시 팝업 제어
+/// 3. 튜토리얼 제어
+/// 4. 토큰 데이터베이스에 저장하기
 class MainController extends GetxController{
+  String? _token;
+
+
 
   @override
-  void onInit() {
+  void onInit() async {
     // TODO: implement onInit
-
     super.onInit();
+    // 기기의 토큰을 받아오기
+    _token = await FirebaseMessaging.instance.getToken();
+    print(_token);
+    print('----------------------');
+    // 맨 아래 정의한 메소드 통해서 받아온 토큰을 데이터베이스에 저장하기
+    //await saveTokenToDatabase(_token!);
+    // 토큰이 리프레시 될 때 자동으로 데이터베이스에 토큰 저장하는 메소드 사용
+    // FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
   }
+
+
 
   /// 네비게이션 바 컨트롤 변수
   var navigationBarIndex = 0.obs;
@@ -86,6 +106,18 @@ class MainController extends GetxController{
         },
     );
     tutorial.show();
+  }
+
+  Future<void> saveTokenToDatabase(String token) async {
+    // Assume user is logged in for this example
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .update({
+      'tokens': FieldValue.arrayUnion([token]),
+    });
   }
 
 

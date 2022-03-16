@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../forest_model.dart';
 
@@ -60,7 +61,8 @@ class ForestChatRoom extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Container(
-                                  constraints: const BoxConstraints(maxWidth: 250),
+                                  // overflow 방지 위해 with 명시적 설정
+                                  constraints: BoxConstraints(maxWidth: Get.width*0.6),
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -90,7 +92,8 @@ class ForestChatRoom extends StatelessWidget {
                         Text(messages[messages.length-1-index].getTime(),style: const TextStyle(color: Colors.grey, fontSize: 12),),
                         const SizedBox(width: 10,),
                         Container(
-                          constraints: const BoxConstraints(maxWidth: 250),
+
+                          constraints: BoxConstraints(maxWidth: Get.width*0.6),
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                               color: Colors.white,
