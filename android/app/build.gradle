@@ -76,6 +76,7 @@ flutter {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta04'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
     implementation platform('com.google.firebase:firebase-bom:29.0.3')

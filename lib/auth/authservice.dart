@@ -26,7 +26,7 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
       database.ref("users/${user?.uid}").set({"username":name,"birthdate":birth,"Sex":Sex,"nickname":nickname,"phonenumber":phonenumber,"slidevalue":slidevalue})
           .then((value) => print("User Added"))
           .catchError((error) => print("Failed to add user: $error"));
-      ;
+
       return user;
     }catch(e){
       print(e);
