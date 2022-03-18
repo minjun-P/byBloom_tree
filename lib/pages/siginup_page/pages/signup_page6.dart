@@ -53,5 +53,9 @@ class SignupPage6 extends GetView<SignupController> {
       ),
     );
   }
+  bool maketree(){
+
+    return true;
+  }
 }
 

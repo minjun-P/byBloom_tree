@@ -1,10 +1,15 @@
+import 'package:bybloom_tree/main.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-
+User? user= FirebaseAuth.instance.currentUser;
 class TreeStatus extends GetView<TreeController> {
   const TreeStatus({Key? key}) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,4 +60,6 @@ class TreeStatus extends GetView<TreeController> {
       ),
     );
   }
+
+
 }
