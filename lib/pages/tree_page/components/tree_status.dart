@@ -1,11 +1,12 @@
 import 'package:bybloom_tree/main.dart';
+import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-User? user= FirebaseAuth.instance.currentUser;
 class TreeStatus extends GetView<TreeController> {
   const TreeStatus({Key? key}) : super(key: key);
 
@@ -36,23 +37,27 @@ class TreeStatus extends GetView<TreeController> {
           const SizedBox(height: 10,),
           /// 경험치 바, 어떻게 코드 짤지 고민을 좀 더 해보겠음
           Container(
-            width: double.infinity,
+            width: 500,
             height: 20,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: Colors.white
             ),
             alignment: Alignment.centerLeft,
-            child: FractionallySizedBox(
-              widthFactor: 0.7,
-              heightFactor: 1,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.green.shade100
-                ),
-              ),
+            child: StreamBuilder<DocumentSnapshot>(
+              stream: Get.find<MainController>().documentStream,
+              builder: (context,snapshot) {
+                Map<String,dynamic> s= snapshot.data! as Map<String,dynamic>;
+                return AnimatedContainer(
+
+                  width:s['exp'],
+                  duration: const Duration(milliseconds: 200),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.green.shade100
+                  ),
+                );
+              }
             ),
           ),
 
