@@ -35,83 +35,84 @@ class FriendDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 20,),
+        FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text("Something went wrong");
+            }
 
-    return FutureBuilder<DocumentSnapshot>(
-        future: document,
-        builder: (BuildContext context,AsyncSnapshot snapshot){
-      Map<String, dynamic>? data= snapshot.data?.data() as Map<String, dynamic>?;
-      if(data !=null){
-        data=data  as Map<String,dynamic>;
+            if (snapshot.hasData && !snapshot.data!.exists) {
+              return Text("Document does not exist");
+            }
+            if (snapshot.connectionState != ConnectionState.done) {
 
-
-      }
-      if(snapshot.connectionState==ConnectionState.waiting){
-        return Text('waiting');
-      }
-          return Column(
-        children: [
-          const SizedBox(height: 20,),
-           ListTile(
-            dense: true,
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.red,
-            ),
-            title: Text(
-           data!['name'],
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
-            ),
-            trailing: Text(
-              '프로필 변경하기',
-              style: TextStyle(
+              return Text("wating");
+            }
+            return ListTile(
+              dense: true,
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.red,
+              ),
+              title: Text(
+                  (snapshot.data!.data() as Map<String,dynamic>)['name'],
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+              ),
+              trailing: Text(
+                '프로필 변경하기',
+                style: TextStyle(
                   color: Colors.grey,
                   fontSize: 13,
                   decoration: TextDecoration.underline
-              ),),
+                ),),
+            );
+          }
+        ),
+        const SizedBox(height: 25,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+            Row(
+              children: const [
+                Icon(Icons.search, color: Colors.grey,),
+                Text('우리교회 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
+              ],
+            )
+          ],
+        ),
+        const SizedBox(height: 20,),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            children: List.generate(10, (index) {
+              return ListTile(
+                onTap: (){
+                  /// db 연결 시, 각 친구에 맞는 프로필 페이지로 이동해야 할 듯.
+                  Get.to(()=>const ProfilePage());
+                },
+                contentPadding: const EdgeInsets.all(10),
+                dense: true,
+                title: Row(
+                  children: const [
+                    Text('박민준',style: TextStyle(fontSize: 18),),
+                    SizedBox(width: 30,),
+                    Icon(Icons.message_outlined)
+                  ],
+                ),
+                leading: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.redAccent[200],
+                ),
+              );
+            })
           ),
-          const SizedBox(height: 25,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
-              Row(
-                children: const [
-                  Icon(Icons.search, color: Colors.grey,),
-                  Text('우리교회 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
-                ],
-              )
-            ],
-          ),
-          const SizedBox(height: 20,),
-          Expanded(
-            child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                children: List.generate(10, (index) {
-                  return ListTile(
-                    onTap: (){
-                      /// db 연결 시, 각 친구에 맞는 프로필 페이지로 이동해야 할 듯.
-                      Get.to(()=>const ProfilePage());
-                    },
-                    contentPadding: const EdgeInsets.all(10),
-                    dense: true,
-                    title: Row(
-                      children: const [
-                        Text('박민준',style: TextStyle(fontSize: 18),),
-                        SizedBox(width: 30,),
-                        Icon(Icons.message_outlined)
-                      ],
-                    ),
-                    leading: CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.redAccent[200],
-                    ),
-                  );
-                })
-            ),
-          )
-        ],
-      );
-    }
+        )
+      ],
     );
   }
 }

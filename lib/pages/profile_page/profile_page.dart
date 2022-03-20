@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'calendar/calendar_controller.dart';
 import 'tab_pages/profile_gallery.dart';
 import 'tab_pages/profile_record.dart';
@@ -46,12 +49,28 @@ class ProfilePage extends StatelessWidget {
                         ),
                         Positioned(
                           bottom: 20,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('김이랑',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
-                              Text('초보 농작꾼',style: TextStyle(color: Color(0xffC5B785)),)
-                            ],
+                          child: FutureBuilder(
+                            future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+                            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                              if (snapshot.hasError){
+                                return Text('error');
+                              }
+                              if (snapshot.hasData && !snapshot.data!.exists){
+                                return Text('Document does not exist');
+                              }
+                              if (snapshot.connectionState == ConnectionState.done){
+                                Map<String,dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(data['name'],style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
+                                    Text(data['nickname'],style: TextStyle(color: Color(0xffC5B785)),)
+                                  ],
+                                );
+                              }
+                              return CircularProgressIndicator();
+
+                            }
                           ),
                         )
                       ],

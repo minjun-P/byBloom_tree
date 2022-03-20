@@ -1,8 +1,6 @@
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -17,22 +15,9 @@ class Tree extends GetView<TreeController>{
     return Stack(
       alignment: Alignment.center,
       children: [
-        Image.asset('assets/tree/background_3.jpg',width: Get.width,height: Get.height,fit: BoxFit.fill,),
-        /**
-        Image.asset(
-          'assets/real_tree_background.jpg',
-          fit: BoxFit.fill,
-          height: Get.height,
-          width: Get.width,
-        ),*/
-        Image.asset('assets/tree/tree_2_moving.gif',width: Get.width,height: Get.height,fit: BoxFit.fill,),
-        /**
-            Obx(()=> Image.asset(
-            'assets/tree/tree_${Get.find<TreeController>().treeGrade.value}.png',
-            fit: BoxFit.fill,
-            height: Get.height,
-            width: Get.width,
-            ))**/
+        Image.asset('assets/tree/basic_background.jpg',width: Get.width,height: Get.height,fit: BoxFit.fill,),
+        Obx(()=>Image.asset('assets/tree/${controller.level.value}.gif',width: Get.width,height: Get.height,fit: BoxFit.fill,)),
+
       ],
     );
   }

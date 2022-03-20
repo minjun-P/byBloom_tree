@@ -16,6 +16,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MainController extends GetxController{
   String? _token;
   String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+  // 다큐먼트 스냅샷
+  Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
+
 
   @override
   void onInit() async {
@@ -23,17 +26,10 @@ class MainController extends GetxController{
     super.onInit();
     // 기기의 토큰을 받아오기
     _token = await FirebaseMessaging.instance.getToken();
-    print(_token);
-    print('----------------------');
     // 맨 아래 정의한 메소드 통해서 받아온 토큰을 데이터베이스에 저장하기
     await saveTokenToDatabase(_token!);
     // 토큰이 리프레시 될 때 자동으로 데이터베이스에 토큰 저장하는 메소드 사용
     FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
-
-
-
-
-
 
   }
 
