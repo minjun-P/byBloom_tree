@@ -3,11 +3,15 @@ import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
 import 'package:bybloom_tree/pages/siginup_page/pages/signup_page1.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:get/get.dart';
+import 'tree_status.dart';
 
+Future<DocumentSnapshot> document= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get();
 /// drawer는 모두 이 함수를 통해 만드는 것으로 통일 child 인수로 받음.
 Widget buildCustomDrawer({required Widget child, bool left=true}){
   return Drawer(
@@ -31,68 +35,83 @@ class FriendDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 20,),
-        const ListTile(
-          dense: true,
-          leading: CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.red,
+
+    return FutureBuilder<DocumentSnapshot>(
+        future: document,
+        builder: (BuildContext context,AsyncSnapshot snapshot){
+      Map<String, dynamic>? data= snapshot.data?.data() as Map<String, dynamic>?;
+      if(data !=null){
+        data=data  as Map<String,dynamic>;
+
+
+      }
+      if(snapshot.connectionState==ConnectionState.waiting){
+        return Text('waiting');
+      }
+          return Column(
+        children: [
+          const SizedBox(height: 20,),
+           ListTile(
+            dense: true,
+            leading: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.red,
+            ),
+            title: Text(
+           data!['name'],
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+            ),
+            trailing: Text(
+              '프로필 변경하기',
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                  decoration: TextDecoration.underline
+              ),),
           ),
-          title: Text(
-            '조수민',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+          const SizedBox(height: 25,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+              Row(
+                children: const [
+                  Icon(Icons.search, color: Colors.grey,),
+                  Text('우리교회 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
+                ],
+              )
+            ],
           ),
-          trailing: Text(
-            '프로필 변경하기',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 13,
-              decoration: TextDecoration.underline
-            ),),
-        ),
-        const SizedBox(height: 25,),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
-            Row(
-              children: const [
-                Icon(Icons.search, color: Colors.grey,),
-                Text('우리교회 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
-              ],
-            )
-          ],
-        ),
-        const SizedBox(height: 20,),
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            children: List.generate(10, (index) {
-              return ListTile(
-                onTap: (){
-                  /// db 연결 시, 각 친구에 맞는 프로필 페이지로 이동해야 할 듯.
-                  Get.to(()=>const ProfilePage());
-                },
-                contentPadding: const EdgeInsets.all(10),
-                dense: true,
-                title: Row(
-                  children: const [
-                    Text('박민준',style: TextStyle(fontSize: 18),),
-                    SizedBox(width: 30,),
-                    Icon(Icons.message_outlined)
-                  ],
-                ),
-                leading: CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.redAccent[200],
-                ),
-              );
-            })
-          ),
-        )
-      ],
+          const SizedBox(height: 20,),
+          Expanded(
+            child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                children: List.generate(10, (index) {
+                  return ListTile(
+                    onTap: (){
+                      /// db 연결 시, 각 친구에 맞는 프로필 페이지로 이동해야 할 듯.
+                      Get.to(()=>const ProfilePage());
+                    },
+                    contentPadding: const EdgeInsets.all(10),
+                    dense: true,
+                    title: Row(
+                      children: const [
+                        Text('박민준',style: TextStyle(fontSize: 18),),
+                        SizedBox(width: 30,),
+                        Icon(Icons.message_outlined)
+                      ],
+                    ),
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.redAccent[200],
+                    ),
+                  );
+                })
+            ),
+          )
+        ],
+      );
+    }
     );
   }
 }
