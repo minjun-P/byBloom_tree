@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:get/get.dart';
+import 'tree_status.dart';
 
+Future<DocumentSnapshot> document= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get();
 /// drawer는 모두 이 함수를 통해 만드는 것으로 통일 child 인수로 받음.
 Widget buildCustomDrawer({required Widget child, bool left=true}){
   return Drawer(

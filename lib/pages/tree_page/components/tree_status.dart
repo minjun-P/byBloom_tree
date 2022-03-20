@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).snapshots();
 
 
 class TreeStatus extends GetView<TreeController> {
@@ -13,6 +14,8 @@ class TreeStatus extends GetView<TreeController> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
@@ -46,6 +49,7 @@ class TreeStatus extends GetView<TreeController> {
                 color: Colors.white
             ),
             alignment: Alignment.centerLeft,
+
             child: Obx(()=> FractionallySizedBox(
               widthFactor: controller.exp.value.toDouble()/100,
               child: AnimatedContainer(
@@ -56,6 +60,7 @@ class TreeStatus extends GetView<TreeController> {
                     color: Colors.green.shade100
                 ),
               ),
+
             ),
             )
           ),
