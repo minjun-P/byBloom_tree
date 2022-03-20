@@ -3,6 +3,8 @@ import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
 import 'package:bybloom_tree/pages/siginup_page/pages/signup_page1.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
@@ -34,23 +36,39 @@ class FriendDrawer extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 20,),
-        const ListTile(
-          dense: true,
-          leading: CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.red,
-          ),
-          title: Text(
-            '조수민',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
-          ),
-          trailing: Text(
-            '프로필 변경하기',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 13,
-              decoration: TextDecoration.underline
-            ),),
+        FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text("Something went wrong");
+            }
+
+            if (snapshot.hasData && !snapshot.data!.exists) {
+              return Text("Document does not exist");
+            }
+            if (snapshot.connectionState != ConnectionState.done) {
+
+              return Text("wating");
+            }
+            return ListTile(
+              dense: true,
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.red,
+              ),
+              title: Text(
+                  (snapshot.data!.data() as Map<String,dynamic>)['name'],
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+              ),
+              trailing: Text(
+                '프로필 변경하기',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                  decoration: TextDecoration.underline
+                ),),
+            );
+          }
         ),
         const SizedBox(height: 25,),
         Row(

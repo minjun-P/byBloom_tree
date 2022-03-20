@@ -28,7 +28,7 @@ class NotificationController extends GetxController {
     _onMessage();
     super.onInit();
     /// 임시로 precache해보기
-    precacheImage(AssetImage('assets/tree/background_3.jpg'), Get.context!);
+    precacheImage(AssetImage('assets/tree/basic_background.jpg'), Get.context!);
 
 
   }

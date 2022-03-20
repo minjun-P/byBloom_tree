@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
@@ -8,27 +11,41 @@ import 'package:cloud_functions/cloud_functions.dart';
 /// - 나무 성장단계 제어
 /// - 물받기 제어
 /// 이러한 기능이 필요할 듯 하다.
+
+class Exp {
+  late double exp;
+  Exp(this.exp);
+  Exp.fromSnapshot(DocumentSnapshot snapshot) {
+    exp = snapshot['exp'];
+  }
+}
 class TreeController extends GetxController with GetTickerProviderStateMixin{
 
+
+  /// 애니메이션 영역
   late AnimationController wateringIconController;
   late AnimationController rainController;
   late Animation<double> rainAnimation;
-
-  final List<Image> imageList = [
-    Image.asset('assets/tree/background_1.jpg',width: Get.width,fit: BoxFit.fitWidth,),
-    Image.asset('assets/tree/tree_1.png',width: Get.width,fit: BoxFit.fitWidth,),
-    Image.asset('assets/tree/tree_2.png',width: Get.width,fit: BoxFit.fitWidth,),
-    Image.asset('assets/tree/tree_3.png',width: Get.width,fit: BoxFit.fitWidth,),
-    Image.asset('assets/tree/tree_4.png',width: Get.width,fit: BoxFit.fitWidth,),
-    Image.asset('assets/tree/tree_5.png',width: Get.width,fit: BoxFit.fitWidth,),
-    Image.asset('assets/tree/tree_6.png',width: Get.width,fit: BoxFit.fitWidth,),
-  ];
-
+  // 임시로 만든거, 푸시알림 보내기 기능
   late GlobalKey<FormState> formKey;
+
+
+
+  RxInt exp = 0.obs;
+  RxInt level = 0.obs;
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
+
+  Stream<Map> userDetail() {
+    Stream<DocumentSnapshot> documentStream = fireStore.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
+    return documentStream.map((event) => {'exp':event.get('exp'),'level':event.get('level')});
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    exp.bindStream(userDetail().map((event)=>event['exp']));
+    level.bindStream(userDetail().map((event)=>event['level']));
 
     wateringIconController = AnimationController(
       vsync: this,
@@ -47,15 +64,6 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
 
     formKey = GlobalKey();
 
-  }
-
-  @override
-  void didChangeDependencies(BuildContext context) {
-    // TODO: implement didChangeDependencies
-    for (int i=1;i<=6;i++) {
-      precacheImage(imageList[i].image, Get.context!);
-    }
-    super.didChangeDependencies(context);
   }
 
   void animateWateringIcon() async {

@@ -7,10 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class TreeStatus extends GetView<TreeController> {
   const TreeStatus({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -26,45 +25,45 @@ class TreeStatus extends GetView<TreeController> {
             padding: const EdgeInsets.all(20.0),
             child: IconButton(
               icon: const Icon(
-                  Icons.check_circle_outline,
+                Icons.check_circle_outline,
                 color: Colors.white,
                 size: 60,
               ),
               onPressed: (){
-                controller.show();
+                FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(
+                    {'exp':controller.exp.value+10});
+
+                //controller.show();
               },),
           ),
           const SizedBox(height: 10,),
           /// 경험치 바, 어떻게 코드 짤지 고민을 좀 더 해보겠음
           Container(
             width: 500,
-            height: 20,
+            height: 30,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white
             ),
             alignment: Alignment.centerLeft,
-            child: StreamBuilder<DocumentSnapshot>(
-              stream: Get.find<MainController>().documentStream,
-              builder: (context,snapshot) {
-                Map<String,dynamic> s= snapshot.data! as Map<String,dynamic>;
-                return AnimatedContainer(
-
-                  width:s['exp'],
-                  duration: const Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.green.shade100
-                  ),
-                );
-              }
+            child: Obx(()=> FractionallySizedBox(
+              widthFactor: controller.exp.value.toDouble()/100,
+              child: AnimatedContainer(
+                //width: (snapshot.data!['exp'] as int).toDouble(),
+                duration: const Duration(milliseconds: 200),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.green.shade100
+                ),
+              ),
             ),
+            )
           ),
 
         ],
       ),
     );
   }
-
-
 }
+
+
