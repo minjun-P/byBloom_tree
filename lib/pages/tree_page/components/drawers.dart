@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:get/get.dart';
 import 'tree_status.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 
 Future<DocumentSnapshot> document= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get();
 /// drawer는 모두 이 함수를 통해 만드는 것으로 통일 child 인수로 받음.
@@ -35,6 +36,7 @@ class FriendDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController s;
     return Column(
       children: [
         const SizedBox(height: 20,),

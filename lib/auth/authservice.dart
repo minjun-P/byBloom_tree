@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,10 +27,14 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
       user= await FirebaseAuth.instance.currentUser;
       print("users/${user?.uid}");
       CollectionReference users = FirebaseFirestore.instance.collection('users');
-      UserModel s= UserModel(phoneNumber:phonenumber,name:name,
+      UserModel s= UserModel(
+        uid:user?.uid,
+          phoneNumber:phonenumber,name:name,
           birth: birth, Sex: Sex, level: 0, exp: 0, createdAt: DateTime.now()
         ,
-          imageUrl: '', slidevalue: slidevalue, nickname: nickname,);
+          imageUrl: '', slidevalue: slidevalue, nickname: nickname,
+      friendlist: [],
+      friendphonelist: []);
       users.doc(user?.uid).set(s.toJson())
           .then((value) => print("User Added"))
           .catchError((error) => print("Failed to add user: $error"));

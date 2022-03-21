@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/main.dart';
 import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
@@ -7,8 +8,37 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).snapshots();
+//유저등록
+/*
+ Future<UserModel> makeUserModel( ) async {
 
+User? user;
+try {
+user= await FirebaseAuth.instance.currentUser;
+print("users/${user?.uid}");
+CollectionReference users = FirebaseFirestore.instance.collection('users');
+var doc=await users.doc(user?.uid).get();
+doc.data()?.data['phoneenumber'];
+UserModel s= UserModel(
+uid:user?.uid,
+phoneNumber:doc.data['phonenumber'],name:name,
+birth: birth, Sex: Sex, level: 0, exp: 0, createdAt: DateTime.now()
+,
+imageUrl: '', slidevalue: slidevalue, nickname: nickname,
+friendlist: [],
+friendphonelist: []);
+users.doc(user?.uid).set(s.toJson())
+    .then((value) => print("User Added"))
+    .catchError((error) => print("Failed to add user: $error"));
 
+return user;
+}catch(e){
+print(e);
+return null;
+}
+
+}
+*/
 class TreeStatus extends GetView<TreeController> {
   const TreeStatus({Key? key}) : super(key: key);
 
