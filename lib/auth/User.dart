@@ -47,7 +47,7 @@ class UserModel{
     'Sex':Sex,
     'birth':birth,
     'slidevalue':slidevalue,
-    'frinedphoneList':friendphonelist
+    'frinedphonelist':friendphonelist
 
 
   };
