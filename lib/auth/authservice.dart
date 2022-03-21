@@ -18,7 +18,7 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
     }
   }
   //유저등록
-  static Future<User?> register( String phonenumber, String name, String Sex, String nickname,String birth,double slidevalue) async {
+  static Future<User?> register({required String phoneNumber, required String name, required String sex, required String nickname,required String birth,required double slideValue}) async {
     User? user;
 
 
@@ -26,10 +26,18 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
       user= await FirebaseAuth.instance.currentUser;
       print("users/${user?.uid}");
       CollectionReference users = FirebaseFirestore.instance.collection('users');
-      UserModel s= UserModel(phoneNumber:phonenumber,name:name,
-          birth: birth, Sex: Sex, level: 0, exp: 0, createdAt: DateTime.now()
-        ,
-          imageUrl: '', slidevalue: slidevalue, nickname: nickname,);
+      UserModel s= UserModel(
+        phoneNumber:phoneNumber,
+        name:name,
+        birth: birth,
+        sex: sex,
+        level: 0,
+        exp: 0,
+        createdAt: DateTime.now(),
+        imageUrl: '',
+        slideValue: slideValue,
+        nickname: nickname,
+      );
       users.doc(user?.uid).set(s.toJson())
           .then((value) => print("User Added"))
           .catchError((error) => print("Failed to add user: $error"));

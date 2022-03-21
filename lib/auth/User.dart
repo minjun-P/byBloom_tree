@@ -6,9 +6,10 @@ class UserModel{
   String imageUrl;
   int level;
   int exp;
-  String Sex;
-  double slidevalue;
+  String sex;
+  double slideValue;
   String birth;
+
 
   UserModel({
     required this.name,
@@ -18,9 +19,9 @@ class UserModel{
     required this.exp,
     required this.imageUrl,
     required this.level,
-    required this.Sex,
+    required this.sex,
     required this.birth,
-    required this.slidevalue
+    required this.slideValue
 
 });
 
@@ -32,9 +33,9 @@ class UserModel{
     'exp': exp,
     'level': level,
     'imageUrl': imageUrl,
-    'Sex':Sex,
+    'Sex':sex,
     'birth':birth,
-    'slidevalue':slidevalue
+    'slideValue':slideValue
 
 
   };
