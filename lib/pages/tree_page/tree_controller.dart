@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/auth/User.dart';
 
 /// Tree 페이지의 컨트롤러
@@ -53,6 +55,23 @@ Future<UserModel?> makeUserModel( ) async {
   }
 
 }
+
+bool uploadfriend(UserModel currentUser){
+  try {
+    List s = currentUser.friendphonelist;
+    s.forEach((index) async {
+      print(index);
+      FriendModel? myfriend ;
+      myfriend=await finduserfromphone(index) ;
+      currentUser.friendlist.add(myfriend!);
+    });
+
+    return true;
+  }catch(error){
+    print(error);
+    return false;
+  }
+}
 class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
@@ -80,6 +99,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     super.onInit();
     currentUserModel=await makeUserModel();
     print("UID:${currentUserModel?.name}");
+    print(uploadfriend(currentUserModel!));
     exp.bindStream(userDetail().map((event)=>event['exp']));
     level.bindStream(userDetail().map((event)=>event['level']));
 

@@ -9,10 +9,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
+import 'tree_status.dart';
 import 'package:get/get.dart';
 import 'tree_status.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:bybloom_tree/main_controller.dart';
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 
 Future<DocumentSnapshot> document= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get();
 /// drawer는 모두 이 함수를 통해 만드는 것으로 통일 child 인수로 받음.
@@ -96,9 +98,17 @@ class FriendDrawer extends StatelessWidget {
 
           itemBuilder: (BuildContext context, int index) {
           return Container(
+           child: InkWell(
+              child:Card(
+              color: Colors.amber,
+              elevation: 10,
+              child:Text(currentUserModel!.friendlist[index].name))
+             ,
+              onTap:(){} ,
+          )
           );
           },
-            itemCount: 10,
+            itemCount: currentUserModel?.friendlist.length,
           ),
         )
       ],
