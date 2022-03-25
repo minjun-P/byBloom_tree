@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 String? pphotoloc;
-User? curuser = authservice.getcurrentUser();
+User? curuser = authservice.getCurrentUser();
 final database= FirebaseFirestore.instance;
 final storage= FirebaseStorage.instance;
 
@@ -21,7 +21,7 @@ AddProfilePhoto() async {
   String? uploadsuccess= await s.uploadPhoto(_photo); //db에 업로드
   downloadURL= await storage.ref(uploadsuccess).getDownloadURL();
   database.collection('users').doc(authservice
-      .getcurrentUser()
+      .getCurrentUser()
       ?.uid).update({'profileUrl':downloadURL});
   print('downloadURL:$downloadURL');
 
@@ -54,9 +54,9 @@ Future getImage(bool gallery) async {
 
 
 class Addphoto {
-  User? curuser = authservice.getcurrentUser();
+  User? curuser = authservice.getCurrentUser();
   String userdir = 'users/${authservice
-      .getcurrentUser()
+      .getCurrentUser()
       ?.uid}';
 
   Future<String?> uploadPhoto(File? s) async {

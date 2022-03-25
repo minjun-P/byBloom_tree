@@ -25,7 +25,7 @@ class ProfilePage extends StatefulWidget {
 class ProfilePageState extends State<ProfilePage>{
   late SharedPreferences _prefs;
 
-
+  @override
   initState(){
     _loadURLfromshared();
   }

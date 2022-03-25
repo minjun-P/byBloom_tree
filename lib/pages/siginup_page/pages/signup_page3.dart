@@ -7,8 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import '../components/signup_gauge.dart';
 import 'signup_page4.dart';
-import 'package:pinput/pin_put/pin_put.dart';
-import '';
+
 
 /// 전화번호
 
@@ -222,6 +221,11 @@ class SignupPage3 extends GetView<SignupController> {
       phoneNumber: "+82" + controller.phoneCon.text,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential).then((value) {
+          print("You are logged in successfully");
+          controller.phonesuc.value=true;
+          Get.to(() => SignupPage4(),
+              transition: Transition.rightToLeftWithFade);
+
         });
       },
       verificationFailed: (FirebaseAuthException e) {
