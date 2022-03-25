@@ -1,16 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'calendar/calendar_controller.dart';
 import 'tab_pages/profile_gallery.dart';
 import 'tab_pages/profile_record.dart';
 import 'tab_pages/profile_tree.dart';
-import 'package:bybloom_tree/pages/tree_page/components/tree.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:bybloom_tree/Profile/profilephoto.dart';
 
-class ProfilePage extends StatelessWidget {
+
+
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+   return ProfilePageState();
+  }
+}
+class ProfilePageState extends State<ProfilePage>{
+  late SharedPreferences _prefs;
+
+
+  initState(){
+    _loadURLfromshared();
+  }
+
+  _loadURLfromshared() async {
+    _prefs= await SharedPreferences.getInstance();
+    downloadURL= (_prefs.getString('downloadURL') ?? await _loadURLfromdatabase()) as String?;
+    _prefs.setString('profileUrl', downloadURL!);
+    print('downloadURL1:$downloadURL');
+  }
+  Future<String?> _loadURLfromdatabase() async {
+    var document= await database.collection('users').doc(curuser?.uid).get();
+    return document.data()!['profileUrl'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +70,48 @@ class ProfilePage extends StatelessWidget {
                           ],
                         ),
                         ClipOval(
-                          child: Container(
-                            color: Colors.green,
-                            height: 100,
-                            width: 100,
+                          child:    InkWell(
+                            child: downloadURL== null? CircularProgressIndicator(): CircleAvatar(
+                              backgroundImage:
+                              ExtendedNetworkImageProvider(downloadURL!,cache: true,scale:1),
+
+                              radius: 60,
+                            ),
+                            onDoubleTap:(){
+                              print(downloadURL);
+                            } ,
+                            onLongPress: () {
+
+                              showDialog(context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+
+                                      elevation: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height / 5,
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text('프로필변경')
+                                        ],
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(onPressed: () {
+                                          AddProfilePhoto();
+                                          _prefs.setString("profileUrl", downloadURL!);
+
+                                          Navigator.pop(context);
+                                        }, child: Text('예')),
+                                        TextButton(onPressed: () {
+                                          Navigator.pop(context);
+                                        }, child: Text('아니오'))
+                                      ],
+                                    );
+                                  });
+                            }
+                            ,
                           ),
                         ),
                         Positioned(

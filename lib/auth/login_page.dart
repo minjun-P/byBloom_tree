@@ -137,7 +137,7 @@ class loginScreen extends GetView<LoginController> {
        verificationFailed: (FirebaseAuthException e) {
          print(e.message);
        },
-       codeSent: (String verificationId, int? r화esendToken) {
+       codeSent: (String verificationId, int? resendToken) {
          verificationID = verificationId;
            AlertDialog(
              content: Text("인증번호 혹은 전화번호가 잘못되었습니다."),
