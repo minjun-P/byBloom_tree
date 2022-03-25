@@ -29,10 +29,8 @@ class TreePage extends GetView<TreeController> {
 
         title: InkWell(
         child: const Text('bybloom',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),),
-        onTap: (){authservice.logout();
-        Get.toNamed('./first');
-
-
+        onTap: (){
+          print(controller.currentUserModel!.toJson().toString());
         },
         ),
         /// 친구 목록 drawer - db 연결 필요 - 하단 Scaffold의 drawer 파라미터 참조

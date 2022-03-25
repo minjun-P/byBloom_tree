@@ -15,58 +15,10 @@ import 'package:bybloom_tree/auth/User.dart';
 /// - 물받기 제어
 /// 이러한 기능이 필요할 듯 하다.
 
-UserModel? currentUserModel;
 
-Future<UserModel?> makeUserModel( ) async {
 
-  User? user;
-  try {
-    user= await FirebaseAuth.instance.currentUser;
-    print("users/${user?.uid}");
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    var doc=await users.doc(user?.uid).get();
-    print('다큐먼트가져오기');
-    var q=doc.data() as Map<String,dynamic>;
-    print(q['phoneNumber']);
-    print(q['friendPhoneList']);
-    var array = q['friendPhoneList']; // array is now List<dynamic>
-    List<String> strings = List<String>.from(array);
 
-    UserModel s= UserModel(
-        uid:user!.uid,
-        phoneNumber:q['phoneNumber'],name:q['name'],
-        birth: q['birth'], sex: q['Sex'], level: q['level'], exp:q['exp'],
-        createdAt: q['createdAt'].toDate()
-        , imageUrl: q['imageUrl'], slideValue: q['slidevalue'], nickname: q['nickname'],
-        friendList: [] ,
-        friendPhoneList: strings);
-    print("유저모델생성완료");
 
-    return s;
-  }catch(e){
-    print(e);
-    print("에러발");
-    return null;
-  }
-
-}
-
-bool uploadFriend(UserModel currentUser){
-  try {
-    List s = currentUser.friendPhoneList;
-    s.forEach((index) async {
-      print(index);
-      FriendModel? myFriend ;
-      myFriend=await findUserFromPhone(index) ;
-      currentUser.friendList.add(myFriend!);
-    });
-
-    return true;
-  }catch(error){
-    print(error);
-    return false;
-  }
-}
 class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
@@ -89,6 +41,59 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
   Stream<Map> userDetail() {
     Stream<DocumentSnapshot> documentStream = fireStore.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
     return documentStream.map((event) => {'exp':event.get('exp'),'level':event.get('level')});
+  }
+
+  /// 유저모델 관리
+  late UserModel? currentUserModel;
+
+  Future<UserModel?> makeUserModel( ) async {
+
+    User? user;
+    try {
+      user= await FirebaseAuth.instance.currentUser;
+      print("users/${user?.uid}");
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+      var doc=await users.doc(user?.uid).get();
+      print('다큐먼트가져오기');
+      var q=doc.data() as Map<String,dynamic>;
+      print(q['phoneNumber']);
+      print(q['friendPhoneList']);
+      var array = q['friendPhoneList']; // array is now List<dynamic>
+      List<String> strings = List<String>.from(array);
+
+      UserModel s= UserModel(
+          uid:user!.uid,
+          phoneNumber:q['phoneNumber'],name:q['name'],
+          birth: q['birth'], sex: q['Sex'], level: q['level'], exp:q['exp'],
+          createdAt: q['createdAt'].toDate()
+          , imageUrl: q['imageUrl'], slideValue: q['slideValue'], nickname: q['nickname'],
+          friendList: [] ,
+          friendPhoneList: strings);
+      print("유저모델생성완료");
+
+      return s;
+    }catch(e){
+      print(e);
+      print("에러발");
+    }
+
+  }
+
+  bool uploadFriend(UserModel currentUser){
+    try {
+      List s = currentUser.friendPhoneList;
+      s.forEach((index) async {
+        print(index);
+        FriendModel? myFriend ;
+        myFriend=await findUserFromPhone(index) ;
+        currentUser.friendList.add(myFriend!);
+      });
+
+      return true;
+    }catch(error){
+      print(error);
+      return false;
+    }
   }
 
   @override
