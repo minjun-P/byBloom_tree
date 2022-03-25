@@ -115,6 +115,12 @@ class loginScreen extends GetView<LoginController> {
              ],
            ),
          ),
+         ElevatedButton(
+           onPressed: (){
+             Get.offAllNamed('/main');
+           },
+           child: Text('메인스크린 이동'),
+         )
        ],
      ),
    ),

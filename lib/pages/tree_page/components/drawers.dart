@@ -1,6 +1,7 @@
 import 'package:bybloom_tree/auth/login_page.dart';
 import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/main_screen.dart';
+import 'package:bybloom_tree/pages/firend_page/friend_profile_page.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
 import 'package:bybloom_tree/pages/siginup_page/pages/signup_page1.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
@@ -35,7 +36,7 @@ Widget buildCustomDrawer({required Widget child, bool left=true}){
 }
 
 /// 좌측 친구 drawer - db 연결 필요
-class FriendDrawer extends StatelessWidget {
+class FriendDrawer extends GetView<TreeController> {
   const FriendDrawer({Key? key}) : super(key: key);
 
   @override
@@ -68,13 +69,18 @@ class FriendDrawer extends StatelessWidget {
                   (snapshot.data!.data() as Map<String,dynamic>)['name'],
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
               ),
-              trailing: Text(
-                '프로필 변경하기',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 13,
-                  decoration: TextDecoration.underline
-                ),),
+              trailing: GestureDetector(
+                onTap: (){
+                  Get.to(()=>FriendProfilePage());
+                },
+                child: Text(
+                  '프로필 변경하기',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13,
+                    decoration: TextDecoration.underline
+                  ),),
+              ),
             );
           }
         ),
@@ -102,13 +108,13 @@ class FriendDrawer extends StatelessWidget {
               child:Card(
               color: Colors.amber,
               elevation: 10,
-              child:Text(currentUserModel!.friendList[index].name))
+              child:Text(controller.currentUserModel!.friendList[index].name))
              ,
               onTap:(){} ,
           )
           );
           },
-            itemCount: currentUserModel?.friendList.length,
+            itemCount: controller.currentUserModel?.friendList.length,
           ),
         )
       ],
