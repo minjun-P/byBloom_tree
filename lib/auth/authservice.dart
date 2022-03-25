@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,8 +38,11 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
         imageUrl: '',
         slideValue: slideValue,
         nickname: nickname,
-      );
-      users.doc(user?.uid).set(s.toJson())
+        uid:user!.uid,
+        friendList: [],
+        friendPhoneList: []);
+
+      users.doc(user.uid).set(s.toJson())
           .then((value) => print("User Added"))
           .catchError((error) => print("Failed to add user: $error"));
 
@@ -58,12 +62,12 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
     return refreshedUser;
   }
 
-  static User? getcurrentUser( ) { //이게 제일 많이 씀..현 유저 들고오기
+  static User? getCurrentUser( ) { //이게 제일 많이 씀..현 유저 들고오기
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    User? currentuser = auth.currentUser;
+    User? currentUser = auth.currentUser;
 
-    return currentuser;
+    return currentUser;
   }
 
   static logout(){

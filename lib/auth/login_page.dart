@@ -129,6 +129,9 @@ class loginScreen extends GetView<LoginController> {
        phoneNumber: "+82" + controller.phoneCon.text,
        verificationCompleted: (PhoneAuthCredential credential) async {
          await auth.signInWithCredential(credential).then((value) {
+           print("You are logged in successfully");
+           controller.phonesuc.value=true;
+           Get.offAllNamed('/main');
          });
        },
        verificationFailed: (FirebaseAuthException e) {
@@ -136,6 +139,10 @@ class loginScreen extends GetView<LoginController> {
        },
        codeSent: (String verificationId, int? resendToken) {
          verificationID = verificationId;
+           AlertDialog(
+             content: Text("인증번호 혹은 전화번호가 잘못되었습니다."),
+           );
+
        },
        codeAutoRetrievalTimeout: (String verificationId) {
 
@@ -150,7 +157,7 @@ class loginScreen extends GetView<LoginController> {
      await auth.signInWithCredential(credential).then((value) {
        print("You are logged in successfully");
        controller.phonesuc.value=true;
-       Get.offAllNamed('/main',arguments: 'tutorial');
+       Get.offAllNamed('/main');
 
      });
    }

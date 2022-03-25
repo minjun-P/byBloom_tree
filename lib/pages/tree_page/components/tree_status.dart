@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/main.dart';
 import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
@@ -7,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).snapshots();
-
+//유저등록
 
 class TreeStatus extends GetView<TreeController> {
   const TreeStatus({Key? key}) : super(key: key);

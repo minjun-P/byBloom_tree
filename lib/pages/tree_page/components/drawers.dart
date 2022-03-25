@@ -3,13 +3,18 @@ import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
 import 'package:bybloom_tree/pages/siginup_page/pages/signup_page1.dart';
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
+import 'tree_status.dart';
 import 'package:get/get.dart';
 import 'tree_status.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:bybloom_tree/main_controller.dart';
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 
 Future<DocumentSnapshot> document= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get();
 /// drawer는 모두 이 함수를 통해 만드는 것으로 통일 child 인수로 받음.
@@ -35,6 +40,7 @@ class FriendDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController s;
     return Column(
       children: [
         const SizedBox(height: 20,),
@@ -87,29 +93,22 @@ class FriendDrawer extends StatelessWidget {
         ),
         const SizedBox(height: 20,),
         Expanded(
-          child: ListView(
+          child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            children: List.generate(10, (index) {
-              return ListTile(
-                onTap: (){
-                  /// db 연결 시, 각 친구에 맞는 프로필 페이지로 이동해야 할 듯.
-                  Get.to(()=>const ProfilePage());
-                },
-                contentPadding: const EdgeInsets.all(10),
-                dense: true,
-                title: Row(
-                  children: const [
-                    Text('박민준',style: TextStyle(fontSize: 18),),
-                    SizedBox(width: 30,),
-                    Icon(Icons.message_outlined)
-                  ],
-                ),
-                leading: CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.redAccent[200],
-                ),
-              );
-            })
+
+          itemBuilder: (BuildContext context, int index) {
+          return Container(
+           child: InkWell(
+              child:Card(
+              color: Colors.amber,
+              elevation: 10,
+              child:Text(currentUserModel!.friendList[index].name))
+             ,
+              onTap:(){} ,
+          )
+          );
+          },
+            itemCount: currentUserModel?.friendList.length,
           ),
         )
       ],

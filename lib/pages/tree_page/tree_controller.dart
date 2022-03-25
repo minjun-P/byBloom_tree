@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:bybloom_tree/auth/User.dart';
+import 'package:bybloom_tree/auth/User.dart';
 
 /// Tree 페이지의 컨트롤러
 /// - 경험치 제어
@@ -12,6 +15,58 @@ import 'package:cloud_functions/cloud_functions.dart';
 /// - 물받기 제어
 /// 이러한 기능이 필요할 듯 하다.
 
+UserModel? currentUserModel;
+
+Future<UserModel?> makeUserModel( ) async {
+
+  User? user;
+  try {
+    user= await FirebaseAuth.instance.currentUser;
+    print("users/${user?.uid}");
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    var doc=await users.doc(user?.uid).get();
+    print('다큐먼트가져오기');
+    var q=doc.data() as Map<String,dynamic>;
+    print(q['phoneNumber']);
+    print(q['friendPhoneList']);
+    var array = q['friendPhoneList']; // array is now List<dynamic>
+    List<String> strings = List<String>.from(array);
+
+    UserModel s= UserModel(
+        uid:user!.uid,
+        phoneNumber:q['phoneNumber'],name:q['name'],
+        birth: q['birth'], sex: q['Sex'], level: q['level'], exp:q['exp'],
+        createdAt: q['createdAt'].toDate()
+        , imageUrl: q['imageUrl'], slideValue: q['slidevalue'], nickname: q['nickname'],
+        friendList: [] ,
+        friendPhoneList: strings);
+    print("유저모델생성완료");
+
+    return s;
+  }catch(e){
+    print(e);
+    print("에러발");
+    return null;
+  }
+
+}
+
+bool uploadFriend(UserModel currentUser){
+  try {
+    List s = currentUser.friendPhoneList;
+    s.forEach((index) async {
+      print(index);
+      FriendModel? myFriend ;
+      myFriend=await findUserFromPhone(index) ;
+      currentUser.friendList.add(myFriend!);
+    });
+
+    return true;
+  }catch(error){
+    print(error);
+    return false;
+  }
+}
 class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
@@ -37,9 +92,12 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
   }
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
+    currentUserModel=await makeUserModel();
+    print("UID:${currentUserModel?.name}");
+    print(uploadFriend(currentUserModel!));
     exp.bindStream(userDetail().map((event)=>event['exp']));
     level.bindStream(userDetail().map((event)=>event['level']));
 
@@ -59,6 +117,9 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     ).animate(rainController);
 
     formKey = GlobalKey();
+
+
+
 
   }
 
