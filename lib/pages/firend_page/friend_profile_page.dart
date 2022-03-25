@@ -1,6 +1,7 @@
 import 'package:bybloom_tree/pages/firend_page/firend_profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../tree_page/components/tree.dart';
 
@@ -31,9 +32,17 @@ class FriendProfilePage extends GetView<FriendProfileController> {
               Positioned(
                 bottom: 50,
                 right: 20,
-                child: IconButton(
-                  icon: Icon(Icons.star,size: 40,color: Colors.white,),
-                  onPressed: (){},
+                child: Container(
+                  padding: EdgeInsets.only(bottom: 5,left: 3,right: 3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.white,width: 4)
+                  ),
+                  child: IconButton(
+                    icon: Icon(MdiIcons.wateringCanOutline,size: 40,color: Colors.white,),
+                    onPressed: (){},
+                  ),
                 ),
               )
             ],
@@ -68,18 +77,19 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                     ],
                   ),
                   Spacer(),
-                  Icon(Icons.start)
+                  Icon(MdiIcons.messageProcessingOutline,color: Colors.grey.shade400,size: 35,),
+                  SizedBox(width: 20,)
                 ],
               ),
               SizedBox(height: 20,),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _buildIconWithNum(Icons.key,120),
+                  _buildIconWithNum(MdiIcons.clockOutline,120),
                   SizedBox(width: 40,),
-                  _buildIconWithNum(Icons.key,120),
+                  _buildIconWithNum(MdiIcons.checkboxOutline,120),
                   SizedBox(width: 40,),
-                  _buildIconWithNum(Icons.key,120),
+                  _buildIconWithNum(MdiIcons.calendarWeekendOutline,120),
                 ],
               )
 
@@ -94,9 +104,9 @@ class FriendProfilePage extends GetView<FriendProfileController> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon,size: 30,color: Colors.blueGrey,),
+        Icon(icon,size: 25,color: Colors.grey,),
         SizedBox(width: 10,),
-        Text(num.toString(),style: TextStyle(fontSize: 16,color: Colors.blueGrey),)
+        Text(num.toString(),style: TextStyle(fontSize: 16,color: Colors.grey),)
       ],
     );
   }
