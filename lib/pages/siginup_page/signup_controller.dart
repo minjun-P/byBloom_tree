@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:timer_count_down/timer_controller.dart';
 enum Sex {man, woman, yet}
 
 /// DB 제어는 이 컨트롤러를 통해서 하는게 좋을 것 같음
@@ -45,6 +46,9 @@ class SignupController extends GetxController{
   TextEditingController smsCon = TextEditingController();
   //전화번호로그인제어
   Rx<bool> phonesuc=false.obs;
+  // 폰인증 타이머
+  CountdownController countdownController = CountdownController();
+  Rx<bool> countdown = false.obs;
 
   // --------------------------------------------------------
   /// SignupPage4

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel{
-  final uid;
+  final String uid;
   final String name;
   final String phoneNumber;
   final DateTime createdAt;
@@ -11,11 +11,12 @@ class UserModel{
   String imageUrl;
   int level;
   int exp;
-  String Sex;
-  double slidevalue;
+  String sex;
+  double slideValue;
   String birth;
-  List<String> friendphonelist;
-  List<FriendModel> friendlist;
+  List<String> friendPhoneList;
+  List<FriendModel> friendList;
+
 
 
 
@@ -28,11 +29,11 @@ class UserModel{
     required this.exp,
     required this.imageUrl,
     required this.level,
-    required this.Sex,
+    required this.sex,
     required this.birth,
-    required this.slidevalue,
-    required this.friendlist,
-    required this.friendphonelist
+    required this.slideValue,
+    required this.friendList,
+    required this.friendPhoneList
 
 });
 
@@ -44,27 +45,28 @@ class UserModel{
     'exp': exp,
     'level': level,
     'imageUrl': imageUrl,
-    'Sex':Sex,
+    'Sex':sex,
     'birth':birth,
-    'slidevalue':slidevalue,
-    'frinedphonelist':friendphonelist
+    'slideValue':slideValue,
+    'friendPhoneList':friendPhoneList
+
 
 
   };
 
-  bool AddFriend( FriendModel s){
-    friendphonelist.add(s.phoneNumber);
-    friendlist.add(s);
+  bool addFriend( FriendModel s){
+    friendPhoneList.add(s.phoneNumber);
+    friendList.add(s);
     FirebaseFirestore.instance.collection('users')
-        .doc(uid).update({'friendphonelist':friendphonelist});
+        .doc(uid).update({'friendPhoneList':friendPhoneList});
     return true;
   }
 }
 
 
-Future<String?> findusernamefromphone(String phonenum) async {
+Future<String?> findUserNameFromPhone(String phoneNum) async {
   var friend =  await FirebaseFirestore.instance.collection('users').
-  where('phonenumber',isEqualTo:phonenum).
+  where('phoneNumber',isEqualTo:phoneNum).
   snapshots().first;
 
   if (friend != null) {
@@ -76,9 +78,9 @@ Future<String?> findusernamefromphone(String phonenum) async {
   return null;
 }
 
-Future<FriendModel?> finduserfromphone(String phonenum) async {
+Future<FriendModel?> findUserFromPhone(String phoneNum) async {
   var friend =  await FirebaseFirestore.instance.collection('users').
-  where('phoneNumber',isEqualTo:phonenum).get()
+  where('phoneNumber',isEqualTo:phoneNum).get()
   ;
 
   if (friend.size!=0) {

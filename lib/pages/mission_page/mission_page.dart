@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'components/mission_container.dart';
 import 'mission_controller.dart';
+import 'bible_model.dart';
 
 /// 미션을 확인하고 수행하는 페이지
 /// 필요 기능
@@ -11,6 +13,7 @@ import 'mission_controller.dart';
 // 아직 거의 건드리지 않아서 db 연결하면서 같이 수정합시다.
 class MissionPage extends GetView<MissionController> {
   const MissionPage({Key? key}) : super(key: key);
+
   
 
   @override
@@ -18,7 +21,12 @@ class MissionPage extends GetView<MissionController> {
     Get.put(MissionController());
     return Scaffold(
       appBar: AppBar(
-        title: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+        title: GestureDetector(
+          onTap: () {
+            controller.getFruit();
+          },
+            child: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
+        actions: [Obx(()=> Text(controller.day.value.toString(), style: TextStyle(color: Colors.black),),),SizedBox(width: 30,)],
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),

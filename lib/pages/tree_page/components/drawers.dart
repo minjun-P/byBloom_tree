@@ -102,13 +102,13 @@ class FriendDrawer extends StatelessWidget {
               child:Card(
               color: Colors.amber,
               elevation: 10,
-              child:Text(currentUserModel!.friendlist[index].name))
+              child:Text(currentUserModel!.friendList[index].name))
              ,
               onTap:(){} ,
           )
           );
           },
-            itemCount: currentUserModel?.friendlist.length,
+            itemCount: currentUserModel?.friendList.length,
           ),
         )
       ],
