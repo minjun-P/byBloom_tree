@@ -33,9 +33,22 @@ class TreeStatus extends GetView<TreeController> {
                 size: 60,
               ),
               onPressed: (){
-                FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(
-                    {'exp':controller.exp.value+10});
-
+                controller.rain(!controller.rain.value);
+              },),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: IconButton(
+              icon: const Icon(
+                Icons.check_circle_outline,
+                color: Colors.white,
+                size: 60,
+              ),
+              onPressed: (){
+                /// 경험치 증가 테스팅
+                //FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(
+                    //{'exp':controller.exp.value+10});
+                /// 푸시알람 테스팅
                 //controller.show();
               },),
           ),
@@ -53,7 +66,6 @@ class TreeStatus extends GetView<TreeController> {
             child: Obx(()=> FractionallySizedBox(
               widthFactor: controller.exp.value.toDouble()/100,
               child: AnimatedContainer(
-                //width: (snapshot.data!['exp'] as int).toDouble(),
                 duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),

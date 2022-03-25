@@ -12,17 +12,13 @@ import 'package:cloud_functions/cloud_functions.dart';
 /// - 물받기 제어
 /// 이러한 기능이 필요할 듯 하다.
 
-class Exp {
-  late double exp;
-  Exp(this.exp);
-  Exp.fromSnapshot(DocumentSnapshot snapshot) {
-    exp = snapshot['exp'];
-  }
-}
 class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
   /// 애니메이션 영역
+
+  Rx<bool> rain = false.obs;
+
   late AnimationController wateringIconController;
   late AnimationController rainController;
   late Animation<double> rainAnimation;

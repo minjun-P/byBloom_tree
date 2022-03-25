@@ -12,7 +12,7 @@ import 'main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/siginup_page/pages/signup_page1.dart';
-
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 
 
@@ -22,7 +22,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 파이어베이스 서비스 객체 초기화
   await Firebase.initializeApp();
-
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+  );
   // 국제화 사용하기 위해선 date formatting 필수
   initializeDateFormatting().then((_)=>runApp(MyApp()));
 }

@@ -1,4 +1,4 @@
-List bible = [
+List<Map<String,String>> bible = [
   {
     "성경": "베드로후서",
     "장:절": "3:16",

@@ -17,7 +17,8 @@ class SignupTextField extends GetView<SignupController> {
     this.helperText,
     this.focusNode,
     this.inputFormatters,
-    this.textInputAction
+    this.textInputAction,
+    this.suffix
 
   }) : super(key: key);
   // 파라미터 타입 선언
@@ -30,7 +31,7 @@ class SignupTextField extends GetView<SignupController> {
   final FocusNode? focusNode;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputAction? textInputAction;
-
+  final Widget? suffix;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class SignupTextField extends GetView<SignupController> {
       validator: validator,
       cursorColor: Colors.lightGreen,
       decoration: InputDecoration(
+        suffix: suffix,
         contentPadding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
         filled: true,
         hintText: hintText,

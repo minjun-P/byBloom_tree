@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 import '../components/signup_gauge.dart';
 import 'signup_page4.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -97,53 +98,114 @@ class SignupPage3 extends GetView<SignupController> {
                                 FilteringTextInputFormatter.digitsOnly
                               ],
                             ),
-                            SignupTextField(
-                              focusNode: controller.page3FocusNode2,
-                              textController: controller.smsCon,
-                              keyboardType: TextInputType.number,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Stack(
+                                    children: [
+                                      SignupTextField(
+                                        focusNode: controller.page3FocusNode2,
+                                        textController: controller.smsCon,
+                                        keyboardType: TextInputType.number,
 
-                              labelText: '인증번호',
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return '올바른 인증번호 값을 입력하세요';
-                                }
-                                if (value.length != 6) {
-                                  return '인증번호가 6자리가 아닙니다';
-                                }
-                                else {
-                                  return null;
-                                }
-                              },
+                                        labelText: '인증번호',
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return '올바른 인증번호 값을 입력하세요';
+                                          }
+                                          if (value.length != 6) {
+                                            return '인증번호가 6자리가 아닙니다';
+                                          }
+                                          else {
+                                            return null;
+                                          }
+                                        },
 
-                              // 애초에 숫자만 입력되도록
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
+                                        // 애초에 숫자만 입력되도록
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                      ),
+                                      Obx(()=>
+                                          Visibility(
+                                            visible: controller.countdown.value,
+                                            child: Positioned(
+                                              right: 30,
+                                              top: 12,
+                                              bottom: 0,
+                                              child: Countdown(
+                                                controller: controller.countdownController,
+                                                seconds: 120,
+                                                build: (context, time){
+                                                  return Text(
+                                                    time.toInt().toString()+' 초',
+                                                    style: TextStyle(
+                                                        color: Colors.blue,
+                                                      fontSize: 14
+                                                    ),
+                                                  );
+                                                },
+                                                onFinished: (){
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return const AlertDialog(
+                                                          title: Text('인증번호가 만료되었습니다!'),
+                                                          content: Text('다시 인증번호를 받아주세요!'),
+                                                        );
+                                                      }
+                                                  );
+                                                  controller.countdown(false);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                      )
+                                      
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 25,),
+                                Column(
+                                  children: [
+                                    OutlinedButton(
+                                      child: Text(
+                                          '인증번호 받기',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      onPressed: (){
+                                        if (_status == Status.Waiting) {
+                                          loginWithPhone();
+                                          controller.countdown(true);
+                                          Future.delayed(const Duration(seconds: 1),(){
+                                            controller.countdownController.start();
+                                          });
+                                        }
+                                      },
+                                    ),
+                                    Obx(()=>
+                                      OutlinedButton(
+                                        child: Text(
+                                          '인증하기',
+                                            style: TextStyle(color: controller.countdown.value?Colors.green:Colors.black)
+                                        ),
+                                        onPressed: controller.countdown.value?(){
+                                          if (_status == Status.Waiting) {
+                                            verifyOTP();
+                                          }
+                                        }:null,
+                                        style: OutlinedButton.styleFrom(
+                                          side: controller.countdown.value?const BorderSide(color: Colors.green,width: 2):null
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ],
                             )
                           ]
                       ),
                     ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          TextButton(
-                              child: Text("인증번호받기"),
-                              onPressed: () {
-                                if (_status == Status.Waiting) {
-                                  loginWithPhone();
-                                }
-                              }
-                          ),
-                          TextButton(
-                              child: Text("인증하기"),
-                              onPressed: () {
-                                if (_status == Status.Waiting) {
-                                  verifyOTP();
-                                }
-                              }
-                          )
-                        ]
-                    )
                   ],
                 ),
               ),
