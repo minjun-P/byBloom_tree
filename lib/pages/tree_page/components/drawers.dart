@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import '../../../Profile/profilephoto.dart';
+import '../../../auth/FriendAdd.dart';
+import '../../../auth/FriendModel.dart';
 import 'tree_status.dart';
 import 'package:get/get.dart';
 import 'tree_status.dart';
@@ -65,9 +67,9 @@ class FriendDrawer extends GetView<TreeController> {
             }
             return ListTile(
               dense: true,
-              leading: downloadURL== null? CircularProgressIndicator(): CircleAvatar(
+              leading: (snapshot.data!.data() as Map<String,dynamic>)['imageUrl']==''? CircularProgressIndicator(): CircleAvatar(
                 backgroundImage:
-                ExtendedNetworkImageProvider(downloadURL!,cache: true,scale:1),
+                ExtendedNetworkImageProvider((snapshot.data!.data() as Map<String,dynamic>)['imageUrl'],cache: true,scale:1),
 
                 radius: 40,
               ),
@@ -94,7 +96,30 @@ class FriendDrawer extends GetView<TreeController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+             InkWell(
+    child:Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+           onTap: () async {
+
+             List<FriendModel>? s=await findfriendwithcontact();
+             print(s?.length);
+             s?.forEach((element) {
+               print(element.phoneNumber);
+             });
+             showDialog(context: context, builder:(context){
+               return ListView.builder(
+                   itemCount: s?.length,
+                   itemBuilder:(BuildContext context,int index){
+                     return Card(
+                         child:ListTile(
+                       leading: Text(s![index].phoneNumber),
+                     )
+                     );
+                   }
+               );
+
+             });
+
+           }, ),
             Row(
               children: const [
                 Icon(Icons.search, color: Colors.grey,),

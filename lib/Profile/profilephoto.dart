@@ -13,7 +13,7 @@ final storage= FirebaseStorage.instance;
 File? _photo;
 String? downloadURL;
 
-AddProfilePhoto() async {
+Future<String?> AddProfilePhoto() async {
   await getImage(true);
   print("이미지불러오기");//갤러리에서 사진가져오기
   Addphoto s= new Addphoto();
@@ -22,8 +22,9 @@ AddProfilePhoto() async {
   downloadURL= await storage.ref(uploadsuccess).getDownloadURL();
   database.collection('users').doc(authservice
       .getCurrentUser()
-      ?.uid).update({'profileUrl':downloadURL});
+      ?.uid).update({'imageUrl':downloadURL});
   print('downloadURL:$downloadURL');
+  return downloadURL;
 
 }
 

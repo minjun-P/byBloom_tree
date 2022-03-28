@@ -57,6 +57,7 @@ class SignupController extends GetxController{
   final FocusNode page4FocusNode1 = FocusNode();
 
   // 닉네임 제어
+  Rx<String> imageurl=''.obs;
   TextEditingController nicknameCon = TextEditingController();
 
   // ---------------------------------------------------------

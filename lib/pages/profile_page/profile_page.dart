@@ -70,49 +70,64 @@ class ProfilePageState extends State<ProfilePage>{
                           ],
                         ),
                         ClipOval(
-                          child:    InkWell(
-                            child: downloadURL== null? CircularProgressIndicator(): CircleAvatar(
-                              backgroundImage:
-                              ExtendedNetworkImageProvider(downloadURL!,cache: true,scale:1),
+                          child:    FutureBuilder(
+                            future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
+                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
 
-                              radius: 60,
-                            ),
-                            onDoubleTap:(){
-                              print(downloadURL);
-                            } ,
-                            onLongPress: () {
+                              if (snapshot.hasError){
+                                return Text('error');
+                              }
+                              if (snapshot.hasData && !snapshot.data!.exists){
+                                return Text('Document does not exist');
+                              }
+                              if (snapshot.connectionState == ConnectionState.done){
+                                return InkWell(
+                                    child: (snapshot.data!.data() as Map<String,dynamic>)['imageUrl']==''? CircularProgressIndicator(): CircleAvatar(
+                                      backgroundImage:
+                                      ExtendedNetworkImageProvider((snapshot.data!.data() as Map<String,dynamic>)['imageUrl'],cache: true,scale:1),
 
-                              showDialog(context: context,
-                                  builder: (context) {
+                                      radius: 80,
+                                    ),
+                                    onDoubleTap:(){
+                                    print(downloadURL);
+                                    } ,
+                                    onLongPress: () {
+
+                                    showDialog(context: context,
+                                    builder: (context) {
                                     return AlertDialog(
 
-                                      elevation: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .height / 5,
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text('프로필변경')
-                                        ],
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(onPressed: () {
-                                          AddProfilePhoto();
-                                          _prefs.setString("profileUrl", downloadURL!);
+                                    elevation: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height / 5,
+                                    content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                    Text('프로필변경')
+                                    ],
+                                    ),
+                                    actions: <Widget>[
+                                    TextButton(onPressed: () {
+                                    AddProfilePhoto();
+                                    _prefs.setString("profileUrl", downloadURL!);
 
-                                          Navigator.pop(context);
-                                        }, child: Text('예')),
-                                        TextButton(onPressed: () {
-                                          Navigator.pop(context);
-                                        }, child: Text('아니오'))
-                                      ],
+                                    Navigator.pop(context);
+                                    }, child: Text('예')),
+                                    TextButton(onPressed: () {
+                                    Navigator.pop(context);
+                                    }, child: Text('아니오'))
+                                    ],
                                     );
-                                  });
-                            }
-                            ,
-                          ),
+                                    });
+                                    }
+                                    ,
+                            );
+                            };
+                            return CircularProgressIndicator();
+                                        }
+                           )
                         ),
                         Positioned(
                           bottom: 20,

@@ -145,6 +145,7 @@ class SignupPage3 extends GetView<SignupController> {
                                                   );
                                                 },
                                                 onFinished: (){
+                                                  if(auth.currentUser.isNull)
                                                   showDialog(
                                                       context: context,
                                                       builder: (context) {
