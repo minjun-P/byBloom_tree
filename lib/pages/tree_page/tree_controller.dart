@@ -44,7 +44,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
   }
 
   /// 유저모델 관리
-  late UserModel? currentUserModel;
+  UserModel? currentUserModel=null;
 
   Future<UserModel?> makeUserModel( ) async {
 

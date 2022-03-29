@@ -14,6 +14,7 @@ import 'package:bybloom_tree/auth/authservice.dart';
 import '../../../Profile/profilephoto.dart';
 import '../../../auth/FriendAdd.dart';
 import '../../../auth/FriendModel.dart';
+
 import 'tree_status.dart';
 import 'package:get/get.dart';
 import 'tree_status.dart';
@@ -106,13 +107,29 @@ class FriendDrawer extends GetView<TreeController> {
                print(element.phoneNumber);
              });
              showDialog(context: context, builder:(context){
-               return ListView.builder(
+               if(s?.length==0){
+                 return Card(
+                   child:Text("아직 가입한 친구가없네요")
+                 );
+               }
+               else return ListView.builder(
                    itemCount: s?.length,
                    itemBuilder:(BuildContext context,int index){
                      return Card(
                          child:ListTile(
-                       leading: Text(s![index].phoneNumber),
-                     )
+                       leading:
+                           InkWell(
+                           child:Text(s![index].phoneNumber),
+                           onTap:() async {
+                             bool result=await AddFriend(s![index].phoneNumber);
+                             print('friendadded');
+
+                           }
+                           )
+                             )
+
+
+
                      );
                    }
                );
@@ -120,6 +137,7 @@ class FriendDrawer extends GetView<TreeController> {
              });
 
            }, ),
+            /// s에 연락처연동해서 이미가입해있는 friendmodel들 list 받아왔으니까 친구추가화면 Ui만들어서 채워넣어
             Row(
               children: const [
                 Icon(Icons.search, color: Colors.grey,),
