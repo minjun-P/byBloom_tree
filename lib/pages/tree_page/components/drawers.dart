@@ -6,17 +6,15 @@ import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
 import 'package:bybloom_tree/pages/siginup_page/pages/signup_page1.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'tree_status.dart';
-import 'package:get/get.dart';
-import 'tree_status.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:bybloom_tree/main_controller.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
+import '../../../Profile/profilephoto.dart';
+import '../../../auth/FriendAdd.dart';
+import '../../../auth/FriendModel.dart';
 
 Future<DocumentSnapshot> document= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get();
 /// drawer는 모두 이 함수를 통해 만드는 것으로 통일 child 인수로 받음.
@@ -62,9 +60,11 @@ class FriendDrawer extends GetView<TreeController> {
             }
             return ListTile(
               dense: true,
-              leading: CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.red,
+              leading: (snapshot.data!.data() as Map<String,dynamic>)['imageUrl']==''? CircularProgressIndicator(): CircleAvatar(
+                backgroundImage:
+                ExtendedNetworkImageProvider((snapshot.data!.data() as Map<String,dynamic>)['imageUrl'],cache: true,scale:1),
+
+                radius: 40,
               ),
               title: Text(
                   (snapshot.data!.data() as Map<String,dynamic>)['name'],
@@ -84,7 +84,47 @@ class FriendDrawer extends GetView<TreeController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+             InkWell(
+    child:Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+           onTap: () async {
+
+             List<FriendModel>? s=await findfriendwithcontact();
+             print(s?.length);
+             s?.forEach((element) {
+               print(element.phoneNumber);
+             });
+             showDialog(context: context, builder:(context){
+               if(s?.length==0){
+                 return Card(
+                   child:Text("아직 가입한 친구가없네요")
+                 );
+               }
+               else return ListView.builder(
+                   itemCount: s?.length,
+                   itemBuilder:(BuildContext context,int index){
+                     return Card(
+                         child:ListTile(
+                       leading:
+                           InkWell(
+                           child:Text(s![index].phoneNumber),
+                           onTap:() async {
+                             bool result=await AddFriend(s![index].phoneNumber);
+                             print('friendadded');
+
+                           }
+                           )
+                             )
+
+
+
+                     );
+                   }
+               );
+
+             });
+
+           }, ),
+            /// s에 연락처연동해서 이미가입해있는 friendmodel들 list 받아왔으니까 친구추가화면 Ui만들어서 채워넣어
             Row(
               children: const [
                 Icon(Icons.search, color: Colors.grey,),
