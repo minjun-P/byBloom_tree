@@ -1,15 +1,25 @@
+import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:bybloom_tree/pages/firend_page/firend_profile_controller.dart';
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../../main_controller.dart';
 import '../tree_page/components/tree.dart';
 
 class FriendProfilePage extends GetView<FriendProfileController> {
-  const FriendProfilePage({Key? key}) : super(key: key);
+  const FriendProfilePage({
+    Key? key,
+    required this.friendData
+  }) : super(key: key);
+
+  final FriendModel friendData;
 
   @override
   Widget build(BuildContext context) {
+    Get.put(FriendProfileController());
     return SafeArea(
       child: Scaffold(
         extendBody: true,
@@ -18,31 +28,96 @@ class FriendProfilePage extends GetView<FriendProfileController> {
           child: Stack(
             children: [
               Tree(),
+              Positioned.fill(
+                  child: Lottie.asset(
+                    'assets/tree/cloud.json',
+                    controller: controller.wateringAnimation
+                  )
+              ),
+              Positioned.fill(
+                child: Lottie.asset(
+                    'assets/tree/rain.json',
+                  controller: controller.wateringAnimation
+                ),
+              ),
               Positioned(
                 top: 50,
                 left: 20,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('안녕하세요',style: TextStyle(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),),
-                    Text('이아름님의 나무입니다', style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),)
+                    Text('${friendData.name}님의 나무입니다', style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),)
                   ],
                 ),
               ),
               Positioned(
                 bottom: 50,
                 right: 20,
-                child: Container(
-                  padding: EdgeInsets.only(bottom: 5,left: 3,right: 3),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.transparent,
-                    border: Border.all(color: Colors.white,width: 4)
-                  ),
-                  child: IconButton(
-                    icon: Icon(MdiIcons.wateringCanOutline,size: 40,color: Colors.white,),
-                    onPressed: (){},
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SlideTransition(
+                      position: controller.containerAnimation,
+                      child: Obx(()=>
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 12,vertical: 7),
+                          width: 150,
+                          child: controller.watered.value
+                              ?Text('물을 주셔서 감사해요!')
+                              :Text('친구의 나무에 물을 주세요!')
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+
+                    GestureDetector(
+                      onTap: ()async{
+                        await controller.wateringController.forward();
+                        controller.wateringController.reset();
+                        controller.containerController.stop();
+
+                        friendData.tokens.forEach((token) {
+                          Get.find<MainController>().sendFcm(
+                              token: token,
+                              title: '${Get.find<TreeController>().currentUserModel!.name}님이 나무에 물을 주셨어요',
+                              body: '얼른 확인해보세요!'
+                          );
+                        });
+
+
+                        controller.watered(true);
+                        showDialog(
+                            context: context,
+                            builder: (context)=>AlertDialog(
+                              title: Text('${friendData.name}님에게 물을 주셨어요!'),
+                              content: Text('${Get.find<TreeController>().currentUserModel!.name}님 덕분에 ${friendData.name}님의 경험치가 10 증가했어요!'),
+                              actionsAlignment: MainAxisAlignment.center,
+                              actions: [
+                                ElevatedButton(
+                                child: Text('네'),
+                                onPressed: (){Get.back(closeOverlays: true);},
+                              )],
+                            )
+                        );
+                      },
+                      child: Obx(()=>
+                        Container(
+                          padding: EdgeInsets.only(bottom: 5,left: 3,right: 3),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.transparent,
+                            border: Border.all(color: controller.watered.value?Colors.white:Colors.cyan,width: 4)
+                          ),
+                          child: Icon(MdiIcons.wateringCanOutline,size: 40,color: controller.watered.value?Colors.white:Colors.cyanAccent,)
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               )
             ],
@@ -68,12 +143,17 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '박민준',
-                        style: TextStyle(
-                            fontSize: 21
-                        ),),
-                      Text('별명')
+                      GestureDetector(
+                        onTap: (){
+                          print(friendData.toJson());
+                        },
+                        child: Text(
+                          friendData.name,
+                          style: TextStyle(
+                              fontSize: 21
+                          ),),
+                      ),
+                      Text(friendData.nickname)
                     ],
                   ),
                   Spacer(),

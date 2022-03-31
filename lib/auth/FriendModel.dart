@@ -5,6 +5,7 @@ class FriendModel{
   String imageUrl;
   int level;
   int exp;
+  List tokens;
 
 
   FriendModel({
@@ -14,6 +15,7 @@ class FriendModel{
     required this.exp,
     required this.imageUrl,
     required this.level,
+    required this.tokens
 
   });
 
@@ -23,7 +25,8 @@ class FriendModel{
     'nickname': nickname,
     'exp': exp,
     'level': level,
-    'imageUrl': imageUrl
+    'imageUrl': imageUrl,
+    'tokens':tokens
 
   };
 

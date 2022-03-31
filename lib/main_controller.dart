@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -119,6 +120,19 @@ class MainController extends GetxController{
         .update({
       'tokens': FieldValue.arrayUnion([token]),
     });
+  }
+
+
+  FirebaseFunctions functions = FirebaseFunctions.instanceFor(region: 'asia-northeast3');
+  /// 누군가에게 푸시알림 보내기
+  Future<void> sendFcm({required String token, required String title, required String body}) async {
+    HttpsCallable callable = functions.httpsCallable('sendFCM');
+    final resp = await callable.call(<String, dynamic> {
+      'token': token,
+      'title': title,
+      'body': body
+    });
+    //print(resp.data);
   }
 
 

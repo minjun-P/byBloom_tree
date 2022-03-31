@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'tree_status.dart';
 import 'package:get/get.dart';
 import 'tree_status.dart';
@@ -69,18 +70,13 @@ class FriendDrawer extends GetView<TreeController> {
                   (snapshot.data!.data() as Map<String,dynamic>)['name'],
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
               ),
-              trailing: GestureDetector(
-                onTap: (){
-                  Get.to(()=>FriendProfilePage());
-                },
-                child: Text(
-                  '프로필 변경하기',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13,
-                    decoration: TextDecoration.underline
-                  ),),
-              ),
+              trailing: Text(
+                '프로필 변경하기',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                  decoration: TextDecoration.underline
+                ),),
             );
           }
         ),
@@ -103,15 +99,20 @@ class FriendDrawer extends GetView<TreeController> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
 
           itemBuilder: (BuildContext context, int index) {
-          return Container(
-           child: InkWell(
-              child:Card(
-              color: Colors.amber,
-              elevation: 10,
-              child:Text(controller.currentUserModel!.friendList[index].name))
-             ,
-              onTap:(){} ,
-          )
+          return GestureDetector(
+            onTap: (){
+              Get.to(()=>FriendProfilePage(friendData: controller.currentUserModel!.friendList[index],));
+            },
+            child: ListTile(
+              title: Text(
+                  controller.currentUserModel!.friendList[index].name,
+                  style: TextStyle(
+                    fontSize: 18
+                  ),
+              ),
+              leading: CircleAvatar(backgroundColor: Colors.lime,),
+              trailing: Icon(MdiIcons.messageProcessingOutline,color: Colors.grey.shade500,),
+            ),
           );
           },
             itemCount: controller.currentUserModel?.friendList.length,

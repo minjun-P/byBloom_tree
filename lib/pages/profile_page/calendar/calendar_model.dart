@@ -7,10 +7,11 @@ class Event {
   String title;
   // complete -> 달성 여부
   bool complete;
+
   Event(this.title, this.complete);
 
   @override
-  String toString() => title;
+  String toString() => 'Event title:'+title;
 }
 
 // Map형태로 이렇게 데이터를 직접 코딩해서 만들어 놓음.

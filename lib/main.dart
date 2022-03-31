@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/login', page:()=> loginScreen(),binding: BindingsBuilder.put(()=>LoginController())),
           GetPage(name:'/signup', page:()=>RegisterPage()),
           // 회원 가입 첫 화면
-          GetPage(name:'/first', page: () => const SignupPage1())
+          GetPage(name:'/first', page: () => const SignupPage1()),
         ],
 
         title: 'byBloom MVP',

@@ -27,13 +27,7 @@ class ProfileTree extends StatelessWidget {
         ),
         const SizedBox(height: 30,),
         ClipRRect(
-            child: SizedBox(
-              height: 500,
-              child: FittedBox(
-                fit: BoxFit.fill,
-                  child: SizedBox(child: Tree())
-              ),
-            ),
+            child: SizedBox(child: Tree()),
           borderRadius: BorderRadius.circular(40),
         )
       ],

@@ -22,13 +22,9 @@ import 'package:bybloom_tree/auth/User.dart';
 class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
-  /// 애니메이션 영역
-
   Rx<bool> rain = false.obs;
 
-  late AnimationController wateringIconController;
-  late AnimationController rainController;
-  late Animation<double> rainAnimation;
+
   // 임시로 만든거, 푸시알림 보내기 기능
   late GlobalKey<FormState> formKey;
 
@@ -96,16 +92,38 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     }
   }
 
+  late AnimationController wateringIconController;
+  late AnimationController rainController;
+  late Animation<double> rainAnimation;
+
+  late AnimationController levelUpAnimationController;
+  late Animation<double> levelUpAnimation;
+
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
+    /// 레벨업 애니메이션
+    levelUpAnimationController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 5000)
+    );
+    levelUpAnimation = Tween<double>(
+        begin: 0,
+        end: 1
+    ).animate(levelUpAnimationController);
+
+    /// User 모델 초기화
     currentUserModel=await makeUserModel();
     print("UID:${currentUserModel?.name}");
     print(uploadFriend(currentUserModel!));
+
+    /// 필요한 데이터 가져오기
     exp.bindStream(userDetail().map((event)=>event['exp']));
     level.bindStream(userDetail().map((event)=>event['level']));
 
+
+    /// 물주기 애니메이션 - 임시
     wateringIconController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 200),
@@ -121,12 +139,14 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
       end: 1.0,
     ).animate(rainController);
 
+
     formKey = GlobalKey();
 
 
 
 
   }
+
 
   void animateWateringIcon() async {
     await wateringIconController.forward();
@@ -135,14 +155,20 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     await rainController.reverse();
   }
 
-  Rx<int> treeGrade = 1.obs;
-  void treeUpgrade() {
-    if (treeGrade.value == 6) {
-      treeGrade(1);
-    } else {
-      treeGrade(treeGrade.value+1);
-    }
+  void levelUp(){
+    DocumentReference doc =FirebaseFirestore.instance.collection('users').doc(currentUserModel!.uid);
+    doc.update({
+      'exp':FieldValue.increment(-100),
+      'level':FieldValue.increment(1)
+    });
   }
+  void templevelUp(){
+    DocumentReference doc =FirebaseFirestore.instance.collection('users').doc(currentUserModel!.uid);
+    doc.update({
+      'level':FieldValue.increment(1)
+    });
+  }
+
   /// 알림보내기
   var title = ''.obs;
   var body = ''.obs;

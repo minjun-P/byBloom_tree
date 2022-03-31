@@ -1,23 +1,36 @@
-import 'package:bybloom_tree/pages/mission_page/pages/draggable.dart';
-import 'package:bybloom_tree/pages/mission_page/pages/mission_exexcute_page.dart';
+import 'package:bybloom_tree/pages/mission_page/pages/type_C/mission_C_page.dart';
+import 'package:bybloom_tree/pages/mission_page/pages/type_D/mission_D_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../mission_controller.dart';
-import '../pages/draggable_page.dart';
+import '../pages/type_A/mission_A_page.dart';
+import '../pages/type_B/mission_B_page.dart';
 class MissionContainer extends GetView<MissionController> {
-  final int index;
+  final String type;
   const MissionContainer({
     Key? key,
-    required this.index,
+    required this.type,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Mission mission = missionList[index];
     return GestureDetector(
       onTap: (){
-        Get.to(()=>MissionExecutePage(mission: mission));
+        switch(type) {
+          case 'A':
+            Get.to(()=>MissionAPage());
+            break;
+          case 'B':
+            Get.to(()=>MissionBPage());
+            break;
+          case 'C':
+            Get.to(()=>MissionCPage());
+            break;
+          case 'D':
+            Get.to(()=>MissionDPage());
+            break;
+        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
@@ -42,16 +55,17 @@ class MissionContainer extends GetView<MissionController> {
             Flexible(
               flex: 4,
               child: Text(
-                mission.title,
+                  controller.typeMatch[type],
                 style: TextStyle(
-                  color: Colors.grey.shade500,
-                  fontSize: 20
+                  fontSize: 20,
+                  color: Colors.grey
                 ),
-              ),
+
+              )
             ),
             Flexible(
               flex: 1,
-                child: _buildMissionCompleteBox(index)
+                child: _buildMissionCompleteBox(type)
             ),
 
           ],
@@ -59,25 +73,20 @@ class MissionContainer extends GetView<MissionController> {
       ),
     );
   }
-  Widget _buildMissionCompleteBox(int index) {
-    return Obx(()=>GestureDetector(
-      onTap: (){
-        controller.updateMissionComplete(index);
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(
-          border: controller.missionComplete[index]
-              ?Border.all(color:Colors.green,width: 2)
-              :Border.all(color:Colors.grey,width: 1.5),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        curve: Curves.linearToEaseOut,
-        child: controller.missionComplete[index]?const Icon(Icons.park,color: Colors.green,):null,
-
+  Widget _buildMissionCompleteBox(String type) {
+    return Obx(()=>AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        border: controller.missionCompleted[type]!
+            ?Border.all(color:Colors.green,width: 2)
+            :Border.all(color:Colors.grey,width: 1.5),
+        borderRadius: BorderRadius.circular(10),
       ),
+      curve: Curves.linearToEaseOut,
+      child: controller.missionCompleted[type]!?const Icon(Icons.park,color: Colors.green,):null,
+
     ));
   }
 }

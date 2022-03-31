@@ -1,9 +1,10 @@
+import 'package:bybloom_tree/pages/profile_page/calendar/calendar_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'components/mission_container.dart';
 import 'mission_controller.dart';
-import 'bible_model.dart';
+import 'pages/type_A/mission_A_page.dart';
 
 /// 미션을 확인하고 수행하는 페이지
 /// 필요 기능
@@ -23,21 +24,33 @@ class MissionPage extends GetView<MissionController> {
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
-            controller.getFruit();
+            print(Get.find<CalendarController>().list);
           },
             child: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
-        actions: [Obx(()=> Text(controller.day.value.toString(), style: TextStyle(color: Colors.black),),),SizedBox(width: 30,)],
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),
       backgroundColor: Colors.white,
       body: ListView(
-        padding: EdgeInsets.fromLTRB(Get.width*0.05, 20, Get.width*0.05, 100),
+        padding: EdgeInsets.fromLTRB(Get.width*0.05, 0, Get.width*0.05, 100),
         children: [
-          MissionContainer(index:0),
-          MissionContainer(index: 1,),
-          MissionContainer(index: 2),
-          MissionContainer(index:3),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Obx(()=>
+              Text(
+                  '${controller.day.value} 일째, 데일리 미션입니다',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold
+                  ),
+              ),
+            ),
+          ),
+          MissionContainer(type: 'A',),
+          MissionContainer(type: 'D',),
+          MissionContainer(type: 'C',),
+          MissionContainer(type: 'B',),
         ],
       ),
     );

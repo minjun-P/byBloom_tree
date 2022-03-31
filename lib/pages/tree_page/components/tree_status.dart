@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lottie/lottie.dart';
 Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).snapshots();
 //유저등록
 
@@ -25,6 +26,28 @@ class TreeStatus extends GetView<TreeController> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           /// 임시 물 받기 아이콘
+          Obx(()=>
+            Visibility(
+              visible: controller.exp.value>=100,
+                child: Column(
+                  children: [
+                    Text('레벨업'),
+                    GestureDetector(
+                      onTap: ()async{
+                        controller.levelUpAnimationController.forward().then((value) => controller.levelUpAnimationController.reset());
+                        Future.delayed(Duration(milliseconds: 3400)).then((value) => controller.templevelUp());
+
+
+
+
+                      },
+                      child: Lottie.asset(
+                          'assets/45717-arrow-up.json',
+                          width: 50,height: 50),
+                    ),
+                  ],
+                )),
+          ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: IconButton(
@@ -33,9 +56,12 @@ class TreeStatus extends GetView<TreeController> {
                 color: Colors.white,
                 size: 60,
               ),
-              onPressed: (){
-                controller.rain(!controller.rain.value);
-              },),
+              onPressed: ()async{
+                await controller.levelUpAnimationController.forward();
+                Future.delayed(Duration(milliseconds: 800)).then((value) => controller.templevelUp());
+                controller.levelUpAnimationController.reverse();
+
+                },),
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -46,9 +72,10 @@ class TreeStatus extends GetView<TreeController> {
                 size: 60,
               ),
               onPressed: (){
+                // 임시로 태현이형 위해서
                 /// 경험치 증가 테스팅
-                //FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(
-                    //{'exp':controller.exp.value+10});
+                FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(
+                    {'exp':controller.exp.value+10});
                 /// 푸시알람 테스팅
                 //controller.show();
               },),
