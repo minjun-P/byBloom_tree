@@ -1,71 +1,78 @@
-import 'package:bybloom_tree/pages/mission_page/mission_model.dart';
-import 'package:bybloom_tree/pages/mission_page/pages/type_A/mission_A_page.dart';
-import 'package:bybloom_tree/pages/mission_page/pages/type_C/mission_C_page.dart';
-import 'package:bybloom_tree/pages/mission_page/pages/type_D/mission_D_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../tree_page/tree_controller.dart';
-import 'pages/type_B/mission_B_page.dart';
 
 
 /// 그냥 각 미션 별로 체크 박스만 만들어놓음.
 /// db 연결하면서 미션 목록 불러오고, 완료 여부 확인도 할 수 있도록 해야할 듯.
 class MissionController extends GetxController {
-  
-  void temp(){
-    CollectionReference ref = FirebaseFirestore.instance.collection('missions');
-    for (int i=1;i<=30;i++){
-      ref.doc('day$i').collection('category').doc('B').set(model[i-1]);
+  // 반응형 day -> Stream 과 bindStream
+  Rx<int> day = 1.obs;
+  /// 반응형 missions 가 담긴 변수들과 업데이트 메소드
+  // 반응형 변수들
+  RxMap<String,dynamic> missionA = RxMap<String,dynamic>({});
+  RxMap<String,dynamic> missionB = RxMap<String,dynamic>({});
+
+  CollectionReference missionsRef = FirebaseFirestore.instance.collection('missions');
+
+  // 반응형 변수(데일리 미션 정보) 컨트롤 메소드
+  void updateDailyMission(String type, int day) async {
+    /// missionA 데이터 업데이트
+    DocumentReference<Map<String,dynamic>> missionARef = missionsRef.doc('day$day').collection('category').doc(type);
+    DocumentSnapshot<Map<String,dynamic>> data = await missionARef.get();
+    switch(type) {
+      case 'A':
+        missionA.addAll(data.data()!);
+        break;
+      case 'B':
+        missionB.addAll(data.data()!);
+        break;
     }
   }
-  
-  // 미션 내부 정보 컨트롤
 
-  Rx<int> day = 1.obs;
-  RxMap<String,dynamic> missionA = RxMap<String,dynamic>({});
+
   RxMap<String,bool> missionCompleted = <String,bool>{
     'A':false,
     'B':false,
     'C':false,
     'D':false
   }.obs;
-  RxMap missionsB = {}.obs;
-  RxMap missionC = {}.obs;
 
-  late PanelController panelController;
 
-  // 컬렉션 레퍼런스 생성
-  CollectionReference missions = FirebaseFirestore.instance.collection('missions');
 
-  // 미션 A 댓글창 컨트롤러
-  TextEditingController commentControllerA = TextEditingController();
+  /// 미션 A 댓글창 컨트롤러
+  late TextEditingController commentControllerA;
+  /// 미션 B 댓글창 컨트롤러
+  late TextEditingController commentControllerB;
+
+  /// 댓글 조작 메서드 모음 --------------------------------------------------------------------------
   void uploadComment({required String comment, required String type}){
-    missions.doc('day${day.value}').collection('category').doc(type).collection('comments').add({
+    missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').add({
       'writer': Get.find<TreeController>().currentUserModel!.name,
-      'contents':commentControllerA.text,
+      'contents':comment,
       'createdAt':DateTime.now(),
       'uid':Get.find<TreeController>().currentUserModel!.uid,
       'like':[]
     });
   }
   void plusLikeCount({required String docId, required String type}) {
-    missions.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).update({
+    missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).update({
       'like':FieldValue.arrayUnion([Get.find<TreeController>().currentUserModel!.uid])
     });
   }
 
   void minusLikeCount({required String docId, required String type}) {
-    missions.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).update({
+    missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).update({
       'like':FieldValue.arrayRemove([Get.find<TreeController>().currentUserModel!.uid])
     });
   }
 
   void deleteComment({required String docId, required String type}) {
     // comment 컬렉션에서 삭제
-    missions.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).delete();
+    missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).delete();
     // mission_completed 컬렉션에서 삭제
     var doc = FirebaseFirestore.instance.collection('users').doc(Get.find<TreeController>().currentUserModel!.uid).collection('mission_completed').doc('day${day.value}');
     doc.update({
@@ -93,35 +100,30 @@ class MissionController extends GetxController {
       });
     }
   }
-
+  /// -------------------------------------------------------------------------  댓글 조작 메서드 모음
 
 
   @override
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
-    // 슬라이딩 판넬
-    panelController = PanelController();
+    commentControllerA = TextEditingController();
+    commentControllerB = TextEditingController();
     // day 값 스트림에 연결
-    day.bindStream(missions.doc('today').snapshots().map((event) => event.get('day')));
+    day.bindStream(missionsRef.doc('today').snapshots().map((event) => event.get('day')));
     // day 가 변경 시마다 데이터 업데이트
     ever(day, (day) async {
-      print('day가 업데이트');
       /// missionA 데이터 업데이트
-      DocumentReference<Map<String,dynamic>> missionARef = missions.doc('day${day}').collection('category').doc('A');
-      DocumentSnapshot<Map<String,dynamic>> data = await missionARef.get();
-      missionA.addAll(data.data()!);
+      updateDailyMission('A', day as int);
+      /// missionB 데이터 업데이트
+      updateDailyMission('B', day);
+
       /// missionCompleted 데이터 업데이트
       try {
         missionCompletedUpdate();
       } catch(e) {
         Future.delayed(Duration(milliseconds: 500)).then((value) => missionCompletedUpdate());
       }
-
-    });
-    ever(missionCompleted, (map) {
-      print('missionCompleted가 업데이트');
-      print(map);
     });
 
 
@@ -140,7 +142,7 @@ class MissionController extends GetxController {
     bool C = false;
     bool D = false;
     DocumentReference dayCompleted = FirebaseFirestore.instance.collection('users')
-        .doc(Get.find<TreeController>().currentUserModel!.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('mission_completed').doc('day$day');
     missionCompleted.bindStream(dayCompleted.snapshots().map((event){
       // 스냅샷 존재하지 않을 경우
@@ -195,6 +197,9 @@ class MissionController extends GetxController {
     'C':'감사일기',
     'D':'교회 연계미션'
   };
+
+  /// MissionB 내부 변수
+  Rx<int> selectedContainer = 0.obs;
 
 
 

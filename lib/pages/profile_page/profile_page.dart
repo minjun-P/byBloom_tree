@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,6 +45,7 @@ class ProfilePageState extends State<ProfilePage>{
   @override
   Widget build(BuildContext context) {
     Get.put(CalendarController());
+    Get.put(ProfileController());
     return Scaffold(
       body: DefaultTabController(
         length: 3,
@@ -70,7 +72,7 @@ class ProfilePageState extends State<ProfilePage>{
                           ],
                         ),
                         ClipOval(
-                          child:    FutureBuilder(
+                          child: FutureBuilder(
                             future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
                             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
 

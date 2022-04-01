@@ -1,7 +1,10 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:table_calendar/table_calendar.dart';
 import '../../tree_page/tree_controller.dart';
 import 'calendar_model.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +46,9 @@ class CalendarController extends GetxController {
   // optional 파라미터에 값을 넣어줬을 때만 특정 날짜의 events를 리턴한다.
   List<Event> getEventsForDay([DateTime? eventCheckDay]) {
     if (eventCheckDay !=null){
-      return events[eventCheckDay] ?? [];
+      return hashedEventList.value[eventCheckDay] ?? [];
     }
-    return events[selectedDay.value] ?? [];
+    return hashedEventList.value[selectedDay.value] ?? [];
   }
 
 
@@ -72,37 +75,65 @@ class CalendarController extends GetxController {
   }
 
   /// 디비랑 연동해 mission -> Event 로 만드는 로직
-  Stream<List> loadMissionCompleted(){
+  Stream<Map<DateTime,List<Event>>> loadMissionCompleted(){
     FirebaseFirestore db = FirebaseFirestore.instance;
+    // 임시로 uid 고정값
     CollectionReference col = db.collection('users').doc('qm2fiMNEhzTvahd5neE2ihe7Jsk1').collection('mission_completed');
     // 콜렉션 스냅샷 불러오기
     Stream<QuerySnapshot> completedSnapshot = col.snapshots();
-    // 스냅샷을 내가 필요한 형태로 가공 ==> Event 객체가 들어있는 스냅샷
-    Stream<List> stream = completedSnapshot.map((event) {
+    /// 스냅샷을 내가 필요한 형태로 가공 ==> Stream<Map>형태
+    Stream<Map<DateTime,List<Event>>> stream = completedSnapshot.map((event) {
       // 다큐먼트 스냅샷이 모여있는 리스트 생성
       List<QueryDocumentSnapshot> docsList = event.docs;
-      // 해당 리스트를 Event가 모여 있는 리스트로 변환
-      List eventsList = docsList.map((document) {
-        //개별 다큐먼트를 Map으로 변환.
-        Map<String,dynamic> data = document.data() as Map<String,dynamic>;
-        var dailyEventList = data.keys.map((key){
-          Timestamp date = data['createdAt'];
-          return date.toDate();
-        }).toList();
-        // 아래 리턴 값으로 이루어진 이벤트 반환, 최종리스트의 요소 리스트
-        return dailyEventList;
+      List<QueryDocumentSnapshot> filteredDocsList = docsList.where((element) {
+        Map data = element.data() as Map<String,dynamic>;
+        return data.isNotEmpty;
       }).toList();
-      //var map = Map.fromIterable(eventsList,key: (element)=>element[0])
-      return eventsList;
 
+      //
+      Iterable<DateTime> datetimeList = filteredDocsList.map((document){
+        Map<String,dynamic> temp = document.data() as Map<String,dynamic>;
+        Map<String,dynamic> time = temp[temp.keys.elementAt(0)] as Map<String,dynamic>;
+        Timestamp timestamp = time['createdAt'];
+        DateTime date = timestamp.toDate();
+
+        return DateTime(date.year,date.month,date.day);
+      });
+      Iterable<List<Event>> missionList = filteredDocsList.map((document){
+        Map<String,dynamic> temp = document.data() as Map<String,dynamic>;
+        // 미션 카테고리 따라서
+        List<Event> missions =temp.keys.map((key){
+          Map<String,dynamic> detail = temp[key] as Map<String,dynamic>;
+          return Event(detail['contents'],true,category: key);
+        }).toList();
+        return missions;
+      });
+      Map<DateTime,List<Event>> result = Map.fromIterables(datetimeList, missionList);
+      return result;
     });
     return stream;
   }
-  var list = RxList();
+  var calendarEventList = RxMap<DateTime,List<Event>>({});
+  Rx<LinkedHashMap<DateTime?, List<Event>>> hashedEventList = LinkedHashMap<DateTime?, List<Event>>(
+    equals: isSameDay,
+  ).obs;
+
+  RxList selectedEventsList = [].obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
-    Future.delayed(Duration(milliseconds: 1000)).then((value) => list.bindStream(loadMissionCompleted()));
+    calendarEventList.bindStream(loadMissionCompleted());
+    ever(calendarEventList, (list){
+      hashedEventList.value.addAll(calendarEventList);
+      print(calendarEventList);
+      update();
+    });
+    ever(selectedDay,(day){
+      selectedEventsList.value = getEventsForDay().map((event)=>event.category!).toList();
+      update();
+    });
+    Future.delayed(Duration(milliseconds: 1000)).then((value) => update());
     super.onInit();
   }
 

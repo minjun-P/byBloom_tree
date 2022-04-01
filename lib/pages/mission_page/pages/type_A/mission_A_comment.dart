@@ -19,64 +19,6 @@ class MissionAComment extends GetView<MissionController> {
           appBar: AppBar(
             title: Obx(()=> Text('오늘의 말씀 day${controller.day.value}')),
           ),
-          /// 댓글 텍스트 창
-          bottomSheet: !controller.missionCompleted['A']!
-          ?Container(
-            height: 80,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
-                boxShadow: [
-                  BoxShadow(
-                      offset: Offset(0,-0.7),
-                      color: Colors.grey,
-                      blurRadius: 5,
-                      spreadRadius: 0.1
-                  )
-                ]
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.amber,
-                ),
-                SizedBox(width:10),
-                Expanded(
-                    child: TextFormField(
-                      controller: controller.commentControllerA,
-                      decoration: InputDecoration(
-                          hintText: '랄라블라로 의견 남기기'
-                      ),
-                      maxLines: 2,
-                    )
-                ),
-                // 댓글 남기기
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: (){
-                    // 텍스트가 있을 때만
-                    if (controller.commentControllerA.text.isNotEmpty){
-                      controller.uploadComment(comment: controller.commentControllerA.text,type: 'A');
-                      controller.updateComplete(comment: controller.commentControllerA.text,type: 'A');
-                      controller.incrementExp(30);
-                      controller.commentControllerA.clear();
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text('수고하셨어요!'),
-                              content: Text('느낀점을 남겨 경험치가 30 증가했어요!'),
-                            );
-                          }
-                      );
-                    }
-
-                  },
-                )
-              ],
-            ),
-          ):null,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
             child: Column(
@@ -92,7 +34,7 @@ class MissionAComment extends GetView<MissionController> {
                 Text('최신순'),
                 Divider(thickness: 2,color: Colors.grey,),
                 StreamBuilder<QuerySnapshot>(
-                  stream: controller.missions.doc('day${controller.day.value}').collection('category').doc('A').collection('comments').orderBy('createdAt',descending: true).snapshots(),
+                  stream: controller.missionsRef.doc('day${controller.day.value}').collection('category').doc('A').collection('comments').orderBy('createdAt',descending: true).snapshots(),
                   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
 
                     if (snapshot.hasError) {
@@ -202,6 +144,64 @@ class MissionAComment extends GetView<MissionController> {
               ],
             ),
           ),
+          /// 댓글 텍스트 창
+          bottomSheet: !controller.missionCompleted['A']!
+              ?Container(
+            height: 80,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+                boxShadow: [
+                  BoxShadow(
+                      offset: Offset(0,-0.7),
+                      color: Colors.grey,
+                      blurRadius: 5,
+                      spreadRadius: 0.1
+                  )
+                ]
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.amber,
+                ),
+                SizedBox(width:10),
+                Expanded(
+                    child: TextFormField(
+                      controller: controller.commentControllerA,
+                      decoration: InputDecoration(
+                          hintText: '랄라블라로 의견 남기기'
+                      ),
+                      maxLines: 2,
+                    )
+                ),
+                // 댓글 남기기
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: (){
+                    // 텍스트가 있을 때만
+                    if (controller.commentControllerA.text.isNotEmpty){
+                      controller.uploadComment(comment: controller.commentControllerA.text,type: 'A');
+                      controller.updateComplete(comment: controller.commentControllerA.text,type: 'A');
+                      controller.incrementExp(30);
+                      controller.commentControllerA.clear();
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('수고하셨어요!'),
+                              content: Text('느낀점을 남겨 경험치가 30 증가했어요!'),
+                            );
+                          }
+                      );
+                    }
+
+                  },
+                )
+              ],
+            ),
+          ):null,
         ),
       ),
     );

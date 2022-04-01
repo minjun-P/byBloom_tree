@@ -117,6 +117,7 @@ class Calendar extends GetView<CalendarController> {
                   /** 날짜 터치시 상호작용 */
                   onDaySelected: (DateTime selectedDay, _){
                     controller.updateSelectedDay(selectedDay);
+                    print(controller.selectedEventsList);
                     },
                   selectedDayPredicate: (day){
                     return isSameDay(controller.selectedDay.value,day);

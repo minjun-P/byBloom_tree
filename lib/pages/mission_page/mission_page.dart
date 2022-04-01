@@ -1,7 +1,10 @@
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_controller.dart';
+import 'package:bybloom_tree/pages/profile_page/calendar/calendar_model.dart';
+import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'components/mission_container.dart';
 import 'mission_controller.dart';
 import 'pages/type_A/mission_A_page.dart';
@@ -24,7 +27,8 @@ class MissionPage extends GetView<MissionController> {
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
-            print(Get.find<CalendarController>().list);
+            print(Get.find<ProfileController>().dayCount.value);
+            print(Get.find<ProfileController>().missionCount.value);
           },
             child: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
         backgroundColor: Colors.white,
