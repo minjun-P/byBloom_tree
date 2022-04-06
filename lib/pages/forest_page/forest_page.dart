@@ -73,15 +73,69 @@ class ForestPage extends GetView<ForestController> {
                   );
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
+                padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
+                height: 120,
+
                   child: Row(
+
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+
+              Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+              // 색 값 따로 다 설정하기 귀찮아서 그냥 랜덤으로 정해지도록 임시 설정함함
+              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1),
+              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1)
+              ]
+              ),
+              boxShadow: const[
+              BoxShadow(color: Colors.grey,offset: Offset(3,3),blurRadius: 3)
+              ])),
                       Text(room.name ?? ''),
+                      const SizedBox(width: 15,),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10,),
+                            Text('방제목',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                            Text(
+                              '최근메시지',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 14),
+                            )
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            forestList[index].latestMessage.getTime(),
+                            style: const TextStyle(color: Colors.grey,fontSize: 13),),
+                          const SizedBox(height: 5,),
+                          Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(forestList[index].unreadCount.toString(),style: const TextStyle(color: Colors.white,fontSize: 14),),
+                          )
+                        ],
+                      )
                     ],
                   ),
+              )
               );
             },
           );
