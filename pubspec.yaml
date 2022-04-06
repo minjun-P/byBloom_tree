@@ -61,6 +61,16 @@ dependencies:
   shared_preferences: ^2.0.13
   contacts_service: ^0.6.3
   permission_handler: ^9.2.0
+  uuid: ^3.0.5
+  flutter_chat_ui: ^1.5.5
+  flutter_firebase_chat_core: ^1.5.2
+  faker: ^2.0.0
+  mime: ^1.0.1
+  open_file: ^3.2.1
+  path_provider: ^2.0.8
+  file_picker: ^4.5.1
+
+
 
 
 dev_dependencies:

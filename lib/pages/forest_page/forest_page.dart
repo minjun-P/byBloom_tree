@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'pages/forest_chat_room.dart';
 
 
+
 /// 숲 페이지 - 카톡처럼 클릭하면 내부 채팅방 들어가짐.
 /// DB 연결할 껀덕지가 제일 많은 곳이 아닐까 싶음. 내부 채팅방은 아마 더...
 /// 지금은 임시로 forest_model 페이지에 만들어놓은 데이터를 가져다 대강 구현해놓음
@@ -16,6 +17,7 @@ class ForestPage extends GetView<ForestController> {
 
   @override
   Widget build(BuildContext context) {
+
     Get.put(ForestController());
     return Scaffold(
       appBar: AppBar(
@@ -100,6 +102,7 @@ class ForestPage extends GetView<ForestController> {
         },
       ),
     );
+
   }
 
 }
