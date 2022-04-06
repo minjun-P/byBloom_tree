@@ -21,24 +21,52 @@ import '../forest_model.dart';
 /// 주환 너가 직접 만들어본 경험 있으니깐 여기는 직접 다루는게 더 편할 듯 해서 더 안 건드림
 /// 채팅 목록은 forest_model에서 가져왔으.
 class ForestChatRoom extends StatelessWidget {
-  final Forest forest;
+  final types.Room room;
   ForestChatRoom({
     Key? key,
-    required this.forest
+    required this.room
   }) : super(key: key);
   /// 나중에 이 친구들 controller로 보내는게 깔끔할지도?
   final TextEditingController textEditingController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        title: Text(forest.name),
+        title: Text(this.room.name!),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
       backgroundColor: const Color(0xffFAE7E2),
+      body: StreamBuilder<types.Room>(
+        initialData: this.room,
+        stream: FirebaseChatCore.instance.room(this.room.id),
+        builder: (context, snapshot) {
+          return StreamBuilder<List<types.Message>>(
+            initialData: const [],
+            stream: FirebaseChatCore.instance.messages(snapshot.data!),
+            builder: (context, snapshot) {
+              return SafeArea(
+                bottom: false,
+                child: Chat(
+                  messages: snapshot.data ?? [],
+
+                  user: types.User(
+                    id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
+                  ), onSendPressed: (PartialText ) {  },
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+  /*
+  @override
+  Widget build(BuildContext context) {
+     return Scaffold(
+
       body: Column(
         children: [
           Expanded(
@@ -153,5 +181,6 @@ class ForestChatRoom extends StatelessWidget {
         ],
       ),
     );
-  }
+  }*/
+
 }

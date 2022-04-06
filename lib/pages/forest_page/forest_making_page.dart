@@ -1,99 +1,70 @@
 import 'dart:math';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import '../tree_page/tree_controller.dart';
 import 'forest_model.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'pages/forest_chat_room.dart';
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
 
-class ForestPage extends GetView<ForestController> {
-  const ForestPage({Key? key}) : super(key: key);
+class ForestMakingPage extends GetView<ForestController> {
+  const ForestMakingPage({Key? key}) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
+    List<bool> checkbox=  List.filled(100,false);
     Get.put(ForestController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('숲 만들기',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-        actions: [IconButton(onPressed:(){ }, icon: Icon(
-            Icons.add_box))],
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),
       backgroundColor: Colors.white,
       body: ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: forestList.length,
-        itemBuilder: (context,index){
-          return InkWell(
-            onTap: (){
-              Get.to(()=>ForestChatRoom(forest: forestList[index]));
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
-              height: 120,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              // 색 값 따로 다 설정하기 귀찮아서 그냥 랜덤으로 정해지도록 임시 설정함함
-                              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1),
-                              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1)
-                            ]
-                        ),
-                        boxShadow: const[
-                          BoxShadow(color: Colors.grey,offset: Offset(3,3),blurRadius: 3)
-                        ]
-                    ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              width: 100,
+              height: 100,
+              child: ListTile(
+                title: Text(
+                  Get.find<TreeController>().currentUserModel!.friendList[index].name,
+                  style: TextStyle(
+                      fontSize: 18
                   ),
-                  const SizedBox(width: 15,),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10,),
-                        Text(forestList[index].name,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
-                        Text(
-                          forestList[index].latestMessage.content,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 14),
-                        )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        forestList[index].latestMessage.getTime(),
-                        style: const TextStyle(color: Colors.grey,fontSize: 13),),
-                      const SizedBox(height: 5,),
-                      Container(
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(forestList[index].unreadCount.toString(),style: const TextStyle(color: Colors.white,fontSize: 14),),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        },
+                ),
+                leading: CircleAvatar(backgroundColor: Colors.lime,),
+                trailing:Obx(()=>InkWell(
+                 child:controller.checkbox[index].value?
+
+                 Icon( Icons.check_circle, color: Colors.lightGreen):
+                 Icon( Icons.check_circle, color: Colors.grey),
+               onTap: (){ Get.find<ForestController>().checkbox[index].value=!Get.find<ForestController>().checkbox[index].value;},
+            ))
+                ),
+              );
+
+
+
+          },
+          itemCount: Get.find<TreeController>().currentUserModel?.friendList.length,
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+
+        onPressed: () {  },
+
       ),
-    );
+      );
+
+
+
   }
 
 }

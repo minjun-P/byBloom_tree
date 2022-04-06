@@ -13,6 +13,8 @@ import 'package:path_provider/path_provider.dart';
 
 class ForestController extends GetxController {
 
+  List<RxBool> checkbox=List.filled(100, RxBool(false));
+
 
 }
 

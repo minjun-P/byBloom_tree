@@ -1,8 +1,12 @@
 import 'dart:math';
+import 'package:bybloom_tree/pages/forest_page/forest_making_page.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+
 import 'forest_model.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'pages/forest_chat_room.dart';
 
 
@@ -15,6 +19,10 @@ import 'pages/forest_chat_room.dart';
 class ForestPage extends GetView<ForestController> {
   const ForestPage({Key? key}) : super(key: key);
 
+
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -22,19 +30,70 @@ class ForestPage extends GetView<ForestController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('숲',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-        actions: [IconButton(onPressed:(){ }, icon: Icon(
+        actions: [IconButton(onPressed:(){
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ForestMakingPage()),
+            );
+
+
+        }, icon: Icon(
           Icons.add_box))],
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),
       backgroundColor: Colors.white,
-      body: ListView.builder(
+      body: StreamBuilder<List<types.Room>>(
+        stream: FirebaseChatCore.instance.rooms(),
+        initialData: const [],
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(
+                bottom: 200,
+              ),
+              child: const Text('아직 가입한 숲이없어요'),
+            );
+          }
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              final room = snapshot.data![index];
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ForestChatRoom(
+                        room: room,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      Text(room.name ?? ''),
+                    ],
+                  ),
+              );
+            },
+          );
+        },
+      ),
+      /*ListView.builder(
         padding: EdgeInsets.zero,
         itemCount: forestList.length,
         itemBuilder: (context,index){
           return InkWell(
             onTap: (){
-              Get.to(()=>ForestChatRoom(forest: forestList[index]));
+              Get.to(()=>ForestChatRoom(room:));
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
@@ -100,7 +159,7 @@ class ForestPage extends GetView<ForestController> {
             ),
           );
         },
-      ),
+      )*/
     );
 
   }

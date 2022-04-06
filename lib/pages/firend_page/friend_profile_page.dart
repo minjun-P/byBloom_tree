@@ -1,13 +1,18 @@
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:bybloom_tree/pages/firend_page/firend_profile_controller.dart';
+import 'package:bybloom_tree/pages/forest_page/pages/forest_chat_room.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:bybloom_tree/auth/User.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../main_controller.dart';
 import '../tree_page/components/tree.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 class FriendProfilePage extends GetView<FriendProfileController> {
   const FriendProfilePage({
@@ -61,10 +66,7 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                       position: controller.containerAnimation,
                       child: Obx(()=>
                         Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)
-                          ),
+
                           padding: EdgeInsets.symmetric(horizontal: 12,vertical: 7),
                           width: 150,
                           child: controller.watered.value
@@ -157,7 +159,23 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                     ],
                   ),
                   Spacer(),
-                  Icon(MdiIcons.messageProcessingOutline,color: Colors.grey.shade400,size: 35,),
+                  InkWell(
+                      onTap: () async {
+                        final room2=await FirebaseChatCore.instance.createRoom(types.User(id:(await finduidFromPhone(friendData.phoneNumber!))!),metadata: {'name':friendData.name});
+
+                        Navigator.of(context).push(
+
+                          MaterialPageRoute(
+                            builder: (context) => ForestChatRoom(
+                              room: room2,
+                            ),
+                          ),
+                        );
+                      },
+                  child:Icon(MdiIcons.messageProcessingOutline,color: Colors.grey.shade400,size: 35,)
+
+
+                  ),
                   SizedBox(width: 20,)
                 ],
               ),

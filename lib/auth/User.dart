@@ -77,6 +77,19 @@ Future<String?> findUserNameFromPhone(String phoneNum) async {
 
   return null;
 }
+Future<String?> finduidFromPhone(String phoneNum) async {
+  var friend =  await FirebaseFirestore.instance.collection('users').
+  where('phoneNumber',isEqualTo:phoneNum).
+  snapshots().first;
+
+  if (friend != null) {
+    return friend.docs[0].id;
+
+
+  }
+
+  return null;
+}
 
 Future<FriendModel?> findUserFromPhone(String phoneNum) async {
   var friend =  await FirebaseFirestore.instance.collection('users').
