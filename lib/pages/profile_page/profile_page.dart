@@ -34,8 +34,10 @@ class ProfilePageState extends State<ProfilePage>{
   _loadURLfromshared() async {
     _prefs= await SharedPreferences.getInstance();
     downloadURL= (_prefs.getString('downloadURL') ?? await _loadURLfromdatabase()) as String?;
-    _prefs.setString('profileUrl', downloadURL!);
-    print('downloadURL1:$downloadURL');
+    if(downloadURL!=null) {
+      _prefs.setString('profileUrl', downloadURL!);
+      print('downloadURL1:$downloadURL');
+    }
   }
   Future<String?> _loadURLfromdatabase() async {
     var document= await database.collection('users').doc(curuser?.uid).get();

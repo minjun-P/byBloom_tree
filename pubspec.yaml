@@ -69,6 +69,7 @@ dependencies:
   open_file: ^3.2.1
   path_provider: ^2.0.8
   file_picker: ^4.5.1
+  bottom_drawer: ^0.0.5
 
 
 

@@ -1,3 +1,4 @@
+import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,8 @@ import '../tree_page/tree_controller.dart';
 /// 그냥 각 미션 별로 체크 박스만 만들어놓음.
 /// db 연결하면서 미션 목록 불러오고, 완료 여부 확인도 할 수 있도록 해야할 듯.
 class MissionController extends GetxController {
+
+  BottomDrawerController controller=BottomDrawerController();
   // 반응형 day -> Stream 과 bindStream
   Rx<int> day = 1.obs;
   /// 반응형 missions 가 담긴 변수들과 업데이트 메소드

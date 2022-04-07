@@ -8,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'components/mission_container.dart';
 import 'mission_controller.dart';
 import 'pages/type_A/mission_A_page.dart';
+import 'package:bottom_drawer/bottom_drawer.dart';
 
 /// 미션을 확인하고 수행하는 페이지
 /// 필요 기능
@@ -35,7 +36,8 @@ class MissionPage extends GetView<MissionController> {
         toolbarHeight: 80,
       ),
       backgroundColor: Colors.white,
-      body: ListView(
+      body: Stack(
+    children: [ListView(
         padding: EdgeInsets.fromLTRB(Get.width*0.05, 0, Get.width*0.05, 100),
         children: [
           Padding(
@@ -55,8 +57,35 @@ class MissionPage extends GetView<MissionController> {
           MissionContainer(type: 'D',),
           MissionContainer(type: 'C',),
           MissionContainer(type: 'B',),
+        SizedBox(height: 100,),
+        TextButton(
+            onPressed: () {
+
+              controller.controller.open();
+
+            },
+        child: Row(
+          children: <Widget>[Icon(Icons.share),Text('미션공유하기')],
+        ))
+
         ],
       ),
+    buildBottomDrawer(context)
+    ],
+    )
     );
-  }  
+  }
+  Widget buildBottomDrawer(BuildContext context){
+    return BottomDrawer(
+      headerHeight: 0,
+      header: Text('헤'),
+      drawerHeight: 200,
+      body: Text('친'),
+      controller: controller.controller,);
+
+  }
 }
+
+
+
+

@@ -45,7 +45,7 @@ class ForestPage extends GetView<ForestController> {
       ),
       backgroundColor: Colors.white,
       body: StreamBuilder<List<types.Room>>(
-        stream: FirebaseChatCore.instance.rooms(),
+        stream: FirebaseChatCore.instance.rooms(orderByUpdatedAt: false),
         initialData: const [],
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {

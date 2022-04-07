@@ -94,10 +94,21 @@ class ForestChatRoom extends StatelessWidget {
                 bottom: false,
                 child: Chat(
                   messages: snapshot.data ?? [],
+                  showUserNames: true,
+                  theme: DefaultChatTheme(
+                    backgroundColor: const Color(0xffFAE7E2),
+                    inputBackgroundColor: Colors.lightGreen,
+                    primaryColor:Colors.white,
+                    inputTextColor: Colors.black,
+                    secondaryColor: Colors.black,
+                      inputTextStyle: TextStyle(color: Colors.black),
+                    sentMessageBodyTextStyle: TextStyle(color:Colors.black)
+
+                  ),
 
                   user: types.User(
                     id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
-                  ), onSendPressed: (PartialText ) {  },
+                  ), onSendPressed:_handleSendPressed,
                 ),
               );
             },
