@@ -1,6 +1,8 @@
+import 'dart:core';
 import 'dart:math';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
+import 'dart:core';
 import '../tree_page/tree_controller.dart';
 import 'forest_model.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
@@ -8,16 +10,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'pages/forest_chat_room.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bybloom_tree/auth/User.dart';
 
-class ForestMakingPage extends GetView<ForestController> {
+List <bool> checkbox= List.filled(100,false);
+List<types.User> userlist=[];
+class ForestMakingPage extends StatefulWidget {
   const ForestMakingPage({Key? key}) : super(key: key);
 
-
-
   @override
+  State<StatefulWidget> createState() {
+   return  Forest_making_state();
+  }
+
+
+
+}
+
+class Forest_making_state extends State<ForestMakingPage> {
+
+@override
   Widget build(BuildContext context) {
-    List<bool> checkbox=  List.filled(100,false);
-    Get.put(ForestController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('숲 만들기',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
@@ -40,25 +54,51 @@ class ForestMakingPage extends GetView<ForestController> {
                   ),
                 ),
                 leading: CircleAvatar(backgroundColor: Colors.lime,),
-                trailing:Obx(()=>InkWell(
-                 child:controller.checkbox[index].value?
+                trailing:InkWell(
+                 child:checkbox[index]?
 
                  Icon( Icons.check_circle, color: Colors.lightGreen):
                  Icon( Icons.check_circle, color: Colors.grey),
-               onTap: (){ Get.find<ForestController>().checkbox[index].value=!Get.find<ForestController>().checkbox[index].value;},
-            ))
-                ),
-              );
+               onTap: () async {
+                   setState(()  {
+                     print(checkbox);
+                     checkbox[index]=!checkbox[index];
+
+                   });
+                    if(checkbox[index]==true){
+                     String? uid=await finduidFromPhone(Get.find<TreeController>().currentUserModel!.friendList![index].phoneNumber);
+                     userlist.add(types.User(id:uid!));}
+                   if(checkbox[index]==false){
+                     String? uid=await finduidFromPhone(Get.find<TreeController>().currentUserModel!.friendList![index].phoneNumber);
+                     userlist.remove(types.User(id:uid!));}
+                   ;
+                   }
+                    )
+            )
+            );
+                   },
 
 
 
-          },
+
+
           itemCount: Get.find<TreeController>().currentUserModel?.friendList.length,
         ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
 
-        onPressed: () {  },
+        onPressed: () async {
+          checkbox.fillRange(0, 99,false);
+          types.Room room2= await FirebaseChatCore.instance.createGroupRoom(name: "숲", users: userlist);
+          Navigator.of(context).push(
+
+            MaterialPageRoute(
+              builder: (context) => ForestChatRoom(
+                room: room2,
+              ),
+            ),
+          );
+        },
 
       ),
       );

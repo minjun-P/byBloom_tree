@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:bybloom_tree/pages/forest_page/forestselectpage.dart';
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_controller.dart';
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_model.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
@@ -24,87 +27,93 @@ import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 class MissionPage extends GetView<MissionController> {
   const MissionPage({Key? key}) : super(key: key);
 
-  
 
   @override
   Widget build(BuildContext context) {
     Get.put(MissionController());
     return Scaffold(
-      appBar: AppBar(
-        title: GestureDetector(
-          onTap: () {
-            print(Get.find<ProfileController>().dayCount.value);
-            print(Get.find<ProfileController>().missionCount.value);
-          },
-            child: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
+        appBar: AppBar(
+          title: GestureDetector(
+              onTap: () {
+                print(Get
+                    .find<ProfileController>()
+                    .dayCount
+                    .value);
+                print(Get
+                    .find<ProfileController>()
+                    .missionCount
+                    .value);
+              },
+              child: const Text('오늘의 바이블룸',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
+          backgroundColor: Colors.white,
+          toolbarHeight: 80,
+        ),
         backgroundColor: Colors.white,
-        toolbarHeight: 80,
-      ),
-      backgroundColor: Colors.white,
-      body: Stack(
-    children: [ListView(
-        padding: EdgeInsets.fromLTRB(Get.width*0.05, 0, Get.width*0.05, 100),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Obx(()=>
-              Text(
-                  '${controller.day.value} 일째, 데일리 미션입니다',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold
-                  ),
+        body: Stack(
+          children: [ListView(
+            padding: EdgeInsets.fromLTRB(
+                Get.width * 0.05, 0, Get.width * 0.05, 100),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Obx(() =>
+                    Text(
+                      '${controller.day.value} 일째, 데일리 미션입니다',
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                ),
               ),
-            ),
+              MissionContainer(type: 'A',),
+              MissionContainer(type: 'D',),
+              MissionContainer(type: 'C',),
+              MissionContainer(type: 'B',),
+              SizedBox(height: 10,),
+              TextButton(
+                  onPressed: () {
+                    controller.controller.open();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text('지난나눔보기', style: TextStyle(color: Colors.grey),),
+                      SizedBox(width: 20),
+                      Icon(Icons.folder, color: Colors.grey,)
+                    ],
+                  ))
+              ,
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => ForestselectPage()
+                      ),
+                    );
+                  },
+
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text('미션공유하기', style: TextStyle(color: Colors.grey),),
+                      SizedBox(width: 20),
+                      Icon(Icons.send, color: Colors.grey,)
+                    ],
+                  )),
+
+
+            ],
           ),
-          MissionContainer(type: 'A',),
-          MissionContainer(type: 'D',),
-          MissionContainer(type: 'C',),
-          MissionContainer(type: 'B',),
-        SizedBox(height: 100,),
-        TextButton(
-            onPressed: () {
-
-              controller.controller.open();
-
-            },
-        child: Row(
-          children: <Widget>[Icon(Icons.share),Text('미션공유하기')],
-        ))
-
-        ],
-      ),
-    buildBottomDrawer(context)
-    ],
-    )
+          ],
+        )
     );
   }
-  ///미션공유하는 bottom drawer: 카톡공유하기랑 비슷한느낌으로 하자그래서 일단 뼈대만 해놨는데
-  ///수민이가 UI주면 그거에 맞게 구현만해줘... 친구목록은 어덯께불러오는지알거고
-  ///내가포함된 방목록은 FirebaseChatCore.instance.rooms 로 가져올수있
-  Widget buildBottomDrawer(BuildContext context){
-    return BottomDrawer(
-      followTheBody: true,
-      headerHeight: 0,
-      header: Text('공유할 숲선'),
-      drawerHeight: 200,
-      body: Container(
-       color: Colors.lime,
-       width: Get.width,
-      child:TextButton(
-        child:Text('공유'),
-        onPressed: () async {
-          types.Room room=(await FirebaseChatCore.instance.rooms().first)[0];
-          print(room.id);
-          sendmissioncompletedmessage(room);
-          controller.controller.close();
-        },
-      )),
-      controller: controller.controller,);
-
-  }
 }
+
 
 ///미션완료 메시지 보내기!!
 sendmissioncompletedmessage(types.Room room){
