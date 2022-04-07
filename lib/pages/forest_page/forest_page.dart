@@ -98,16 +98,15 @@ class ForestPage extends GetView<ForestController> {
               boxShadow: const[
               BoxShadow(color: Colors.grey,offset: Offset(3,3),blurRadius: 3)
               ])),
-                      Text(room.name ?? ''),
                       const SizedBox(width: 15,),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 10,),
-                            Text('방제목',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                            Text(room.name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
                             Text(
-                              '최근메시지',
+                              room.lastMessages!=null?room.lastMessages!.last.metadata!['text']:"최근메시지없음",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(fontSize: 14),
@@ -119,7 +118,7 @@ class ForestPage extends GetView<ForestController> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            forestList[index].latestMessage.getTime(),
+                            (DateTime.now().minute-room.updatedAt!.floor()).toString(),
                             style: const TextStyle(color: Colors.grey,fontSize: 13),),
                           const SizedBox(height: 5,),
                           Container(
@@ -129,7 +128,7 @@ class ForestPage extends GetView<ForestController> {
                                 borderRadius: BorderRadius.circular(10)
                             ),
                             alignment: Alignment.center,
-                            child: Text(forestList[index].unreadCount.toString(),style: const TextStyle(color: Colors.white,fontSize: 14),),
+                            child: Text(room.lastMessages!=null?room.lastMessages!.length.toString():"0",style: const TextStyle(color: Colors.white,fontSize: 14),),
                           )
                         ],
                       )

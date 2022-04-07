@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
@@ -13,6 +14,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
 
 import '../forest_model.dart';
 
@@ -93,21 +95,40 @@ class ForestChatRoom extends StatelessWidget {
               return SafeArea(
                 bottom: false,
                 child: Chat(
+                  showUserAvatars: true,
+
+
+
+
+                  customMessageBuilder: (types.CustomMessage s, {required int messageWidth} )=>
+                  Container(
+
+                    color: Colors.grey,
+                    child: Text('님이 미션을 완료하셨습니다'),
+                    width: Get.width*2,
+                  ),
+
+
                   messages: snapshot.data ?? [],
                   showUserNames: true,
                   theme: DefaultChatTheme(
-                    backgroundColor: const Color(0xffFAE7E2),
+                    userNameTextStyle: TextStyle(color:Colors.black),
+                      backgroundColor: const Color(0xffFAE7E2),
                     inputBackgroundColor: Colors.lightGreen,
                     primaryColor:Colors.white,
                     inputTextColor: Colors.black,
-                    secondaryColor: Colors.black,
+                    secondaryColor: Colors.white,
                       inputTextStyle: TextStyle(color: Colors.black),
                     sentMessageBodyTextStyle: TextStyle(color:Colors.black)
 
                   ),
 
                   user: types.User(
+
                     id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
+                    firstName: Get.find<tree.TreeController>().currentUserModel!.name,
+                    lastName: "해",
+                    imageUrl: Get.find<tree.TreeController>().currentUserModel!.imageUrl
                   ), onSendPressed:_handleSendPressed,
                 ),
               );
@@ -355,3 +376,6 @@ class ForestChatRoom extends StatelessWidget {
   }*/
 
 }
+
+
+

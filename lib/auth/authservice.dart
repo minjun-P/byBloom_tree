@@ -40,7 +40,9 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
         nickname: nickname,
         uid:user!.uid,
         friendList: [],
-        friendPhoneList: []);
+        friendPhoneList: [],
+        lastName: name,
+        firstName: "");
 
       users.doc(user.uid).set(s.toJson())
           .then((value) => print("User Added"))

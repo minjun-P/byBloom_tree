@@ -2,6 +2,7 @@ import 'package:bybloom_tree/pages/profile_page/calendar/calendar_controller.dar
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_model.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -9,6 +10,10 @@ import 'components/mission_container.dart';
 import 'mission_controller.dart';
 import 'pages/type_A/mission_A_page.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 /// 미션을 확인하고 수행하는 페이지
 /// 필요 기능
@@ -75,16 +80,41 @@ class MissionPage extends GetView<MissionController> {
     )
     );
   }
+  ///미션공유하는 bottom drawer: 카톡공유하기랑 비슷한느낌으로 하자그래서 일단 뼈대만 해놨는데
+  ///수민이가 UI주면 그거에 맞게 구현만해줘... 친구목록은 어덯께불러오는지알거고
+  ///내가포함된 방목록은 FirebaseChatCore.instance.rooms 로 가져올수있
   Widget buildBottomDrawer(BuildContext context){
     return BottomDrawer(
+      followTheBody: true,
       headerHeight: 0,
-      header: Text('헤'),
+      header: Text('공유할 숲선'),
       drawerHeight: 200,
-      body: Text('친'),
+      body: Container(
+       color: Colors.lime,
+       width: Get.width,
+      child:TextButton(
+        child:Text('공유'),
+        onPressed: () async {
+          types.Room room=(await FirebaseChatCore.instance.rooms().first)[0];
+          print(room.id);
+          sendmissioncompletedmessage(room);
+          controller.controller.close();
+        },
+      )),
       controller: controller.controller,);
 
   }
 }
+
+///미션완료 메시지 보내기!!
+sendmissioncompletedmessage(types.Room room){
+types.PartialCustom missioncompleted= types.PartialCustom();
+FirebaseChatCore.instance.sendMessage(missioncompleted, room.id);
+print("room:$room.id");
+}
+
+
+
 
 
 
