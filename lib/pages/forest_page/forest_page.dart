@@ -106,7 +106,7 @@ class ForestPage extends GetView<ForestController> {
                             const SizedBox(height: 10,),
                             Text(room.name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
                             Text(
-                              room.lastMessages!=null?room.lastMessages!.last.metadata!['text']:"최근메시지없음",
+                              room.lastMessages!=null?room.lastMessages!.last.metadata!['text']:"최근메시지없",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(fontSize: 14),
@@ -118,7 +118,7 @@ class ForestPage extends GetView<ForestController> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            (DateTime.now().minute-room.updatedAt!.floor()).toString(),
+                            (room.updatedAt!.floor()).toString(),
                             style: const TextStyle(color: Colors.grey,fontSize: 13),),
                           const SizedBox(height: 5,),
                           Container(
