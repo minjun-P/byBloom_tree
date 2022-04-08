@@ -24,11 +24,13 @@ import '../forest_model.dart';
 /// 주환 너가 직접 만들어본 경험 있으니깐 여기는 직접 다루는게 더 편할 듯 해서 더 안 건드림
 /// 채팅 목록은 forest_model에서 가져왔으.
 class ForestChatRoom extends StatelessWidget {
-  final types.Room room;
+
   ForestChatRoom({
     Key? key,
     required this.room
   }) : super(key: key);
+  final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();
+  final types.Room room;
   /// 나중에 이 친구들 controller로 보내는게 깔끔할지도?
   final TextEditingController textEditingController = TextEditingController();
   final ScrollController scrollController = ScrollController();
@@ -79,11 +81,17 @@ class ForestChatRoom extends StatelessWidget {
       );
     }
     return Scaffold(
+      key: _ScaffoldKey,
+      endDrawer: buildCustomDrawer(child: ChatRoomDrawer(room: this.room),left: false),
       appBar: AppBar(
         title: Text(this.room.name!),
         centerTitle: true,
         backgroundColor: Colors.white,
+        actions: [ IconButton(onPressed: (){
+          _ScaffoldKey.currentState?.openEndDrawer();
+    }, icon: Icon(Icons.folder))],
       ),
+
       backgroundColor: const Color(0xffFAE7E2),
       body: StreamBuilder<types.Room>(
         initialData: this.room,
@@ -258,9 +266,25 @@ class ForestChatRoom extends StatelessWidget {
 
 
   }
+  Widget buildCustomDrawer({required Widget child, bool left=true}){
+    return Drawer(
+      backgroundColor: Colors.grey[200],
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            //좌측이냐 아니냐 따라서 값 다르게 매기기
+            topRight: left?const Radius.circular(30):Radius.zero,
+            bottomRight: left?const Radius.circular(30):Radius.zero,
+            topLeft: left?Radius.zero:const Radius.circular(30),
+            bottomLeft: left?Radius.zero:const Radius.circular(30),
+          )
+      ),
+      child: child,
+    );
+  }
 
 
-  /*
+
+/*
   @override
   Widget build(BuildContext context) {
      return Scaffold(
@@ -383,5 +407,66 @@ class ForestChatRoom extends StatelessWidget {
 
 }
 
+class ChatRoomDrawer extends StatelessWidget {
+  final types.Room room;
+  const ChatRoomDrawer({Key? key, required this.room}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      height: Get.height,
+      child: SizedBox(
+        width: Get.width*0.4,
+        child: Column(
+
+          children: [
+            Text('숲서랍'),
+            SizedBox(
+              height: 50,
+            ),
+
+            Container(
+              padding: EdgeInsets.only(top:50,bottom: 20),
+              child: InkWell(
+                  onTap: (){
+
+                    Navigator.pop(context);
+
+                  }, child:
+
+              Column(
+                children: [
+                  Icon(Icons.logout),
+                  Text('로그아웃'),
+                ],
+              )),
+            ),
+            Container(
+              padding: EdgeInsets.only(top:20,bottom: 20),
+              child: InkWell(
+                  onTap: (){
+                    
+
+
+                  }, child:
+
+              Column(
+                children: [
+                  Icon(Icons.no_accounts),
+                  Text('회원탈퇴'),
+                ],
+              )
+              ),
+            ),
+          
+
+
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 
