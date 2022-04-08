@@ -95,6 +95,7 @@ class MissionAComment extends GetView<MissionController> {
                                       ),
                                       Spacer(),
                                       // 삭제 로직
+                                      /**
                                       Visibility(
                                         visible: data['uid']==Get.find<TreeController>().currentUserModel!.uid,
                                         child: TextButton(
@@ -119,7 +120,7 @@ class MissionAComment extends GetView<MissionController> {
 
                                           },
                                         ),
-                                      ),
+                                      )*/
                                       IconButton(
                                         icon: Icon(
                                           MdiIcons.heartOutline,

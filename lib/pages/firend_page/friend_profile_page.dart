@@ -60,9 +60,13 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                       position: controller.containerAnimation,
                       child: Obx(()=>
                         Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(10)
+                          ),
 
                           padding: EdgeInsets.symmetric(horizontal: 12,vertical: 7),
-                          width: 180,
+                          width: 220,
                           child: controller.waterTo.contains(friendData.uid)
                               ?Text('물을 주셔서 감사해요!')
                               :Text('친구의 나무에 물을 주세요!')
