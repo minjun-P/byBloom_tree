@@ -75,13 +75,15 @@ class ProfileRecord extends StatelessWidget {
         children: [
           Text('나의 기록',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),),
           SizedBox(height: 10,),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildRecordDetail('달성목표', '개', Get.find<ProfileController>().missionCount.value),
-                _buildRecordDetail('달성일수', '일', Get.find<ProfileController>().dayCount.value),
-              ],
+          Obx(()=>
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildRecordDetail('달성목표', '개', Get.find<ProfileController>().missionCount.value),
+                  _buildRecordDetail('달성일수', '일', Get.find<ProfileController>().dayCount.value),
+                ],
+              ),
             ),
           )
         ],

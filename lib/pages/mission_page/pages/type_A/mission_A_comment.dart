@@ -1,4 +1,5 @@
 import 'package:bybloom_tree/main_controller.dart';
+import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,61 +77,85 @@ class MissionAComment extends GetView<MissionController> {
                           List<QueryDocumentSnapshot> snapshotList = snapshot.data!.docs;
                           Map<String,dynamic> data = snapshotList[index].data() as Map<String,dynamic>;
                           return Container(
-                              child: Row(
+                              child: Column(
                                 children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.red,
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  Row(
                                     children: [
-                                      Text(data['writer'], style: TextStyle(color: Colors.grey),),
-                                      Text(data['contents']),
-                                      SizedBox(height: 10,),
+                                      CircleAvatar(
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(data['writer'], style: TextStyle(color: Colors.grey),),
+                                          Text(data['contents']),
+                                          SizedBox(height: 10,),
+                                        ],
+                                      ),
+                                      Spacer(),
+                                      // 삭제 로직
+                                      Visibility(
+                                        visible: data['uid']==Get.find<TreeController>().currentUserModel!.uid,
+                                        child: TextButton(
+                                          child: Text('삭제'),
+                                          onPressed: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  // 삭제 확인 알림
+                                                  return AlertDialog(
+                                                    title: Text('정말 삭제하시겠습니까?'),
+                                                    content: OutlinedButton(
+                                                      child: Text('네'),
+                                                      onPressed: (){
+                                                        controller.deleteComment(docId:snapshotList[index].id, type: 'A');
+                                                      },
+                                                    ),
+                                                  );
+                                                }
+
+                                            );
+
+                                          },
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(
+                                          MdiIcons.heartOutline,
+                                          color: List.castFrom(data['like']).contains(Get.find<TreeController>().currentUserModel!.uid)
+                                              ?Colors.red
+                                              :Colors.black,
+                                          size: 20,
+                                        ),
+                                        onPressed: ()async{
+                                          if (List.castFrom(data['like']).contains(Get.find<TreeController>().currentUserModel!.uid)){
+                                            controller.minusLikeCount(docId: snapshotList[index].id,type: 'A');
+                                          } else {
+                                            controller.plusLikeCount(docId: snapshotList[index].id, type: 'A');
+                                            var user = await FirebaseFirestore.instance.collection('users').doc(data['uid']).get();
+                                            Map<String,dynamic> map = user.data()!;
+                                            List tokens = map['tokens'] as List;
+                                            tokens.forEach((element){
+                                              Get.find<MainController>().sendFcm(
+                                                  token: element,
+                                                  title: '띵동',
+                                                  body: '${Get.find<TreeController>().currentUserModel!.name}님이 댓글에 좋아요를 눌렀어요!'
+                                              );
+                                            });
+
+                                          }
+
+                                        },
+                                      ),
+                                      Text(
+                                          List.castFrom(data['like']).length.toString()
+                                      ),
+
                                     ],
                                   ),
-                                  Spacer(),
-                                  IconButton(
-                                    icon: Icon(
-                                      MdiIcons.heartOutline,
-                                      color: List.castFrom(data['like']).contains(Get.find<TreeController>().currentUserModel!.uid)
-                                          ?Colors.red
-                                          :Colors.black,
-                                      size: 20,
-                                    ),
-                                    onPressed: ()async{
-                                      if (List.castFrom(data['like']).contains(Get.find<TreeController>().currentUserModel!.uid)){
-                                        controller.minusLikeCount(docId: snapshotList[index].id,type: 'A');
-                                      } else {
-                                        controller.plusLikeCount(docId: snapshotList[index].id, type: 'A');
-                                        var user = await FirebaseFirestore.instance.collection('users').doc(data['uid']).get();
-                                        Map<String,dynamic> map = user.data()!;
-                                        List tokens = map['tokens'] as List;
-                                        tokens.forEach((element){
-                                          Get.find<MainController>().sendFcm(
-                                              token: element,
-                                              title: '띵동',
-                                              body: '${Get.find<TreeController>().currentUserModel!.name}님이 댓글에 좋아요를 눌렀어요!'
-                                          );
-                                        });
 
-                                      }
 
-                                    },
-                                  ),
-                                  Text(
-                                      List.castFrom(data['like']).length.toString()
-                                  ),
-                                  Visibility(
-                                    visible: data['uid']==Get.find<TreeController>().currentUserModel!.uid,
-                                    child: TextButton(
-                                      child: Text('삭제'),
-                                      onPressed: (){
-                                        controller.deleteComment(docId:snapshotList[index].id, type: 'A');
-                                      },
-                                    ),
-                                  )
                                 ],
                               )
                           );
@@ -184,17 +209,9 @@ class MissionAComment extends GetView<MissionController> {
                     if (controller.commentControllerA.text.isNotEmpty){
                       controller.uploadComment(comment: controller.commentControllerA.text,type: 'A');
                       controller.updateComplete(comment: controller.commentControllerA.text,type: 'A');
-                      controller.incrementExp(30);
+                      controller.clearMission();
                       controller.commentControllerA.clear();
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text('수고하셨어요!'),
-                              content: Text('느낀점을 남겨 경험치가 30 증가했어요!'),
-                            );
-                          }
-                      );
+
                     }
 
                   },

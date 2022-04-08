@@ -1,9 +1,11 @@
+import 'package:bybloom_tree/pages/mission_page/pages/type_B/prior_mission_B.dart';
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_controller.dart';
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_model.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'components/mission_container.dart';
 import 'mission_controller.dart';
@@ -27,8 +29,11 @@ class MissionPage extends GetView<MissionController> {
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
-            print(Get.find<ProfileController>().dayCount.value);
-            print(Get.find<ProfileController>().missionCount.value);
+            for (int i = 1; i<=30; i++){
+              FirebaseFirestore.instance.collection('missions').doc('day$i').set({
+                'day':i
+              });
+            }
           },
             child: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
         backgroundColor: Colors.white,
@@ -38,23 +43,44 @@ class MissionPage extends GetView<MissionController> {
       body: ListView(
         padding: EdgeInsets.fromLTRB(Get.width*0.05, 0, Get.width*0.05, 100),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Obx(()=>
-              Text(
-                  '${controller.day.value} 일째, 데일리 미션입니다',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold
-                  ),
-              ),
-            ),
-          ),
           MissionContainer(type: 'A',),
           MissionContainer(type: 'D',),
           MissionContainer(type: 'C',),
           MissionContainer(type: 'B',),
+          SizedBox(height: 120,),
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: (){
+                Get.to(()=>PriorMissionB());
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text('지난 나눔 보기',style: TextStyle(color: Colors.grey,fontSize: 20),),
+                  SizedBox(width: 10,),
+                  Icon(MdiIcons.folder,color: Colors.grey.shade300,size: 30,)
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 10,),
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: (){
+
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text('숲으로 공유하기',style: TextStyle(color: Colors.grey,fontSize: 20),),
+                  SizedBox(width: 10,),
+                  Icon(MdiIcons.send,color: Colors.grey.shade300,size: 30,)
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -92,7 +92,8 @@ Future<FriendModel?> findUserFromPhone(String phoneNum) async {
         exp: friend.docs[0].data()['exp'],
         imageUrl: friend.docs[0].data()['imageUrl'],
         level: friend.docs[0].data()['level'],
-        tokens: friend.docs[0].data()['tokens']
+        tokens: friend.docs[0].data()['tokens'],
+        uid:  friend.docs[0].id
     );
   }
 

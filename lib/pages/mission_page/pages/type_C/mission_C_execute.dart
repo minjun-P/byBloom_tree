@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_C/mission_C_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_C/mission_C_page.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class MissionCExecute extends GetView<MissionCController> {
                       controller.uploadMissionC(controller.textEditingController.text);
                       controller.textEditingController.clear();
                       Get.back();
+                      Get.find<MissionController>().clearMission();
                     },
                     child: Text(
                       '저장하기',

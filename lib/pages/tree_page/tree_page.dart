@@ -1,5 +1,7 @@
 import 'package:bybloom_tree/auth/authservice.dart';
+import 'package:bybloom_tree/pages/tree_page/components/waterToLimit.dart';
 
+import '../mission_page/mission_controller.dart';
 import '../siginup_page/pages/signup_page1.dart';
 import 'package:bybloom_tree/pages/tree_page/components/tree_status.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
@@ -22,6 +24,8 @@ class TreePage extends GetView<TreeController> {
   @override
   Widget build(BuildContext context) {
     Get.put(TreeController());
+    // 임시
+    Get.put(MissionController());
     return Scaffold(
       key: _outsideScaffoldKey,
       appBar: AppBar(
@@ -77,6 +81,11 @@ class TreePage extends GetView<TreeController> {
                 left: 10,
                 right: 10,
                 child: TreeStatus()
+            ),
+            Positioned(
+              top: 30,
+              right: 10,
+              child: WaterToLimit(),
             )
           ],
         )

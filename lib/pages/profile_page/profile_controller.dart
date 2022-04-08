@@ -43,5 +43,33 @@ class ProfileController extends GetxController with GetTickerProviderStateMixin{
   var missionCompletedRef = FirebaseFirestore.instance.collection('users')
       .doc(FirebaseAuth.instance.currentUser!.uid).collection('mission_completed');
 
+  Stream<List> getDiaryStream(){
+    Stream<QuerySnapshot<Map<String,dynamic>>> snapshot = missionCompletedRef.snapshots();
+    Stream<List> diaryStream = snapshot.map((event){
+      // document snapshot 으로 이루어진 리스트
+      List<QueryDocumentSnapshot> list = event.docs;
+      // 미션 C, 일기가 작성된 day document 로 필터링
+      List<QueryDocumentSnapshot> filteredList = list.where((element) {
+        Map temp = element.data() as Map;
+        return temp['C']!=null;
+      }).toList();
+      // 미션 C 의 데이터가 순서대로 들어있는
+      List diaryList = filteredList.map((document){
+        Map<String, dynamic> map = document.data() as Map<String, dynamic>;
+        return map['C'];
+      }).toList();
+      return diaryList;
+    });
+    return diaryStream;
+  }
+  Map profileComment ={
+    1:'통통한 씨앗',
+    2:'귀여운 새싹',
+    3:'아기 나무',
+    4:'어린 나무',
+    5:'청년 나무',
+    6:'꽃 핀 나무',
+    7:'열매 맺은 나무'
+  };
 
 }

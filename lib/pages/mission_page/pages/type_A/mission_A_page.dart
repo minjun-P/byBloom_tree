@@ -25,15 +25,18 @@ class MissionAPage extends GetView<MissionController> {
               SizedBox(height: 10,),
               Text('말씀을 터치해보세요',style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
               SizedBox(height: 20,),
-              ElevatedButton(
-                  onPressed: (){
-                    Get.to(()=>MissionAComment());
-
-                  },
-                  child: Text('의견 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xffA0C6FF),
-                  fixedSize: Size(Get.width*0.7,50)
+              Obx(()=>
+                ElevatedButton(
+                    onPressed: (){
+                      Get.to(()=>MissionAComment());
+                    },
+                    child: controller.missionCompleted['A']!
+                        ?Text('의견 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
+                        :Text('의견 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xffA0C6FF),
+                    fixedSize: Size(Get.width*0.7,50)
+                  ),
                 ),
               )
             ],

@@ -128,7 +128,7 @@ class FriendDrawer extends GetView<TreeController> {
             Row(
               children: const [
                 Icon(Icons.search, color: Colors.grey,),
-                Text('우리교회 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
+                Text('친구 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
               ],
             )
           ],
@@ -169,42 +169,57 @@ class NoticeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 20,),
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            children: List.generate(20, (index) =>
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
-                  height: 50,
-                  color: Colors.transparent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(child: Text('+$index'), width: 30,),
-                      const SizedBox(width: 10,),
-                      const Flexible(
-                        flex: 8,
-                        child: Text(
-                            '이상구님이 방문해 물을 주고 가셨습니다.',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                      const SizedBox(width: 10,),
-                      const Flexible(
-                        flex: 1,
-                          child: Text('2/2', style: TextStyle(color: Colors.grey,fontSize: 12),)
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+      builder: (context, snapshot){
+        if (snapshot.hasError){
+          return Text('error');
+        }
+        if (snapshot.connectionState == ConnectionState.waiting){
+        return CircularProgressIndicator();
+        }
+        // user document 를 map 으로 변환
+        Map<String,dynamic> data = snapshot.data!.data() as Map<String,dynamic>;
+        if (data['waterFrom']==null){
+          return Text('아직 아무도 물을 주지 않았어요 ㅠ');
+        } else {
+          List list = data['waterFrom'];
+          return ListView(
+            children: [
+              SizedBox(height: 20,),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('누군가 물을 주고 간 기록입니다!',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+              ),
+              SizedBox(height: 10,),
+              ...list.map((element){
+              //  element 는 개별 Map - each 물 준 기록
+                String name = element['name']??'hi';
+                Timestamp timestamp = element['when'] ;
+                DateTime date = timestamp.toDate();
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(text: name, style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                          TextSpan(text:'님이 물을 주고 가셨어요!!')
+                        ]
                       )
-                    ],
-                  ),
-            )),
-          ),
-        ),
-      ],
+                    ),
+                    Text('${date.month}/${date.day}', style: TextStyle(color: Colors.grey, fontSize: 14),)
+                  ],
+                ),
+              );
+            }
+            ).toList(),
+            ]
+          );
+        }
+      },
     );
   }
 }

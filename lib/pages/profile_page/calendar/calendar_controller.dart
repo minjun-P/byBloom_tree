@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -13,7 +14,7 @@ class CalendarController extends GetxController {
 
   // 중요한 변수 두개를 Observalbe 변수로 만든다.
   var focusedDay = DateTime.now().obs;
-  var selectedDay = DateTime.now().obs;
+  var selectedDay = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day).obs;
 
   // 핵심이 되는 메소드. Obx로 하니까 인식을 못해서(왜인진 모름) GetBuilder로 View 구현하고 update() 메소드 추가해줌.
   void updateSelectedDay(DateTime day) {
@@ -46,9 +47,9 @@ class CalendarController extends GetxController {
   // optional 파라미터에 값을 넣어줬을 때만 특정 날짜의 events를 리턴한다.
   List<Event> getEventsForDay([DateTime? eventCheckDay]) {
     if (eventCheckDay !=null){
-      return hashedEventList.value[eventCheckDay] ?? [];
+      return hashedEventList.value[DateTime(eventCheckDay.year,eventCheckDay.month,eventCheckDay.day)] ?? [];
     }
-    return hashedEventList.value[selectedDay.value] ?? [];
+    return hashedEventList.value[DateTime(selectedDay.value.year,selectedDay.value.month,selectedDay.value.day)] ?? [];
   }
 
 
@@ -78,7 +79,7 @@ class CalendarController extends GetxController {
   Stream<Map<DateTime,List<Event>>> loadMissionCompleted(){
     FirebaseFirestore db = FirebaseFirestore.instance;
     // 임시로 uid 고정값
-    CollectionReference col = db.collection('users').doc('qm2fiMNEhzTvahd5neE2ihe7Jsk1').collection('mission_completed');
+    CollectionReference col = db.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('mission_completed');
     // 콜렉션 스냅샷 불러오기
     Stream<QuerySnapshot> completedSnapshot = col.snapshots();
     /// 스냅샷을 내가 필요한 형태로 가공 ==> Stream<Map>형태

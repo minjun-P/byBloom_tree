@@ -31,7 +31,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
   RxInt exp = 0.obs;
-  RxInt level = 0.obs;
+  RxInt level = 1.obs;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   Stream<Map> userDetail() {
@@ -91,13 +91,13 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
       return false;
     }
   }
-
-  late AnimationController wateringIconController;
-  late AnimationController rainController;
-  late Animation<double> rainAnimation;
+  /// 애니메이션 초기화 모음
+  late AnimationController wateringController;
+  late Animation<double> wateringAnimation;
 
   late AnimationController levelUpAnimationController;
   late Animation<double> levelUpAnimation;
+
 
   @override
   Future<void> onInit() async {
@@ -112,32 +112,25 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
         begin: 0,
         end: 1
     ).animate(levelUpAnimationController);
+    /// 물주기 애니메이션
+    wateringController = AnimationController(vsync: this,duration: Duration(milliseconds: 2500));
+    wateringAnimation = Tween<double>(
+        begin: 0,
+        end: 1
+    ).animate(wateringController);
+    /// 필요한 데이터 가져오기
+    exp.bindStream(userDetail().map((event)=>event['exp']));
+    level.bindStream(userDetail().map((event)=>event['level']));
 
     /// User 모델 초기화
     currentUserModel=await makeUserModel();
     print("UID:${currentUserModel?.name}");
     print(uploadFriend(currentUserModel!));
 
-    /// 필요한 데이터 가져오기
-    exp.bindStream(userDetail().map((event)=>event['exp']));
-    level.bindStream(userDetail().map((event)=>event['level']));
 
 
-    /// 물주기 애니메이션 - 임시
-    wateringIconController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 200),
-      lowerBound: 0,
-      upperBound: 0.05
-    );
-    rainController = AnimationController(
-        vsync: this,
-      duration: Duration(milliseconds: 1000),
-    );
-    rainAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(rainController);
+
+
 
 
     formKey = GlobalKey();
@@ -148,26 +141,15 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
   }
 
 
-  void animateWateringIcon() async {
-    await wateringIconController.forward();
-    await wateringIconController.reverse();
-    await rainController.forward();
-    await rainController.reverse();
-  }
 
   void levelUp(){
     DocumentReference doc =FirebaseFirestore.instance.collection('users').doc(currentUserModel!.uid);
     doc.update({
-      'exp':FieldValue.increment(-100),
+      'exp':FieldValue.increment(-expStructure[level.value.toString()]),
       'level':FieldValue.increment(1)
     });
   }
-  void templevelUp(){
-    DocumentReference doc =FirebaseFirestore.instance.collection('users').doc(currentUserModel!.uid);
-    doc.update({
-      'level':FieldValue.increment(1)
-    });
-  }
+
 
   /// 알림보내기
   var title = ''.obs;
@@ -182,70 +164,14 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
       'title': title,
       'body': body
     });
-    print(resp.data);
   }
-
-  void show() {
-    showDialog(
-      context: Get.overlayContext!,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('메시지 보내기'),
-          content: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'title'
-                  ),
-                  initialValue: '',
-                  onSaved: (text) {
-                    title(text);
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'body'
-                  ),
-                  initialValue: '',
-
-                    onSaved: (text) {
-                      body(text);
-                    }
-                ),
-                ElevatedButton(
-                  child: Text('에뮬레이터 보내기'),
-                  onPressed: (){
-                    formKey.currentState!.save();
-                    sendFcm(
-                      token: 'fjYFENbtSXSvgPyc7bBl5p:APA91bHkyMmxFR3u56XLU7ypMA7Te4knctP3Pgb1vfI-mr8A7az5ptolz0RRrASxWlzssAbUhUVrWYDxX1cMe0WDYOfd3EgMjwEkwxqd3pqIFXvo5q3izhH5fRtr4qowgFL5B1bG7kXx',
-                      title: title.value,
-                      body: body.value
-                    );
-                    formKey.currentState!.reset();
-                  },
-                ),
-                ElevatedButton(
-                  child: Text('폰으로 보내기'),
-                  onPressed: (){
-                    formKey.currentState!.save();
-                    sendFcm(
-                        token: 'eSKXF4mtTiide6s7IVnrUF:APA91bGSBvnupeRinLKxlgaAqu6hr4C8parXrCAy0lRtHP_w2Zbv8sjsKr5PGND659XldAahSTvPPMse8BEyZo7Is87a3p5raFE_GL3oG1IIEfHPBSPhEn_fNwbQXQ-ABAbV4yM2eqoN',
-                        title: title.value,
-                        body: body.value
-                    );
-                    formKey.currentState!.reset();
-                  },
-                )
-              ],
-            ),
-          ),
-        );
-      }
-
-    );
-  }
+  Map expStructure = {
+    '1':3,
+    '2':12,
+    '3':30,
+    '4':45,
+    '5':60,
+    '6':60
+  };
 
 }

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../mission_controller.dart';
 import '../pages/type_A/mission_A_page.dart';
-import '../pages/type_B/mission_B_page.dart';
+import '../pages/type_B/mission_B.dart';
 class MissionContainer extends GetView<MissionController> {
   final String type;
   const MissionContainer({
@@ -22,7 +22,7 @@ class MissionContainer extends GetView<MissionController> {
             Get.to(()=>MissionAPage());
             break;
           case 'B':
-            Get.to(()=>MissionBPage());
+            Get.to(()=>MissionB());
             break;
           case 'C':
             Get.to(()=>MissionCPage());
@@ -30,11 +30,12 @@ class MissionContainer extends GetView<MissionController> {
           case 'D':
             Get.to(()=>MissionDPage());
             break;
+
         }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 15),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -57,7 +58,7 @@ class MissionContainer extends GetView<MissionController> {
               child: Text(
                   controller.typeMatch[type],
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.grey
                 ),
 
@@ -76,8 +77,8 @@ class MissionContainer extends GetView<MissionController> {
   Widget _buildMissionCompleteBox(String type) {
     return Obx(()=>AnimatedContainer(
       duration: const Duration(milliseconds: 500),
-      width: 32,
-      height: 32,
+      width: 28,
+      height: 28,
       decoration: BoxDecoration(
         border: controller.missionCompleted[type]!
             ?Border.all(color:Colors.green,width: 2)

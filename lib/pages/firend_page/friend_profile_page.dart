@@ -30,15 +30,9 @@ class FriendProfilePage extends GetView<FriendProfileController> {
               Tree(),
               Positioned.fill(
                   child: Lottie.asset(
-                    'assets/tree/cloud.json',
-                    controller: controller.wateringAnimation
+                      'assets/tree/shower.json',
+                    controller: controller.wateringController
                   )
-              ),
-              Positioned.fill(
-                child: Lottie.asset(
-                    'assets/tree/rain.json',
-                  controller: controller.wateringAnimation
-                ),
               ),
               Positioned(
                 top: 50,
@@ -66,8 +60,8 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                               borderRadius: BorderRadius.circular(10)
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 12,vertical: 7),
-                          width: 150,
-                          child: controller.watered.value
+                          width: 180,
+                          child: controller.waterTo.contains(friendData.uid)
                               ?Text('물을 주셔서 감사해요!')
                               :Text('친구의 나무에 물을 주세요!')
                         ),
@@ -77,33 +71,33 @@ class FriendProfilePage extends GetView<FriendProfileController> {
 
                     GestureDetector(
                       onTap: ()async{
-                        await controller.wateringController.forward();
-                        controller.wateringController.reset();
-                        controller.containerController.stop();
 
-                        friendData.tokens.forEach((token) {
-                          Get.find<MainController>().sendFcm(
-                              token: token,
-                              title: '${Get.find<TreeController>().currentUserModel!.name}님이 나무에 물을 주셨어요',
-                              body: '얼른 확인해보세요!'
-                          );
-                        });
+                        // 물을 준 횟수가 3번 이상이면
+                        if (controller.waterTo.length>=3){
+                          Get.snackbar('띵동', '이미 오늘 줄 수 있는 물을 다 주셨어요!');
+                          return ;
+                        }
+                        // 물을 준 적이 없다면
+                        if (!controller.waterTo.contains(friendData.uid)){
+                          friendData.tokens.forEach((token) {
+                            Get.find<MainController>().sendFcm(
+                                token: token,
+                                title: '${Get.find<TreeController>().currentUserModel!.name}님이 나무에 물을 주셨어요',
+                                body: '얼른 확인해보세요!'
+                            );
+                          });
+                          controller.saveWateringRecord(friendData.uid,friendData.name);
+                          await controller.wateringController.forward();
+                          controller.wateringController.reset();
+                          controller.containerController.stop();
+
+                          Get.snackbar('띵동', '${friendData.name}님에게 물을 주셨어요!');
+                        } else {
+                          // 물을 준 적이 있다면
+                          Get.snackbar('띵동', '이미 물을 주셨어요!');
+                        }
 
 
-                        controller.watered(true);
-                        showDialog(
-                            context: context,
-                            builder: (context)=>AlertDialog(
-                              title: Text('${friendData.name}님에게 물을 주셨어요!'),
-                              content: Text('${Get.find<TreeController>().currentUserModel!.name}님 덕분에 ${friendData.name}님의 경험치가 10 증가했어요!'),
-                              actionsAlignment: MainAxisAlignment.center,
-                              actions: [
-                                ElevatedButton(
-                                child: Text('네'),
-                                onPressed: (){Get.back(closeOverlays: true);},
-                              )],
-                            )
-                        );
                       },
                       child: Obx(()=>
                         Container(
@@ -111,9 +105,9 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.transparent,
-                            border: Border.all(color: controller.watered.value?Colors.white:Colors.cyan,width: 4)
+                            border: Border.all(color: controller.waterTo.contains(friendData.uid)?Colors.white:Colors.cyan,width: 4)
                           ),
-                          child: Icon(MdiIcons.wateringCanOutline,size: 40,color: controller.watered.value?Colors.white:Colors.cyanAccent,)
+                          child: Icon(MdiIcons.wateringCanOutline,size: 40,color: controller.waterTo.contains(friendData.uid)?Colors.white:Colors.cyanAccent,)
                         ),
                       ),
                     ),
@@ -129,7 +123,6 @@ class FriendProfilePage extends GetView<FriendProfileController> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-
           ),
           child: Column(
             children: [

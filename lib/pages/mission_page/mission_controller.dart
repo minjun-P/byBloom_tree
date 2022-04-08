@@ -1,8 +1,13 @@
+import 'dart:math';
+
+import 'package:bybloom_tree/main_screen.dart';
+import 'package:bybloom_tree/pages/mission_page/mission_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import '../../main_controller.dart';
 import '../tree_page/tree_controller.dart';
 
 
@@ -42,14 +47,40 @@ class MissionController extends GetxController {
   }.obs;
 
 
-
   /// 미션 A 댓글창 컨트롤러
   late TextEditingController commentControllerA;
   /// 미션 B 댓글창 컨트롤러
   late TextEditingController commentControllerB;
 
   /// 댓글 조작 메서드 모음 --------------------------------------------------------------------------
-  void uploadComment({required String comment, required String type}){
+  // 해당 미션 Db 바로 아래 comments 콢렉션에 추가
+  void uploadComment({required String comment, required String type, int? index, bool? check}) async{
+
+    // B이고 객관식일 땐 like 빼고 index 추가
+    DocumentSnapshot typeDoc = await missionsRef.doc('day${day.value}').collection('category').doc(type).get();
+
+    if (type=='B'&& typeDoc.get('객관식')){
+      missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').add({
+        'contents':comment,
+        'createdAt':DateTime.now(),
+        'uid':Get.find<TreeController>().currentUserModel!.uid,
+        'index':index
+      });
+      return ;
+    }
+    // A 이거나 B 주관식일 때
+    // 익명 체크됐을 때
+    if (check==true){
+      missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').add({
+        'writer': anonymous.elementAt(Random().nextInt(225)),
+        'contents':comment,
+        'createdAt':DateTime.now(),
+        'uid':Get.find<TreeController>().currentUserModel!.uid,
+        'like':[]
+      });
+      return;
+    }
+
     missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').add({
       'writer': Get.find<TreeController>().currentUserModel!.name,
       'contents':comment,
@@ -58,12 +89,13 @@ class MissionController extends GetxController {
       'like':[]
     });
   }
+  // 미션 A 전용 like 컨트롤 메서드
   void plusLikeCount({required String docId, required String type}) {
     missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).update({
       'like':FieldValue.arrayUnion([Get.find<TreeController>().currentUserModel!.uid])
     });
   }
-
+  // 미션 A 전용 like 컨트롤 메서드
   void minusLikeCount({required String docId, required String type}) {
     missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).update({
       'like':FieldValue.arrayRemove([Get.find<TreeController>().currentUserModel!.uid])
@@ -80,7 +112,7 @@ class MissionController extends GetxController {
     });
 
   }
-
+  // 미션 Db 아래가 아니라 나의 유저 데이터 아래에 저장
   void updateComplete({required String comment, required String type}) async{
     var doc = FirebaseFirestore.instance.collection('users').doc(Get.find<TreeController>().currentUserModel!.uid).collection('mission_completed').doc('day${day.value}');
     var dayRef = await doc.get();
@@ -136,6 +168,21 @@ class MissionController extends GetxController {
     });
   }
 
+  void clearMission() {
+    Future.delayed(Duration(milliseconds: 300)).then((_)=>incrementExp(3));
+    Get.snackbar('수고하셨어요', '미션을 완료해 경험치를 3 획득했습니다',
+        snackPosition: SnackPosition.BOTTOM,
+        mainButton: TextButton(
+          child: Text('확인하러 가보기!'),
+          onPressed: (){
+            Get.offAll(()=>MainScreen());
+            Future.delayed(Duration(milliseconds: 300)).then((value) => Get.find<MainController>().navigationBarIndex(0));
+
+          },
+        )
+    );
+  }
+
   void missionCompletedUpdate(){
     bool A = false;
     bool B = false;
@@ -145,7 +192,7 @@ class MissionController extends GetxController {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('mission_completed').doc('day$day');
     missionCompleted.bindStream(dayCompleted.snapshots().map((event){
-      // 스냅샷 존재하지 않을 경우
+      // 다큐먼트 스냅샷 존재하지 않을 경우
       if (!event.exists){
         return {
           'A':A,
@@ -193,14 +240,39 @@ class MissionController extends GetxController {
 
   Map typeMatch = {
     'A':'오늘의 말씀',
-    'B':'나눔미션',
+    'B':'마가의 다락방',
     'C':'감사일기',
-    'D':'교회 연계미션'
+    'D':'오늘의 예배'
   };
 
   /// MissionB 내부 변수
   Rx<int> selectedContainer = 0.obs;
+  Rx<bool> checkbox = false.obs;
+  Future<double> getResultNum(int num, int day) async {
+    CollectionReference commentsRef = missionsRef.doc('day$day').collection('category').doc('B').collection('comments');
+    QuerySnapshot allResults = await commentsRef.get();
+    int allNum = allResults.docs.length;
 
+    // 해당하는 번호인 답변의 스냅샷을 가져옴.
+    QuerySnapshot numResultRef = await commentsRef
+        .where('index',isEqualTo: num).get();
+    if (num == 0){
+      return allNum.toDouble();
+    }
+    // 답변수가 0이면
+    if (allNum==0){
+      return 0;
+    }
+
+    return numResultRef.docs.length/allNum;
+  }
+  Future<String> getUserSelection() async{
+    CollectionReference missionCompleted = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('mission_completed');
+    var doc = await missionCompleted.doc('day${day.value}').get();
+    Map map = doc as Map;
+    return map['B']['contents'];
+  }
 
 
 

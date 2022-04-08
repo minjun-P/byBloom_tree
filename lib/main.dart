@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         },
         // 페이지 목록 - 여기서 initial binding 즉, 종속성 주입도 같이 해주면 된다.
         getPages: [
-          GetPage(name: '/main', page:()=> const MainScreen(),binding: BindingsBuilder.put(()=>MainController())),
+          GetPage(name: '/main', page:()=> const MainScreen(),binding: BindingsBuilder.put(()=>MainController(),permanent: true)),
           GetPage(name: '/login', page:()=> loginScreen(),binding: BindingsBuilder.put(()=>LoginController())),
           GetPage(name:'/signup', page:()=>RegisterPage()),
           // 회원 가입 첫 화면
