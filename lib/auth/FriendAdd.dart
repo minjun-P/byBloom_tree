@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/Profile/profilephoto.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_page.dart';
@@ -60,13 +61,12 @@ Future<List<Contact>?>getPermission() async{
 Future<bool> AddFriend(String phonenum) async {
   FriendModel? friendtoadd=await findUserFromPhone(phonenum);
   if (friendtoadd!=null){
-    print("phoneList");
-     print(TreeController().currentUserModel?.friendPhoneList);
-     List<String>?temp=TreeController().currentUserModel?.friendPhoneList;
-     temp?.add(phonenum);
-    print("phoneList2");
-    print(temp);
-     TreeController().currentUserModel?.friendList.add(friendtoadd);
+
+     List<String>?temp=DbController.to.currentUserModel.friendPhoneList;
+     temp.add(phonenum);
+
+
+    DbController.to.currentUserModel.friendList.add(friendtoadd);
     database.collection('users').doc(authservice
         .getCurrentUser()
         ?.uid).update({'friendPhoneList':temp});

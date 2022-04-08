@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -126,9 +127,9 @@ class ForestChatRoom extends StatelessWidget {
                   user: types.User(
 
                     id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
-                    firstName: Get.find<tree.TreeController>().currentUserModel!.name,
+                    firstName: DbController.to.currentUserModel.name,
                     lastName: "해",
-                    imageUrl: Get.find<tree.TreeController>().currentUserModel!.imageUrl
+                    imageUrl: DbController.to.currentUserModel.imageUrl
                   ), onSendPressed:_handleSendPressed,
                 ),
               );
@@ -252,6 +253,10 @@ class ForestChatRoom extends StatelessWidget {
       this.room.id,
     );
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"updatedAt":DateTime.now()});
+    FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"lastMessage":message.text});
+
+
+
   }
 
 

@@ -19,7 +19,7 @@ class SignupPage3 extends GetView<SignupController> {
 
   var _status = Status.Waiting;
   var phonenumber;
-  var verificationID;
+  late String verificationID;
 
 
   @override

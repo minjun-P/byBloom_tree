@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:math';
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'dart:core';
@@ -39,6 +40,7 @@ class Forest_making_state extends State<ForestMakingPage> {
       appBar: AppBar(
         actions: [
           TextButton(onPressed: () async {
+
           checkbox.fillRange(0, 99,false);
           types.Room room2= await FirebaseChatCore.instance.createGroupRoom(name: s.text, users: userlist);
 
@@ -85,7 +87,7 @@ class Forest_making_state extends State<ForestMakingPage> {
                 height: 50,
               ),
               Container(
-                height: Get.height*0.7,
+                height: Get.height*0.6,
                 child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
 
@@ -95,7 +97,7 @@ class Forest_making_state extends State<ForestMakingPage> {
                         height: 100,
                         child: ListTile(
                           title: Text(
-                            Get.find<TreeController>().currentUserModel!.friendList[index].name,
+                            DbController.to.currentUserModel.friendList[index].name,
                             style: TextStyle(
                                 fontSize: 18
                             ),
@@ -113,10 +115,10 @@ class Forest_making_state extends State<ForestMakingPage> {
 
                              });
                               if(checkbox[index]==true){
-                               String? uid=await finduidFromPhone(Get.find<TreeController>().currentUserModel!.friendList![index].phoneNumber);
+                               String? uid=await finduidFromPhone(DbController.to.currentUserModel.friendList[index].phoneNumber);
                                userlist.add(types.User(id:uid!));}
                              if(checkbox[index]==false){
-                               String? uid=await finduidFromPhone(Get.find<TreeController>().currentUserModel!.friendList![index].phoneNumber);
+                               String? uid=await finduidFromPhone(DbController.to.currentUserModel.friendList[index].phoneNumber);
                                userlist.remove(types.User(id:uid!));}
                              ;
                              }
@@ -129,7 +131,7 @@ class Forest_making_state extends State<ForestMakingPage> {
 
 
 
-                    itemCount: Get.find<TreeController>().currentUserModel?.friendList.length,
+                    itemCount: DbController.to.currentUserModel.friendList.length,
                   ),
               ),
             ],

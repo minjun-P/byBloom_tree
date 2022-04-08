@@ -1,4 +1,5 @@
 
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/auth/login_controller.dart';
 import 'package:bybloom_tree/notification_controller.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         },
         // 페이지 목록 - 여기서 initial binding 즉, 종속성 주입도 같이 해주면 된다.
         getPages: [
-          GetPage(name: '/main', page:()=> const MainScreen(),binding: BindingsBuilder.put(()=>MainController(),permanent: true)),
+          GetPage(name: '/main', page:()=> const MainScreen(),bindings: [BindingsBuilder.put(()=>MainController(),permanent: true),BindingsBuilder.put(()=>DbController(),permanent: true) ]),
           GetPage(name: '/login', page:()=> loginScreen(),binding: BindingsBuilder.put(()=>LoginController())),
           GetPage(name:'/signup', page:()=>RegisterPage()),
           // 회원 가입 첫 화면

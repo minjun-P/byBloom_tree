@@ -15,7 +15,7 @@ class loginScreen extends GetView<LoginController> {
    loginScreen({Key? key}) : super(key: key);
 
    var phonenumber;
-   var verificationID;
+   late String verificationID;
 
   @override
   Widget build(BuildContext context) {
@@ -115,12 +115,7 @@ class loginScreen extends GetView<LoginController> {
              ],
            ),
          ),
-         ElevatedButton(
-           onPressed: (){
-             Get.offAllNamed('/main');
-           },
-           child: Text('메인스크린 이동'),
-         )
+
        ],
      ),
    ),

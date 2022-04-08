@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,7 +66,7 @@ class FriendProfileController extends GetxController with GetTickerProviderState
     }
     // 상대 디비에 내가 물 준 기록 저장
     fireStore.collection('users').doc(friendUid).update({
-      'waterFrom':FieldValue.arrayUnion([{'who':uid,'when':DateTime.now(),'name':Get.find<TreeController>().currentUserModel!.name}])
+      'waterFrom':FieldValue.arrayUnion([{'who':uid,'when':DateTime.now(),'name':DbController.to.currentUserModel.name}])
     });
   }
 

@@ -40,59 +40,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
   }
 
   /// 유저모델 관리
-  UserModel? currentUserModel=null;
 
-  Future<UserModel?> makeUserModel( ) async {
-
-    User? user;
-    try {
-      user= await FirebaseAuth.instance.currentUser;
-      print("users/${user?.uid}");
-      CollectionReference users = FirebaseFirestore.instance.collection('users');
-      var doc=await users.doc(user?.uid).get();
-      print('다큐먼트가져오기');
-      var q=doc.data() as Map<String,dynamic>;
-      print(q['phoneNumber']);
-      print(q['friendPhoneList']);
-      var array = q['friendPhoneList']; // array is now List<dynamic>
-      List<String> strings = List<String>.from(array);
-
-      UserModel s= UserModel(
-          uid:user!.uid,
-          phoneNumber:q['phoneNumber'],name:q['name'],
-          birth: q['birth'], sex: q['Sex'], level: q['level'], exp:q['exp'],
-          createdAt: q['createdAt'].toDate()
-          , imageUrl: q['imageUrl'], slideValue: q['slideValue'], nickname: q['nickname'],
-          friendList: [] ,
-          friendPhoneList: strings,
-          lastName: q['name'],
-          firstName: "");
-      print("유저모델생성완료");
-
-      return s;
-    }catch(e){
-      print(e);
-      print("에러발");
-    }
-
-  }
-
-  bool uploadFriend(UserModel currentUser){
-    try {
-      List s = currentUser.friendPhoneList;
-      s.forEach((index) async {
-        print(index);
-        FriendModel? myFriend ;
-        myFriend=await findUserFromPhone(index) ;
-        currentUser.friendList.add(myFriend!);
-      });
-
-      return true;
-    }catch(error){
-      print(error);
-      return false;
-    }
-  }
   /// 애니메이션 초기화 모음
   late AnimationController wateringController;
   late Animation<double> wateringAnimation;
@@ -102,7 +50,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
   @override
-  Future<void> onInit() async {
+  void onInit()  {
     // TODO: implement onInit
     super.onInit();
     /// 레벨업 애니메이션
@@ -124,28 +72,13 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     exp.bindStream(userDetail().map((event)=>event['exp']));
     level.bindStream(userDetail().map((event)=>event['level']));
 
-    /// User 모델 초기화
-    currentUserModel=await makeUserModel();
-    print("UID:${currentUserModel?.name}");
-    print(uploadFriend(currentUserModel!));
-
-
-
-
-
-
-
     formKey = GlobalKey();
-
-
-
-
   }
 
 
 
   void levelUp(){
-    DocumentReference doc =FirebaseFirestore.instance.collection('users').doc(currentUserModel!.uid);
+    DocumentReference doc =FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid);
     doc.update({
       'exp':FieldValue.increment(-expStructure[level.value.toString()]),
       'level':FieldValue.increment(1)

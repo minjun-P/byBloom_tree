@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +14,7 @@ class MissionCController extends GetxController {
     super.onInit();
   }
   void uploadMissionC(String text) async{
-    DocumentReference userDoc = FirebaseFirestore.instance.collection('users').doc(Get.find<TreeController>().currentUserModel!.uid);
+    DocumentReference userDoc = FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.uid);
     DocumentReference dayDoc = userDoc.collection('mission_completed').doc('day${Get.find<MissionController>().day.value}');
     var dayRef = await dayDoc.get();
     if (dayRef.exists){

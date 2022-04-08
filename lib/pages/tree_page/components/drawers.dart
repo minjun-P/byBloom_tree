@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bybloom_tree/auth/login_page.dart';
 import 'package:bybloom_tree/auth/signup_page.dart';
@@ -44,7 +45,9 @@ class FriendDrawer extends GetView<TreeController> {
   @override
   Widget build(BuildContext context) {
     TextEditingController s;
-    return Column(
+    return FirebaseAuth.instance.currentUser==null? Column(
+     children:[ Text('로그인해주세요')]
+    ):Column(
       children: [
         const SizedBox(height: 20,),
         FutureBuilder<DocumentSnapshot>(
@@ -88,30 +91,26 @@ class FriendDrawer extends GetView<TreeController> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
              InkWell(
-    child:Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+          child:Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
            onTap: () async {
 
-             List<FriendModel>? s=await findfriendwithcontact();
-             print(s?.length);
-             s?.forEach((element) {
-               print(element.phoneNumber);
-             });
+             List<FriendModel>? friendlist=await findfriendwithcontact();
              showDialog(context: context, builder:(context){
-               if(s?.length==0){
+               if(friendlist?.length==0){
                  return Card(
                    child:Text("아직 가입한 친구가없네요")
                  );
                }
                else return ListView.builder(
-                   itemCount: s?.length,
+                   itemCount: friendlist?.length,
                    itemBuilder:(BuildContext context,int index){
                      return Card(
                          child:ListTile(
                        leading:
                            InkWell(
-                           child:Text(s![index].phoneNumber),
+                           child:Text(friendlist![index].phoneNumber),
                            onTap:() async {
-                             bool result=await AddFriend(s![index].phoneNumber);
+                             bool result=await AddFriend(friendlist[index].phoneNumber);
                              print('friendadded');
 
                            }
@@ -144,11 +143,11 @@ class FriendDrawer extends GetView<TreeController> {
           itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: (){
-              Get.to(()=>FriendProfilePage(friendData: controller.currentUserModel!.friendList[index],));
+              Get.to(()=>FriendProfilePage(friendData: DbController.to.currentUserModel.friendList[index],));
             },
             child: ListTile(
               title: Text(
-                  controller.currentUserModel!.friendList[index].name,
+                DbController.to.currentUserModel.friendList[index].name,
                   style: TextStyle(
                     fontSize: 18
                   ),
@@ -158,7 +157,7 @@ class FriendDrawer extends GetView<TreeController> {
             ),
           );
           },
-            itemCount: controller.currentUserModel?.friendList.length,
+            itemCount: DbController.to.currentUserModel.friendList.length,
           ),
         )
       ],
@@ -331,7 +330,7 @@ Future<bool> showresignPopup(context) async {
       btnCancelOnPress: () {
 
         FirebaseChatCore.instance.deleteUserFromFirestore(
-          Get.find<TreeController>().currentUserModel!.uid
+          DbController.to.currentUserModel.uid
         );
         Get.toNamed('/login');
 

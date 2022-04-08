@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
@@ -124,13 +125,13 @@ class MissionAComment extends GetView<MissionController> {
                                       IconButton(
                                         icon: Icon(
                                           MdiIcons.heartOutline,
-                                          color: List.castFrom(data['like']).contains(Get.find<TreeController>().currentUserModel!.uid)
+                                          color: List.castFrom(data['like']).contains(DbController.to.currentUserModel.uid)
                                               ?Colors.red
                                               :Colors.black,
                                           size: 20,
                                         ),
                                         onPressed: ()async{
-                                          if (List.castFrom(data['like']).contains(Get.find<TreeController>().currentUserModel!.uid)){
+                                          if (List.castFrom(data['like']).contains(DbController.to.currentUserModel.uid)){
                                             controller.minusLikeCount(docId: snapshotList[index].id,type: 'A');
                                           } else {
                                             controller.plusLikeCount(docId: snapshotList[index].id, type: 'A');
@@ -141,7 +142,7 @@ class MissionAComment extends GetView<MissionController> {
                                               Get.find<MainController>().sendFcm(
                                                   token: element,
                                                   title: '띵동',
-                                                  body: '${Get.find<TreeController>().currentUserModel!.name}님이 댓글에 좋아요를 눌렀어요!'
+                                                  body: '${DbController.to.currentUserModel.name}님이 댓글에 좋아요를 눌렀어요!'
                                               );
                                             });
 
