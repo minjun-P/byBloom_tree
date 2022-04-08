@@ -41,7 +41,7 @@ class Forest_making_state extends State<ForestMakingPage> {
           TextButton(onPressed: () async {
           checkbox.fillRange(0, 99,false);
           types.Room room2= await FirebaseChatCore.instance.createGroupRoom(name: s.text, users: userlist);
-          print("ssssssssssss"+s.text);
+
           Navigator.pop(context);
 
           Navigator.of(context).push(
