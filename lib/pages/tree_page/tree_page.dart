@@ -70,6 +70,7 @@ class TreePage extends GetView<TreeController> {
         drawer: buildCustomDrawer(child: const FriendDrawer()),
         endDrawer: buildCustomDrawer(child: const NoticeDrawer(),left: false),
 
+
         // 나무 페이지 화면을 Tree 객체로 통합하여 관리
           // scale 작동 원리가 뭔지 잘 모르겠음.
         body: Stack(

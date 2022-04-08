@@ -64,7 +64,9 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
           createdAt: q['createdAt'].toDate()
           , imageUrl: q['imageUrl'], slideValue: q['slideValue'], nickname: q['nickname'],
           friendList: [] ,
-          friendPhoneList: strings);
+          friendPhoneList: strings,
+          lastName: q['name'],
+          firstName: "");
       print("유저모델생성완료");
 
       return s;

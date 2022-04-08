@@ -1,8 +1,15 @@
+
 import 'package:bybloom_tree/pages/mission_page/pages/type_B/prior_mission_B.dart';
+
+import 'dart:math';
+
+import 'package:bybloom_tree/pages/forest_page/forestselectpage.dart';
+
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_controller.dart';
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_model.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -10,6 +17,11 @@ import 'package:table_calendar/table_calendar.dart';
 import 'components/mission_container.dart';
 import 'mission_controller.dart';
 import 'pages/type_A/mission_A_page.dart';
+import 'package:bottom_drawer/bottom_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 /// 미션을 확인하고 수행하는 페이지
 /// 필요 기능
@@ -20,7 +32,6 @@ import 'pages/type_A/mission_A_page.dart';
 class MissionPage extends GetView<MissionController> {
   const MissionPage({Key? key}) : super(key: key);
 
-  
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +40,6 @@ class MissionPage extends GetView<MissionController> {
       appBar: AppBar(
         title: GestureDetector(
           onTap: () {
-            for (int i = 1; i<=30; i++){
-              FirebaseFirestore.instance.collection('missions').doc('day$i').set({
-                'day':i
-              });
-            }
           },
             child: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
         backgroundColor: Colors.white,
@@ -69,6 +75,14 @@ class MissionPage extends GetView<MissionController> {
             alignment: Alignment.centerRight,
             child: GestureDetector(
               onTap: (){
+                Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ForestselectPage()
+                  ),
+                );
+
+
+
 
               },
               child: Row(
@@ -84,5 +98,14 @@ class MissionPage extends GetView<MissionController> {
         ],
       ),
     );
-  }  
+  }
 }
+
+
+
+
+
+
+
+
+

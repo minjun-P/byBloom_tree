@@ -1,99 +1,110 @@
+import 'dart:core';
 import 'dart:math';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'dart:core';
+import '../tree_page/tree_controller.dart';
 import 'forest_model.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'pages/forest_chat_room.dart';
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bybloom_tree/auth/User.dart';
 
-class ForestPage extends GetView<ForestController> {
-  const ForestPage({Key? key}) : super(key: key);
+List <bool> checkbox= List.filled(100,false);
+List<types.User> userlist=[];
+class ForestMakingPage extends StatefulWidget {
+  const ForestMakingPage({Key? key}) : super(key: key);
 
   @override
+  State<StatefulWidget> createState() {
+   return  Forest_making_state();
+  }
+
+
+
+}
+
+class Forest_making_state extends State<ForestMakingPage> {
+
+@override
   Widget build(BuildContext context) {
-    Get.put(ForestController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('숲 만들기',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-        actions: [IconButton(onPressed:(){ }, icon: Icon(
-            Icons.add_box))],
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),
       backgroundColor: Colors.white,
       body: ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: forestList.length,
-        itemBuilder: (context,index){
-          return InkWell(
-            onTap: (){
-              Get.to(()=>ForestChatRoom(forest: forestList[index]));
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
-              height: 120,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              // 색 값 따로 다 설정하기 귀찮아서 그냥 랜덤으로 정해지도록 임시 설정함함
-                              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1),
-                              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1)
-                            ]
-                        ),
-                        boxShadow: const[
-                          BoxShadow(color: Colors.grey,offset: Offset(3,3),blurRadius: 3)
-                        ]
-                    ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              width: 100,
+              height: 100,
+              child: ListTile(
+                title: Text(
+                  Get.find<TreeController>().currentUserModel!.friendList[index].name,
+                  style: TextStyle(
+                      fontSize: 18
                   ),
-                  const SizedBox(width: 15,),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10,),
-                        Text(forestList[index].name,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
-                        Text(
-                          forestList[index].latestMessage.content,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 14),
-                        )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        forestList[index].latestMessage.getTime(),
-                        style: const TextStyle(color: Colors.grey,fontSize: 13),),
-                      const SizedBox(height: 5,),
-                      Container(
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(forestList[index].unreadCount.toString(),style: const TextStyle(color: Colors.white,fontSize: 14),),
-                      )
-                    ],
-                  )
-                ],
+                ),
+                leading: CircleAvatar(backgroundColor: Colors.lime,),
+                trailing:InkWell(
+                 child:checkbox[index]?
+
+                 Icon( Icons.check_circle, color: Colors.lightGreen):
+                 Icon( Icons.check_circle, color: Colors.grey),
+               onTap: () async {
+                   setState(()  {
+                     print(checkbox);
+                     checkbox[index]=!checkbox[index];
+
+                   });
+                    if(checkbox[index]==true){
+                     String? uid=await finduidFromPhone(Get.find<TreeController>().currentUserModel!.friendList![index].phoneNumber);
+                     userlist.add(types.User(id:uid!));}
+                   if(checkbox[index]==false){
+                     String? uid=await finduidFromPhone(Get.find<TreeController>().currentUserModel!.friendList![index].phoneNumber);
+                     userlist.remove(types.User(id:uid!));}
+                   ;
+                   }
+                    )
+            )
+            );
+                   },
+
+
+
+
+
+          itemCount: Get.find<TreeController>().currentUserModel?.friendList.length,
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+
+        onPressed: () async {
+          checkbox.fillRange(0, 99,false);
+          types.Room room2= await FirebaseChatCore.instance.createGroupRoom(name: "", users: userlist);
+          Navigator.of(context).push(
+
+            MaterialPageRoute(
+              builder: (context) => ForestChatRoom(
+                room: room2,
               ),
             ),
           );
         },
+
       ),
-    );
+      );
+
+
+
   }
 
 }
