@@ -88,6 +88,17 @@ class MissionPage extends GetView<MissionController> {
               ,
               TextButton(
                   onPressed: () {
+                    if(controller.missionCompleted.values.contains(false)){
+                       AlertDialog(
+                        content: Column(
+                          children: [
+                            Text('아직 오늘 미션을 다완료하지 못하셨어요'),
+                            TextButton(onPressed: (){}, child: child)
+                          ],
+                        ),
+                         
+                      )
+                    }
                     Navigator.of(context).push(
                       MaterialPageRoute(
                           builder: (context) => ForestselectPage()
