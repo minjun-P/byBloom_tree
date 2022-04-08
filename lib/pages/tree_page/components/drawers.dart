@@ -1,7 +1,9 @@
 import 'package:bybloom_tree/DBcontroller.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bybloom_tree/auth/login_page.dart';
 import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/main_screen.dart';
+import 'package:bybloom_tree/notification_controller.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_profile_page.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
 import 'package:bybloom_tree/pages/siginup_page/pages/signup_page1.dart';
@@ -10,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -107,7 +110,7 @@ class FriendDrawer extends GetView<TreeController> {
                            InkWell(
                            child:Text(friendlist![index].phoneNumber),
                            onTap:() async {
-                             bool result=await AddFriend(friendlist![index].phoneNumber);
+                             bool result=await AddFriend(friendlist[index].phoneNumber);
                              print('friendadded');
 
                            }
@@ -235,15 +238,66 @@ class MenuDrawer extends StatelessWidget {
       child: SizedBox(
         width: Get.width*0.4,
         child: Column(
-          children: [
-            TextButton(onPressed: (){
-              authservice.logout();
-              Get.to(() => SignupPage1(),
-                  transition: Transition.rightToLeftWithFade);
 
-            }, child: Text('로그아웃')),
-            TextButton(onPressed: (){}, child: Text('회원탈퇴')),
-            TextButton(onPressed: (){}, child: Text('푸쉬알람끄기'))
+          children: [
+            SizedBox(
+              height: 50,
+            ),
+       
+            Container(
+              padding: EdgeInsets.only(top:50,bottom: 20),
+              child: InkWell(
+                  onTap: (){
+                authservice.logout();
+                Get.to(() => SignupPage1(),
+                    transition: Transition.rightToLeftWithFade);
+
+              }, child:
+
+              Column(
+                children: [
+                  Icon(Icons.logout),
+                  Text('로그아웃'),
+                ],
+              )),
+            ),
+            Container(
+              padding: EdgeInsets.only(top:20,bottom: 20),
+              child: InkWell(
+                  onTap: (){
+
+                   showresignPopup(context);
+
+
+                  }, child:
+
+              Column(
+                children: [
+                  Icon(Icons.no_accounts),
+                  Text('회원탈퇴'),
+                ],
+              )
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top:20,bottom: 20),
+              child: Obx(()=>InkWell(
+                  onTap: (){
+                   Get.find<NotificationController>().pushalarmtrue.value=!Get.find<NotificationController>().pushalarmtrue.value;
+                   Get.find<NotificationController>().prefs.setBool('pushalarm', Get.find<NotificationController>().pushalarmtrue.value);
+                   print(Get.find<NotificationController>().pushalarmtrue.value);
+                   }, child:
+
+              Column(
+                children: [
+                  Icon(Icons.doorbell,
+                    color: Get.find<NotificationController>().pushalarmtrue.value ? Colors.black:Colors.grey,),
+                  Text('푸쉬알람변경'),
+                ],
+              ))
+      ),
+            )
+
 
           ],
         ),
@@ -251,4 +305,35 @@ class MenuDrawer extends StatelessWidget {
     );
   }
 }
+Future<bool> showresignPopup(context) async {
+  return await AwesomeDialog(
+      context: context,
+      headerAnimationLoop: false,
+      title: '정말탈퇴하시겠어요?',
+      desc: '저희는 당신의 신앙 도우미 bybloom이었습니다. 다음에 또 놀러오세요!',
+      body: FractionallySizedBox(
+        widthFactor: 0.7,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Text('정말탈퇴하시겠어요?',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+            SizedBox(height: 15,),
+            Text('떠나신다니 아쉽습니다. 저희는 당신의 신앙 도우미 bybloom 이었습니다. 다음에 또 놀러오세요!')
+          ],
+        ),
+      ),
+      btnOkText: '아니오',
+      btnOkOnPress: () {
+        Get.back(closeOverlays: true);
+      },
+      btnCancelText: '네',
+      btnCancelOnPress: () {
 
+        FirebaseChatCore.instance.deleteUserFromFirestore(
+          DbController.to.currentUserModel.uid
+        );
+        Get.toNamed('/login');
+
+      }
+  ).show();
+}

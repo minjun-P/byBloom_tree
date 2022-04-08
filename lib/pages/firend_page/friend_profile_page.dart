@@ -159,7 +159,7 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                   Spacer(),
                   InkWell(
                       onTap: () async {
-                        final room2=await FirebaseChatCore.instance.createRoom(types.User(id:(await finduidFromPhone(friendData.phoneNumber!))!),metadata: {'name':friendData.name});
+                        final room2=await FirebaseChatCore.instance.createRoom(types.User(id:(await finduidFromPhone(friendData.phoneNumber))!),metadata: {'name':friendData.name});
 
                         Navigator.of(context).push(
 

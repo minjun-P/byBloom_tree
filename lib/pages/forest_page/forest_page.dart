@@ -119,7 +119,8 @@ class ForestPage extends GetView<ForestController> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '${((DateTime.now().millisecondsSinceEpoch-room.updatedAt!.floor())/60000).floor().toString()}분전',
+                            (room.updatedAt!=null)?
+                            '${((DateTime.now().millisecondsSinceEpoch-room.updatedAt!.floor())/60000).floor().toString()}분전':'방금',
                             style: const TextStyle(color: Colors.grey,fontSize: 13),),
                           const SizedBox(height: 5,),
                           Container(

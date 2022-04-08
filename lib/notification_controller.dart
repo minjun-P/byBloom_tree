@@ -4,16 +4,20 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class NotificationController extends GetxController {
   // 메시징 서비스 기본 객체 생성
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-
+  RxBool pushalarmtrue=RxBool(true);
+  late SharedPreferences prefs;
   @override
   void onInit() async{
     // TODO: implement onInit
     /// 첫 빌드시, 권한 확인하기
     /// 아이폰은 무조건 받아야 하고, 안드로이드는 상관 없음. 따로 유저가 설정하지 않는 한,
     /// 자동 권한 확보 상태
+    prefs = await SharedPreferences.getInstance();
+    pushalarmtrue.value = prefs.getBool('pushalarm') ?? true;
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -42,6 +46,7 @@ class NotificationController extends GetxController {
   /// 2. 그 채널을 우리 메인 채널로 정해줄 플러그인을 만들어준다.
   /// - 준비 끝!!
   // 1.
+
   final AndroidNotificationChannel channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
@@ -73,26 +78,28 @@ class NotificationController extends GetxController {
     // 1. 콘솔에서 발송하는 메시지를 message 파라미터로 받아온다.
     /// 메시지가 올 때마다 listen 내부 콜백이 실행된다.
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
+      if (pushalarmtrue.value){
+        RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
 
       // android 일 때만 flutterLocalNotification 을 대신 보여주는 거임. 그래서 아래와 같은 조건문 설정.
-      if (notification != null && android != null) {
+      if (notification != null && android != null)
         flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                  channel.id,
-                  channel.name,
-                  channelDescription: channel.description
-              ),
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channelDescription: channel.description
             ),
+          ),
 
-            // 넘겨줄 데이터가 있으면 아래 코드를 써주면 됨.
-            // payload: message.data['argument']
+          // 넘겨줄 데이터가 있으면 아래 코드를 써주면 됨.
+          // payload: message.data['argument']
         );
+
       }
       // 개발 확인 용으로 print 구문 추가
       print('foreground 상황에서 메시지를 받았다.');

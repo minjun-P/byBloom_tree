@@ -63,7 +63,7 @@ Future<bool> AddFriend(String phonenum) async {
   if (friendtoadd!=null){
 
      List<String>?temp=DbController.to.currentUserModel.friendPhoneList;
-     temp?.add(phonenum);
+     temp.add(phonenum);
 
 
     DbController.to.currentUserModel.friendList.add(friendtoadd);
