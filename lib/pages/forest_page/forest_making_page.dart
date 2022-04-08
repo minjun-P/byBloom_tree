@@ -89,7 +89,7 @@ class Forest_making_state extends State<ForestMakingPage> {
 
         onPressed: () async {
           checkbox.fillRange(0, 99,false);
-          types.Room room2= await FirebaseChatCore.instance.createGroupRoom(name: "숲", users: userlist);
+          types.Room room2= await FirebaseChatCore.instance.createGroupRoom(name: "", users: userlist);
           Navigator.of(context).push(
 
             MaterialPageRoute(

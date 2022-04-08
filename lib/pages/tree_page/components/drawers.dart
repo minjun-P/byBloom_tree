@@ -216,14 +216,23 @@ class MenuDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: IconButton(
-        icon: Icon(Icons.logout),
-        onPressed: (){
-          authservice.logout();
-          Get.to(() => SignupPage1(),
-              transition: Transition.rightToLeftWithFade);
+      color: Colors.white,
+      height: Get.height,
+      child: SizedBox(
+        width: Get.width*0.4,
+        child: Column(
+          children: [
+            TextButton(onPressed: (){
+              authservice.logout();
+              Get.to(() => SignupPage1(),
+                  transition: Transition.rightToLeftWithFade);
 
-        },
+            }, child: Text('로그아웃')),
+            TextButton(onPressed: (){}, child: Text('회원탈퇴')),
+            TextButton(onPressed: (){}, child: Text('푸쉬알람끄기'))
+
+          ],
+        ),
       ),
     );
   }

@@ -18,10 +18,18 @@ import 'package:bybloom_tree/pages/forest_page/pages/forest_chat_room.dart';
 /// 지금은 임시로 forest_model 페이지에 만들어놓은 데이터를 가져다 대강 구현해놓음
 /// 그 데이터를 db에서 불러온 값으로 대체하면 될 듯 하다.
 /// 채팅 UI는 너가 더 잘 알테니 알아서 수정해도 될 듯.
-class ForestselectPage extends GetView<ForestController> {
+class ForestselectPage extends StatefulWidget {
   const ForestselectPage({Key? key}) : super(key: key);
 
+  @override
+  State<StatefulWidget> createState() {
+   return Forest_select_state();
+  }
+}
 
+class Forest_select_state extends State<ForestselectPage>{
+  List<types.Room> roomstoshare=[];
+  List<bool> roomChecked=List.filled(100, false);
 
 
 
@@ -32,16 +40,16 @@ class ForestselectPage extends GetView<ForestController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('숲',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-        actions: [IconButton(onPressed:(){
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ForestMakingPage()),
-          );
-
-
-        }, icon: Icon(
-            Icons.add_box))],
+        actions: [
+          TextButton(onPressed: (){
+            roomstoshare.forEach((element) {
+              sendmissioncompletedmessage(element);
+              print('보내기');
+            });
+            Navigator.pop(context);
+          },
+          child: Text('공유하기',style: TextStyle(color: Colors.grey),),)
+        ],
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),
@@ -66,15 +74,19 @@ class ForestselectPage extends GetView<ForestController> {
 
               return GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ForestChatRoom(
-                          room: room,
-                        ),
-                      ),
-                    );
+                    setState(() {
+                      roomChecked[index]=!roomChecked[index];
+                      if(roomChecked[index]){
+                        roomstoshare.add(room);
+                      }
+                      if(!roomChecked[index]){
+                        roomstoshare.remove(room);
+                      }
+                    });
+
                   },
                   child: Container(
+                    color: roomChecked[index]?Colors.lightGreen: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
                     height: 120,
 
@@ -220,3 +232,10 @@ class ForestselectPage extends GetView<ForestController> {
   }
 
 }
+//미션완료 메시지 보내기!!
+sendmissioncompletedmessage(types.Room room){
+  types.PartialCustom missioncompleted= types.PartialCustom();
+  FirebaseChatCore.instance.sendMessage(missioncompleted, room.id);
+  print("room:$room.id");
+}
+

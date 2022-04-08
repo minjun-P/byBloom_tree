@@ -115,12 +115,6 @@ class MissionPage extends GetView<MissionController> {
 }
 
 
-///미션완료 메시지 보내기!!
-sendmissioncompletedmessage(types.Room room){
-types.PartialCustom missioncompleted= types.PartialCustom();
-FirebaseChatCore.instance.sendMessage(missioncompleted, room.id);
-print("room:$room.id");
-}
 
 
 
