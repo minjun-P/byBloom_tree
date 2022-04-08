@@ -66,7 +66,7 @@ class FriendProfileController extends GetxController with GetTickerProviderState
     }
     // 상대 디비에 내가 물 준 기록 저장
     fireStore.collection('users').doc(friendUid).update({
-      'waterFrom':FieldValue.arrayUnion([{'who':uid,'when':DateTime.now(),'name':DbController.to.currentUserModel.name}])
+      'waterFrom':FieldValue.arrayUnion([{'who':uid,'when':DateTime.now(),'name':DbController.to.currentUserModel.value.name}])
     });
   }
 

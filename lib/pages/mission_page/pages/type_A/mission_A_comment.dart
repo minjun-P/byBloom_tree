@@ -96,9 +96,9 @@ class MissionAComment extends GetView<MissionController> {
                                       ),
                                       Spacer(),
                                       // 삭제 로직
-                                      /**
+
                                       Visibility(
-                                        visible: data['uid']==Get.find<TreeController>().currentUserModel!.uid,
+                                        visible: data['uid']==DbController.to.currentUserModel.value.uid,
                                         child: TextButton(
                                           child: Text('삭제'),
                                           onPressed: (){
@@ -112,6 +112,7 @@ class MissionAComment extends GetView<MissionController> {
                                                       child: Text('네'),
                                                       onPressed: (){
                                                         controller.deleteComment(docId:snapshotList[index].id, type: 'A');
+                                                        Get.back(closeOverlays: true);
                                                       },
                                                     ),
                                                   );
@@ -121,17 +122,17 @@ class MissionAComment extends GetView<MissionController> {
 
                                           },
                                         ),
-                                      )*/
+                                      ),
                                       IconButton(
                                         icon: Icon(
                                           MdiIcons.heartOutline,
-                                          color: List.castFrom(data['like']).contains(DbController.to.currentUserModel.uid)
+                                          color: List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)
                                               ?Colors.red
                                               :Colors.black,
                                           size: 20,
                                         ),
                                         onPressed: ()async{
-                                          if (List.castFrom(data['like']).contains(DbController.to.currentUserModel.uid)){
+                                          if (List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)){
                                             controller.minusLikeCount(docId: snapshotList[index].id,type: 'A');
                                           } else {
                                             controller.plusLikeCount(docId: snapshotList[index].id, type: 'A');
@@ -142,7 +143,7 @@ class MissionAComment extends GetView<MissionController> {
                                               Get.find<MainController>().sendFcm(
                                                   token: element,
                                                   title: '띵동',
-                                                  body: '${DbController.to.currentUserModel.name}님이 댓글에 좋아요를 눌렀어요!'
+                                                  body: '${DbController.to.currentUserModel.value.name}님이 댓글에 좋아요를 눌렀어요!'
                                               );
                                             });
 

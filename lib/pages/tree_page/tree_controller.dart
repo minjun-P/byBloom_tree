@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,15 +24,13 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
   Rx<bool> rain = false.obs;
-
+  // 간단하게 하기 위해 getter from DbController 에 있는 currentUserModel
+  int get exp => DbController.to.currentUserModel.value.exp;
+  int get level => DbController.to.currentUserModel.value.level;
 
   // 임시로 만든거, 푸시알림 보내기 기능
   late GlobalKey<FormState> formKey;
 
-
-
-  RxInt exp = 0.obs;
-  RxInt level = 1.obs;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   Stream<Map> userDetail() {
@@ -68,9 +67,6 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
         begin: 0,
         end: 1
     ).animate(wateringController);
-    /// 필요한 데이터 가져오기
-    exp.bindStream(userDetail().map((event)=>event['exp']));
-    level.bindStream(userDetail().map((event)=>event['level']));
 
     formKey = GlobalKey();
   }
@@ -80,7 +76,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
   void levelUp(){
     DocumentReference doc =FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid);
     doc.update({
-      'exp':FieldValue.increment(-expStructure[level.value.toString()]),
+      'exp':FieldValue.increment(-expStructure[DbController.to.currentUserModel.value.level.toString()]),
       'level':FieldValue.increment(1)
     });
   }

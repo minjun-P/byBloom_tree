@@ -143,11 +143,11 @@ class FriendDrawer extends GetView<TreeController> {
           itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: (){
-              Get.to(()=>FriendProfilePage(friendData: DbController.to.currentUserModel.friendList[index],));
+              Get.to(()=>FriendProfilePage(friendData: DbController.to.currentUserModel.value.friendList[index],));
             },
             child: ListTile(
               title: Text(
-                DbController.to.currentUserModel.friendList[index].name,
+                DbController.to.currentUserModel.value.friendList[index].name,
                   style: TextStyle(
                     fontSize: 18
                   ),
@@ -157,7 +157,7 @@ class FriendDrawer extends GetView<TreeController> {
             ),
           );
           },
-            itemCount: DbController.to.currentUserModel.friendList.length,
+            itemCount: DbController.to.currentUserModel.value.friendPhoneList.length,
           ),
         )
       ],
@@ -330,7 +330,7 @@ Future<bool> showresignPopup(context) async {
       btnCancelOnPress: () {
 
         FirebaseChatCore.instance.deleteUserFromFirestore(
-          DbController.to.currentUserModel.uid
+          DbController.to.currentUserModel.value.uid
         );
         Get.toNamed('/login');
 

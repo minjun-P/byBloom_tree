@@ -35,7 +35,7 @@ class TreePage extends GetView<TreeController> {
 
         title: GestureDetector(
           onTap: (){
-            ///Get.to(()=>Temp());
+            print(DbController.to.currentUserModel.value.toJson());
           },
             child: const Text('bybloom',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),)),
         /// 친구 목록 drawer - db 연결 필요 - 하단 Scaffold의 drawer 파라미터 참조

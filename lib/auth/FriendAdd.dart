@@ -62,11 +62,11 @@ Future<bool> AddFriend(String phonenum) async {
   FriendModel? friendtoadd=await findUserFromPhone(phonenum);
   if (friendtoadd!=null){
 
-     List<String>?temp=DbController.to.currentUserModel.friendPhoneList;
+     List<String>?temp=DbController.to.currentUserModel.value.friendPhoneList;
      temp.add(phonenum);
 
 
-    DbController.to.currentUserModel.friendList.add(friendtoadd);
+    DbController.to.currentUserModel.value.friendList.add(friendtoadd);
     database.collection('users').doc(authservice
         .getCurrentUser()
         ?.uid).update({'friendPhoneList':temp});

@@ -14,7 +14,7 @@ class MissionCController extends GetxController {
     super.onInit();
   }
   void uploadMissionC(String text) async{
-    DocumentReference userDoc = FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.uid);
+    DocumentReference userDoc = FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.value.uid);
     DocumentReference dayDoc = userDoc.collection('mission_completed').doc('day${Get.find<MissionController>().day.value}');
     var dayRef = await dayDoc.get();
     if (dayRef.exists){

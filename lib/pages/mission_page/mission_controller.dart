@@ -68,7 +68,7 @@ class MissionController extends GetxController {
       missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').add({
         'contents':comment,
         'createdAt':DateTime.now(),
-        'uid':DbController.to.currentUserModel.uid,
+        'uid':DbController.to.currentUserModel.value.uid,
         'index':index
       });
       return ;
@@ -80,30 +80,30 @@ class MissionController extends GetxController {
         'writer': anonymous.elementAt(Random().nextInt(225)),
         'contents':comment,
         'createdAt':DateTime.now(),
-        'uid':DbController.to.currentUserModel.uid,
+        'uid':DbController.to.currentUserModel.value.uid,
         'like':[]
       });
       return;
     }
 
     missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').add({
-      'writer': DbController.to.currentUserModel.name,
+      'writer': DbController.to.currentUserModel.value.name,
       'contents':comment,
       'createdAt':DateTime.now(),
-      'uid':DbController.to.currentUserModel.uid,
+      'uid':DbController.to.currentUserModel.value.uid,
       'like':[]
     });
   }
   // 미션 A 전용 like 컨트롤 메서드
   void plusLikeCount({required String docId, required String type}) {
     missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).update({
-      'like':FieldValue.arrayUnion([DbController.to.currentUserModel.uid])
+      'like':FieldValue.arrayUnion([DbController.to.currentUserModel.value.uid])
     });
   }
   // 미션 A 전용 like 컨트롤 메서드
   void minusLikeCount({required String docId, required String type}) {
     missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).update({
-      'like':FieldValue.arrayRemove([DbController.to.currentUserModel.uid])
+      'like':FieldValue.arrayRemove([DbController.to.currentUserModel.value.uid])
     });
   }
 
@@ -111,15 +111,16 @@ class MissionController extends GetxController {
     // comment 컬렉션에서 삭제
     missionsRef.doc('day${day.value}').collection('category').doc(type).collection('comments').doc(docId).delete();
     // mission_completed 컬렉션에서 삭제
-    var doc = FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.uid).collection('mission_completed').doc('day${day.value}');
+    /**
+    var doc = FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.value.uid).collection('mission_completed').doc('day${day.value}');
     doc.update({
       type:FieldValue.delete()
     });
-
+*/
   }
   // 미션 Db 아래가 아니라 나의 유저 데이터 아래에 저장
   void updateComplete({required String comment, required String type}) async{
-    var doc = FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.uid).collection('mission_completed').doc('day${day.value}');
+    var doc = FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.value.uid).collection('mission_completed').doc('day${day.value}');
     var dayRef = await doc.get();
     if (dayRef.exists){
       doc.update({
@@ -168,7 +169,7 @@ class MissionController extends GetxController {
   }
 
   void incrementExp(int num) {
-    FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.uid).update({
+    FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.value.uid).update({
       'exp':FieldValue.increment(num)
     });
   }

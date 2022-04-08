@@ -33,7 +33,7 @@ class TreeStatus extends GetView<TreeController> {
           // 레벨업 버튼, 경험치가 꽉 차거나 초과해야 visible 해짐.
           Obx(()=>
               Visibility(
-                  visible: controller.exp.value>=controller.expStructure[controller.level.value.toString()],
+                  visible: controller.exp>=controller.expStructure[controller.level.toString()],
                   child: Column(
                     children: [
                       Text('레벨업'),
@@ -70,7 +70,7 @@ class TreeStatus extends GetView<TreeController> {
                                 children: [
                                   TextSpan(text: '성장단계 : ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
                                   TextSpan(
-                                      text: '${controller.level.value.toString()} ',
+                                      text: '${controller.level.toString()} ',
                                     style: TextStyle(fontWeight: FontWeight.bold)
                                   ),
                                 ]
@@ -81,14 +81,14 @@ class TreeStatus extends GetView<TreeController> {
                                 children: [
                                   TextSpan(text: '성장치 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
                                   TextSpan(
-                                      text: controller.exp.value.toString(),
+                                      text: controller.exp.toString(),
                                       style: TextStyle(
-                                          color: controller.exp.value>=controller.expStructure[controller.level.value.toString()]?Colors.red:Colors.black,
-                                          fontWeight: controller.exp.value>=controller.expStructure[controller.level.value.toString()]?FontWeight.bold:FontWeight.w400
+                                          color: controller.exp>=controller.expStructure[controller.level.toString()]?Colors.red:Colors.black,
+                                          fontWeight: controller.exp>=controller.expStructure[controller.level.toString()]?FontWeight.bold:FontWeight.w400
                                       )
                                   ),
                                   TextSpan(
-                                      text: '/'+controller.expStructure[controller.level.value.toString()].toString()
+                                      text: '/'+controller.expStructure[controller.level.toString()].toString()
                                   )
                                 ]
                             )
@@ -165,7 +165,7 @@ class TreeStatus extends GetView<TreeController> {
                   alignment: Alignment.centerLeft,
 
                   child: Obx(()=> AnimatedContainer(
-                    width: Get.width*0.9*controller.exp.value/controller.expStructure[controller.level.value.toString()],
+                    width: Get.width*0.9*controller.exp/controller.expStructure[controller.level.toString()],
                     duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),

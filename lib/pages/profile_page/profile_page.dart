@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
@@ -135,29 +136,13 @@ class ProfilePageState extends State<ProfilePage>{
                         ),
                         Positioned(
                           bottom: 20,
-                          child: FutureBuilder(
-                            future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
-                            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                              if (snapshot.hasError){
-                                return Text('error');
-                              }
-                              if (snapshot.hasData && !snapshot.data!.exists){
-                                return Text('Document does not exist');
-                              }
-                              if (snapshot.connectionState == ConnectionState.done){
-                                Map<String,dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(data['name'],style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
-                                    Text(data['nickname'],style: TextStyle(color: Color(0xffC5B785)),)
-                                  ],
-                                );
-                              }
-                              return CircularProgressIndicator();
-
-                            }
-                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
+                              Text(DbController.to.currentUserModel.value.nickname,style: TextStyle(color: Color(0xffC5B785)),)
+                            ],
+                          )
                         )
                       ],
                     ),

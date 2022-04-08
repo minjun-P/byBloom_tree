@@ -12,21 +12,63 @@ class DbController extends GetxController{
   String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
   // 다큐먼트 스냅샷
   Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
-  late UserModel currentUserModel;
+  Rx<UserModel> currentUserModel = UserModel(
+    uid: '',
+    phoneNumber: '',
+    name: '',
+    birth: '',
+    sex: '',
+    level: 1,
+    exp: 0,
+    createdAt: DateTime.now(),
+    imageUrl: '',
+    slideValue: 0,
+    nickname: '',
+    friendList: [],
+    friendPhoneList: [],
+    lastName: '',
+    firstName: ''
+  ).obs;
 
 
   @override
   void onInit() async{
     super.onInit();
-    currentUserModel = await makeUserModel();
-    uploadFriend(currentUserModel);
+    currentUserModel.bindStream(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots().map((event) {
+      Map<String,dynamic> data = event.data()!;
+      String uid = event.id;
+      // 친구 폰 목록
+      List<String> friendPhoneList = List<String>.from(data['friendPhoneList'] );
+      return UserModel(
+          uid:uid,
+          phoneNumber:data['phoneNumber'],
+          name:data['name'],
+          birth: data['birth'],
+          sex: data['Sex'],
+          level: data['level'],
+          exp:data['exp'],
+          createdAt: data['createdAt'].toDate(),
+          imageUrl: data['imageUrl'],
+          slideValue: data['slideValue'],
+          nickname: data['nickname'],
+          friendList: [] ,
+          friendPhoneList: friendPhoneList,
+          lastName: data['name'],
+          firstName: ""
+      );
+    }));
+    ever(currentUserModel,(_){
+      _ as UserModel;
+      uploadFriend(currentUserModel.value);
+    });
+
     print("유저업데이트완료");
   }
 
 
 
   // 유저 만드는 메소드
-  Future<UserModel> makeUserModel( ) async {
+  Future<Rx<UserModel>> makeUserModel( ) async {
     String uid= FirebaseAuth.instance.currentUser!.uid;
 
 
@@ -58,7 +100,7 @@ class DbController extends GetxController{
     );
     print("유저모델생성완료");
 
-    return userModel;
+    return userModel.obs;
 
   }
 

@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'selection_answer.dart';
 
 
-class MissionB extends GetView<MissionController> {
-  const MissionB({Key? key}) : super(key: key);
+class MissionBPage extends GetView<MissionController> {
+  const MissionBPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

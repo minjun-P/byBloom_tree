@@ -97,7 +97,7 @@ class Forest_making_state extends State<ForestMakingPage> {
                         height: 100,
                         child: ListTile(
                           title: Text(
-                            DbController.to.currentUserModel.friendList[index].name,
+                            DbController.to.currentUserModel.value.friendList[index].name,
                             style: TextStyle(
                                 fontSize: 18
                             ),
@@ -115,10 +115,10 @@ class Forest_making_state extends State<ForestMakingPage> {
 
                              });
                               if(checkbox[index]==true){
-                               String? uid=await finduidFromPhone(DbController.to.currentUserModel.friendList[index].phoneNumber);
+                               String? uid=await finduidFromPhone(DbController.to.currentUserModel.value.friendList[index].phoneNumber);
                                userlist.add(types.User(id:uid!));}
                              if(checkbox[index]==false){
-                               String? uid=await finduidFromPhone(DbController.to.currentUserModel.friendList[index].phoneNumber);
+                               String? uid=await finduidFromPhone(DbController.to.currentUserModel.value.friendList[index].phoneNumber);
                                userlist.remove(types.User(id:uid!));}
                              ;
                              }
@@ -131,7 +131,7 @@ class Forest_making_state extends State<ForestMakingPage> {
 
 
 
-                    itemCount: DbController.to.currentUserModel.friendList.length,
+                    itemCount: DbController.to.currentUserModel.value.friendList.length,
                   ),
               ),
             ],

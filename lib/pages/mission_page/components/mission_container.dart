@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../mission_controller.dart';
 import '../pages/type_A/mission_A_page.dart';
-import '../pages/type_B/mission_B.dart';
+import '../pages/type_B/mission_B_page.dart';
 class MissionContainer extends GetView<MissionController> {
   final String type;
   const MissionContainer({
@@ -22,7 +22,7 @@ class MissionContainer extends GetView<MissionController> {
             Get.to(()=>MissionAPage());
             break;
           case 'B':
-            Get.to(()=>MissionB());
+            Get.to(()=>MissionBPage());
             break;
           case 'C':
             Get.to(()=>MissionCPage());

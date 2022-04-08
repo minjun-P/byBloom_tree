@@ -89,7 +89,7 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                           friendData.tokens.forEach((token) {
                             Get.find<MainController>().sendFcm(
                                 token: token,
-                                title: '${DbController.to.currentUserModel.name}님이 나무에 물을 주셨어요',
+                                title: '${DbController.to.currentUserModel.value.name}님이 나무에 물을 주셨어요',
                                 body: '얼른 확인해보세요!'
                             );
                           });

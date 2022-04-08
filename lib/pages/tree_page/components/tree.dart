@@ -20,7 +20,7 @@ class Tree extends GetView<TreeController>{
         // 배경
         Image.asset('assets/tree/background_basic.jpg',width: Get.width,height: Get.height,fit: BoxFit.fill,),
         // 나무
-        Obx(()=>Image.asset('assets/tree/${controller.level.value}.gif',width: Get.width*0.9,fit: BoxFit.fitWidth),),
+        Obx(()=>Image.asset('assets/tree/${controller.level}.gif',width: Get.width*0.9,fit: BoxFit.fitWidth),),
         Lottie.asset(
           'assets/tree/shower.json',
           controller: controller.wateringController
