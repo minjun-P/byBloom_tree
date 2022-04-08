@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/main_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -126,13 +127,13 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                           IconButton(
                                             icon: Icon(
                                               MdiIcons.heartOutline,
-                                              color: List.castFrom(data['like']).contains(Get.find<TreeController>().currentUserModel!.uid)
+                                              color: List.castFrom(data['like']).contains(DbController.to.currentUserModel.uid)
                                                   ?Colors.red
                                                   :Colors.black,
                                               size: 20,
                                             ),
                                             onPressed: ()async{
-                                              if (List.castFrom(data['like']).contains(Get.find<TreeController>().currentUserModel!.uid)){
+                                              if (List.castFrom(data['like']).contains(DbController.to.currentUserModel.uid)){
                                                 controller.minusLikeCount(docId: snapshotList[index].id,type: 'B');
                                               } else {
                                                 controller.plusLikeCount(docId: snapshotList[index].id, type: 'B');
@@ -143,7 +144,7 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                                   Get.find<MainController>().sendFcm(
                                                       token: element,
                                                       title: '띵동',
-                                                      body: '${Get.find<TreeController>().currentUserModel!.name}님이 댓글에 좋아요를 눌렀어요!'
+                                                      body: '${DbController.to.currentUserModel.name}님이 댓글에 좋아요를 눌렀어요!'
                                                   );
                                                 });
                                               }
@@ -154,7 +155,7 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                           ),
 
                                           Visibility(
-                                            visible: data['uid']==Get.find<TreeController>().currentUserModel!.uid,
+                                            visible: data['uid']==DbController.to.currentUserModel.uid,
                                             child: TextButton(
                                               child: Text('삭제'),
                                               onPressed: (){

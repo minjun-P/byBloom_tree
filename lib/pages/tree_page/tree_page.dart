@@ -1,5 +1,7 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:bybloom_tree/pages/tree_page/components/waterToLimit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../mission_page/mission_controller.dart';
 import '../siginup_page/pages/signup_page1.dart';
@@ -31,12 +33,11 @@ class TreePage extends GetView<TreeController> {
       appBar: AppBar(
         centerTitle: true,
 
-        title: InkWell(
-        child: const Text('bybloom',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),),
-        onTap: (){
-          print(controller.currentUserModel!.toJson().toString());
-        },
-        ),
+        title: GestureDetector(
+          onTap: (){
+            ///Get.to(()=>Temp());
+          },
+            child: const Text('bybloom',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),)),
         /// 친구 목록 drawer - db 연결 필요 - 하단 Scaffold의 drawer 파라미터 참조
         leading: IconButton(
           key: tutorialKey3,
@@ -94,3 +95,18 @@ class TreePage extends GetView<TreeController> {
     );
   }
 }
+/*
+class Temp extends StatelessWidget {
+  const Temp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('users')
+            .where('phoneNum',isEqualTo: DbController.to.currentUserModel.friendPhoneList[0]).,
+      ),
+    );
+  }
+}
+*/

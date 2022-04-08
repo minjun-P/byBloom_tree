@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:bybloom_tree/pages/firend_page/firend_profile_controller.dart';
 import 'package:bybloom_tree/pages/forest_page/pages/forest_chat_room.dart';
@@ -88,7 +89,7 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                           friendData.tokens.forEach((token) {
                             Get.find<MainController>().sendFcm(
                                 token: token,
-                                title: '${Get.find<TreeController>().currentUserModel!.name}님이 나무에 물을 주셨어요',
+                                title: '${DbController.to.currentUserModel.name}님이 나무에 물을 주셨어요',
                                 body: '얼른 확인해보세요!'
                             );
                           });
