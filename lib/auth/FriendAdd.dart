@@ -61,12 +61,11 @@ Future<List<Contact>?>getPermission() async{
 Future<bool> AddFriend(String phonenum) async {
   FriendModel? friendtoadd=await findUserFromPhone(phonenum);
   if (friendtoadd!=null){
-    print("phoneList");
-     print(DbController.to.currentUserModel.friendPhoneList);
+
      List<String>?temp=DbController.to.currentUserModel.friendPhoneList;
      temp?.add(phonenum);
-    print("phoneList2");
-    print(temp);
+
+
     DbController.to.currentUserModel.friendList.add(friendtoadd);
     database.collection('users').doc(authservice
         .getCurrentUser()

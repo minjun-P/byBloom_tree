@@ -253,6 +253,10 @@ class ForestChatRoom extends StatelessWidget {
       this.room.id,
     );
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"updatedAt":DateTime.now()});
+    FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"lastMessage":message.text});
+
+
+
   }
 
 

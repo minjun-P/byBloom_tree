@@ -42,7 +42,9 @@ class FriendDrawer extends GetView<TreeController> {
   @override
   Widget build(BuildContext context) {
     TextEditingController s;
-    return Column(
+    return FirebaseAuth.instance.currentUser==null? Column(
+     children:[ Text('로그인해주세요')]
+    ):Column(
       children: [
         const SizedBox(height: 20,),
         FutureBuilder<DocumentSnapshot>(
@@ -90,10 +92,6 @@ class FriendDrawer extends GetView<TreeController> {
            onTap: () async {
 
              List<FriendModel>? friendlist=await findfriendwithcontact();
-             print(friendlist?.length);
-             friendlist?.forEach((element) {
-               print(element.phoneNumber);
-             });
              showDialog(context: context, builder:(context){
                if(friendlist?.length==0){
                  return Card(
