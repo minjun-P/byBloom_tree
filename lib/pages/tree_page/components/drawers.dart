@@ -4,6 +4,7 @@ import 'package:bybloom_tree/auth/login_page.dart';
 import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/notification_controller.dart';
+import 'package:bybloom_tree/pages/firend_page/friend_add_page.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_profile_page.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_search_page.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
@@ -95,7 +96,7 @@ class FriendDrawer extends GetView<TreeController> {
                            InkWell(
                            child:Text(friendlist![index].phoneNumber),
                            onTap:() async {
-                             bool result=await AddFriend(friendlist[index].phoneNumber);
+                             bool result=await AddFriend(friendlist[index]);
                              print('friendadded');
 
                            }
@@ -112,10 +113,12 @@ class FriendDrawer extends GetView<TreeController> {
 
            }, ),
             /// s에 연락처연동해서 이미가입해있는 friendmodel들 list 받아왔으니까 친구추가화면 Ui만들어서 채워넣어
+
             GestureDetector(
               onTap: (){
                 Get.to(()=>FriendSearchPage());
               },
+
               child: Row(
                 children: const [
                   Icon(Icons.search, color: Colors.grey,),

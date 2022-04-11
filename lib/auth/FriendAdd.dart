@@ -58,7 +58,7 @@ Future<List<Contact>?>getPermission() async{
 }
 
 
-Future<bool> AddFriend(String phonenum) async {
+Future<bool> AddFriendfromPhone(String phonenum) async {
   FriendModel? friendtoadd=await findUserFromPhone(phonenum);
   if (friendtoadd!=null){
 
@@ -75,6 +75,23 @@ Future<bool> AddFriend(String phonenum) async {
   return false;
 }
 
+Future<bool> AddFriend(FriendModel friendtoadd) async {
+
+  if (friendtoadd!=null&& !DbController.to.currentUserModel.value.friendPhoneList.contains(friendtoadd.phoneNumber)){
+
+
+    List<String>?temp=DbController.to.currentUserModel.value.friendPhoneList;
+    temp.add(friendtoadd.phoneNumber);
+
+
+    DbController.to.currentUserModel.value.friendList.add(friendtoadd);
+    database.collection('users').doc(authservice
+        .getCurrentUser()
+        ?.uid).update({'friendPhoneList':temp});
+    return true;
+  };
+  return false;
+}
 
 ///친구추가하는 로직!!
 
