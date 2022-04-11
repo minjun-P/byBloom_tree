@@ -111,7 +111,7 @@ class FriendDrawer extends GetView<TreeController> {
                            InkWell(
                            child:Text(friendlist![index].phoneNumber),
                            onTap:() async {
-                             bool result=await AddFriend(friendlist[index].phoneNumber);
+                             bool result=await AddFriend(friendlist[index]);
                              print('friendadded');
 
                            }

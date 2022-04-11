@@ -416,18 +416,38 @@ class ChatRoomDrawer extends StatelessWidget {
     return Container(
       color: Colors.white,
       height: Get.height,
+      width: Get.width*0.3,
       child: SizedBox(
-        width: Get.width*0.4,
+
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
           children: [
-            Text('숲서랍'),
+
+            Container(
+                padding:EdgeInsets.all(30)
+                ,child: Column(
+                  children: [
+                    Text('숲구성',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                    Container(
+                      height: Get.height*0.5,
+                      child: ListView.builder(itemBuilder:
+                   (BuildContext context, int index) {
+            return Container(
+
+            );
+            },itemCount: room.users.length),
+                    )
+                  ],
+                )),
             SizedBox(
               height: 50,
             ),
-
+           Row(
+             children: [
             Container(
-              padding: EdgeInsets.only(top:50,bottom: 20),
+              padding: EdgeInsets.only(top:20,bottom: 20),
               child: InkWell(
                   onTap: (){
 
@@ -464,7 +484,8 @@ class ChatRoomDrawer extends StatelessWidget {
 
           ],
         ),
-      ),
+      ]),
+    )
     );
   }
 }
