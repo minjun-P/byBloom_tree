@@ -3,6 +3,7 @@ import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/auth/login_controller.dart';
 import 'package:bybloom_tree/notification_controller.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -42,9 +43,14 @@ class MyApp extends StatelessWidget {
 
       // overScroll 시 생기는 파란색 glow를 지워주기 위함. 전역적으로 해당 설정을 적용하는 코드
       // 맨 아래 정의한 class를 참고하자!
-        builder: (context, child){
-          return ScrollConfiguration(behavior: MyScrollBehavior(), child: child!);
+        builder: (context, child) {
+
+
+
+          return ScrollConfiguration(
+              behavior: MyScrollBehavior(), child: child!);
         },
+
         // 페이지 목록 - 여기서 initial binding 즉, 종속성 주입도 같이 해주면 된다.
         getPages: [
           GetPage(name: '/main', page:()=> const MainScreen(),bindings: [BindingsBuilder.put(()=>MainController(),permanent: true),BindingsBuilder.put(()=>DbController(),permanent: true) ]),
