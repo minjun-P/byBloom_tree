@@ -33,15 +33,13 @@ class TreePage extends GetView<TreeController> {
       appBar: AppBar(
         centerTitle: true,
 
-        title: GestureDetector(
-          onTap: (){
-            print(DbController.to.currentUserModel.value.toJson());
-          },
-            child: const Text('bybloom',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),)),
+        title: Image.asset(
+          'assets/title.png'
+        ),
         /// 친구 목록 drawer - db 연결 필요 - 하단 Scaffold의 drawer 파라미터 참조
         leading: IconButton(
           key: tutorialKey3,
-          icon:const Icon(Icons.person),
+          icon: Image.asset('assets/friend_icon.png'),
           onPressed: (){
             _insideScaffoldKey.currentState?.openDrawer();
             },

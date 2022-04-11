@@ -62,7 +62,6 @@ class MissionAComment extends GetView<MissionController> {
                             Center(child: Text(
                                 '아직 댓글이 없습니다',
                               style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
-
                             )),
                             Spacer()
                           ],
@@ -76,7 +75,8 @@ class MissionAComment extends GetView<MissionController> {
                         itemBuilder: (context, index){
 
                           List<QueryDocumentSnapshot> snapshotList = snapshot.data!.docs;
-                          Map<String,dynamic> data = snapshotList[index].data() as Map<String,dynamic>;
+                          QueryDocumentSnapshot specificSnapshot = snapshotList[index];
+                          Map<String,dynamic> data = specificSnapshot.data() as Map<String,dynamic>;
                           return Container(
                               child: Column(
                                 children: [
@@ -114,6 +114,57 @@ class MissionAComment extends GetView<MissionController> {
                                                         controller.deleteComment(docId:snapshotList[index].id, type: 'A');
                                                         Get.back(closeOverlays: true);
                                                       },
+                                                    ),
+                                                  );
+                                                }
+
+                                            );
+
+                                          },
+                                        ),
+                                      ),
+                                      // 신고
+                                      Visibility(
+                                        visible: data['uid']!=DbController.to.currentUserModel.value.uid,
+                                        child: TextButton(
+                                          child: Text('신고'),
+                                          onPressed: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  // 삭제 확인 알림
+                                                  return AlertDialog(
+                                                    title: Text('정말 신고하시겠습니까?'),
+                                                    content: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Text('<신고 사유>'),
+                                                        TextFormField(
+                                                          controller: controller.reportControllerA,
+                                                          maxLines: 3,
+                                                          decoration: InputDecoration(
+                                                            hintText: '사유를 입력해야 제출이 가능합니다.'
+                                                          ),
+                                                        ),
+                                                        OutlinedButton(
+                                                          child: Text('제출'),
+                                                          onPressed: (){
+                                                            if (controller.reportControllerA.text.isNotEmpty){
+                                                              controller.reportComment(
+                                                                  day: controller.day.value,
+                                                                  type: 'A',
+                                                                  reason: controller.reportControllerA.text,
+                                                                who: data['uid'],
+                                                                commentId: specificSnapshot.id
+
+                                                              );
+
+                                                              controller.reportControllerA.clear();
+                                                              Get.back(closeOverlays: true);
+                                                            }
+                                                          },
+                                                        ),
+                                                      ],
                                                     ),
                                                   );
                                                 }

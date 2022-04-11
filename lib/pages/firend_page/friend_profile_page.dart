@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:bybloom_tree/pages/firend_page/firend_profile_controller.dart';
@@ -41,7 +42,17 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                   )
               ),
               Positioned(
-                top: 50,
+                top: 20,
+                left: 20,
+                child: IconButton(
+                    icon: Icon(MdiIcons.arrowLeft,color: Colors.white,size: 35,),
+                  onPressed: (){
+                      Get.back();
+                  },
+                ),
+              ),
+              Positioned(
+                top: 70,
                 left: 20,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +78,6 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                           ),
 
                           padding: EdgeInsets.symmetric(horizontal: 12,vertical: 7),
-                          width: 220,
                           child: controller.waterTo.contains(friendData.uid)
                               ?Text('물을 주셔서 감사해요!')
                               :Text('친구의 나무에 물을 주세요!')
@@ -106,15 +116,9 @@ class FriendProfilePage extends GetView<FriendProfileController> {
 
 
                       },
-                      child: Obx(()=>
-                        Container(
-                          padding: EdgeInsets.only(bottom: 5,left: 3,right: 3),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.transparent,
-                            border: Border.all(color: controller.waterTo.contains(friendData.uid)?Colors.white:Colors.cyan,width: 4)
-                          ),
-                          child: Icon(MdiIcons.wateringCanOutline,size: 40,color: controller.waterTo.contains(friendData.uid)?Colors.white:Colors.cyanAccent,)
+                      child: Badge(
+                        child: Image.asset(
+                          'assets/watering_to_friend.png',
                         ),
                       ),
                     ),

@@ -107,7 +107,8 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                 itemBuilder: (context, index){
 
                                   List<QueryDocumentSnapshot> snapshotList = snapshot.data!.docs;
-                                  Map<String,dynamic> data = snapshotList[index].data() as Map<String,dynamic>;
+                                  QueryDocumentSnapshot specificSnapshot = snapshotList[index];
+                                  Map<String,dynamic> data = specificSnapshot.data() as Map<String,dynamic>;
                                   return Container(
                                       child: Row(
                                         children: [
@@ -124,6 +125,32 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                             ],
                                           ),
                                           Spacer(),
+                                          Visibility(
+                                            visible: data['uid']==DbController.to.currentUserModel.value.uid,
+                                            child: TextButton(
+                                              child: Text('삭제'),
+                                              onPressed: (){
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      // 삭제 확인 알림
+                                                      return AlertDialog(
+                                                        title: Text('정말 삭제하시겠습니까?'),
+                                                        content: OutlinedButton(
+                                                          child: Text('네'),
+                                                          onPressed: (){
+                                                            controller.deleteComment(docId:snapshotList[index].id, type: 'B');
+                                                            Get.back(closeOverlays: true);
+                                                          },
+                                                        ),
+                                                      );
+                                                    }
+
+                                                );
+
+                                              },
+                                            ),
+                                          ),
                                           IconButton(
                                             icon: Icon(
                                               MdiIcons.heartOutline,
@@ -153,13 +180,56 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                           Text(
                                               List.castFrom(data['like']).length.toString()
                                           ),
+                                          // 삭제
 
+                                          // 신고
                                           Visibility(
-                                            visible: data['uid']==DbController.to.currentUserModel.value.uid,
+                                            visible: data['uid']!=DbController.to.currentUserModel.value.uid,
                                             child: TextButton(
-                                              child: Text('삭제'),
+                                              child: Text('신고'),
                                               onPressed: (){
-                                                controller.deleteComment(docId:snapshotList[index].id, type: 'B');
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      // 삭제 확인 알림
+                                                      return AlertDialog(
+                                                        title: Text('정말 신고하시겠습니까?'),
+                                                        content: Column(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            Text('<신고 사유>'),
+                                                            TextFormField(
+                                                              controller: controller.reportControllerA,
+                                                              maxLines: 3,
+                                                              decoration: InputDecoration(
+                                                                  hintText: '사유를 입력해야 제출이 가능합니다.'
+                                                              ),
+                                                            ),
+                                                            OutlinedButton(
+                                                              child: Text('제출'),
+                                                              onPressed: (){
+                                                                if (controller.reportControllerA.text.isNotEmpty){
+                                                                  controller.reportComment(
+                                                                      day: controller.day.value,
+                                                                      type: 'B',
+                                                                      reason: controller.reportControllerA.text,
+                                                                      who: data['uid'],
+                                                                      commentId: specificSnapshot.id
+
+                                                                  );
+
+                                                                  controller.reportControllerA.clear();
+                                                                  Get.back(closeOverlays: true);
+                                                                }
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }
+
+                                                );
+
                                               },
                                             ),
                                           )

@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/main.dart';
 import 'package:bybloom_tree/main_controller.dart';
@@ -40,7 +41,7 @@ class TreeStatus extends GetView<TreeController> {
                       GestureDetector(
                         onTap: ()async{
                           controller.levelUpAnimationController.forward().then((value) => controller.levelUpAnimationController.reset());
-                          Future.delayed(Duration(milliseconds: 3400)).then((value) => controller.levelUp());
+                          Future.delayed(Duration(milliseconds: 3400)).then((value) => controller.levelUp(DbController.to.currentUserModel.value.level));
                         },
                         child: Lottie.asset(
                             'assets/tree/levelupicon.json',
@@ -117,6 +118,7 @@ class TreeStatus extends GetView<TreeController> {
                   int finalNum = len-waterToExp;
                   return Badge(
                     badgeContent: Text(finalNum.toString(),style: TextStyle(color: Colors.white),),
+                    badgeColor: Colors.blueGrey,
                     padding: EdgeInsets.all(7),
                     child: GestureDetector(
                       onTap: () async{
@@ -133,15 +135,7 @@ class TreeStatus extends GetView<TreeController> {
                         }
 
                       },
-                      child: Container(
-                          padding: EdgeInsets.only(bottom: 5,left: 3,right: 3),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.transparent,
-                              border: Border.all(color: Colors.white,width: 4)
-                          ),
-                          child: Icon(MdiIcons.wateringCanOutline,size: 40,color: Colors.white,)
-                      ),
+                      child: Image.asset('assets/watering.png',width: 60,),
                     ),
                   );
 
@@ -155,24 +149,29 @@ class TreeStatus extends GetView<TreeController> {
           Center(
             child: Stack(
               children: [
-                Container(
-                  width: Get.width*0.9,
-                  height: 30,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.white
-                  ),
-                  alignment: Alignment.centerLeft,
-
-                  child: Obx(()=> AnimatedContainer(
-                    width: Get.width*0.9*controller.exp/controller.expStructure[controller.level.toString()],
-                    duration: const Duration(milliseconds: 200),
+                GestureDetector(
+                  onTap:(){
+                    print('hi');
+                  },
+                  child: Container(
+                    width: Get.width*0.9,
+                    height: 30,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: Colors.green.shade100
+                        color: Colors.white
                     ),
+                    alignment: Alignment.centerLeft,
+
+                    child: Obx(()=> AnimatedContainer(
+                      width: Get.width*0.9*controller.exp/controller.expStructure[controller.level.toString()],
+                      duration: const Duration(milliseconds: 200),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.green.shade100
+                      ),
+                    ),
+                    )
                   ),
-                  )
                 ),
               ],
             ),

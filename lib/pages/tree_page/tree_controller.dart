@@ -28,8 +28,6 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
   int get exp => DbController.to.currentUserModel.value.exp;
   int get level => DbController.to.currentUserModel.value.level;
 
-  // 임시로 만든거, 푸시알림 보내기 기능
-  late GlobalKey<FormState> formKey;
 
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
@@ -68,15 +66,14 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
         end: 1
     ).animate(wateringController);
 
-    formKey = GlobalKey();
   }
 
 
 
-  void levelUp(){
+  void levelUp(int currentLevel){
     DocumentReference doc =FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid);
     doc.update({
-      'exp':FieldValue.increment(-expStructure[DbController.to.currentUserModel.value.level.toString()]),
+      'exp':FieldValue.increment(-expStructure[(currentLevel).toString()]),
       'level':FieldValue.increment(1)
     });
   }

@@ -5,6 +5,7 @@ import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/notification_controller.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_profile_page.dart';
+import 'package:bybloom_tree/pages/firend_page/friend_search_page.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
 import 'package:bybloom_tree/pages/siginup_page/pages/signup_page1.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
@@ -44,48 +45,32 @@ class FriendDrawer extends GetView<TreeController> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController s;
-    return FirebaseAuth.instance.currentUser==null? Column(
-     children:[ Text('로그인해주세요')]
-    ):Column(
+    return Column(
       children: [
         const SizedBox(height: 20,),
-        FutureBuilder<DocumentSnapshot>(
-          future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text("Something went wrong");
-            }
-
-            if (snapshot.hasData && !snapshot.data!.exists) {
-              return Text("Document does not exist");
-            }
-            if (snapshot.connectionState != ConnectionState.done) {
-
-              return Text("wating");
-            }
-            return ListTile(
-              dense: true,
-              leading: (snapshot.data!.data() as Map<String,dynamic>)['imageUrl']==''? CircularProgressIndicator(): CircleAvatar(
-                backgroundImage:
-                ExtendedNetworkImageProvider((snapshot.data!.data() as Map<String,dynamic>)['imageUrl'],cache: true,scale:1),
-
-                radius: 40,
+        ListTile(
+          dense: true,
+          leading: DbController.to.currentUserModel.value.imageUrl==''
+            ?CircularProgressIndicator()
+            :CircleAvatar(
+                backgroundImage: ExtendedNetworkImageProvider(
+                  DbController.to.currentUserModel.value.imageUrl,
+                  cache: true,
+                  scale:1
               ),
-              title: Text(
-                  (snapshot.data!.data() as Map<String,dynamic>)['name'],
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
-              ),
-              trailing: Text(
-                '프로필 변경하기',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 13,
-                  decoration: TextDecoration.underline
-                ),),
-            );
-          }
-        ),
+              radius: 40,
+                ),
+          title: Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
+          trailing: Text(
+            '프로필 변경하기',
+            style: TextStyle(
+                color: Colors.grey,
+                fontSize: 13,
+                decoration: TextDecoration.underline
+            ),
+          ),
+      ) ,
+
         const SizedBox(height: 25,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -127,15 +112,21 @@ class FriendDrawer extends GetView<TreeController> {
 
            }, ),
             /// s에 연락처연동해서 이미가입해있는 friendmodel들 list 받아왔으니까 친구추가화면 Ui만들어서 채워넣어
-            Row(
-              children: const [
-                Icon(Icons.search, color: Colors.grey,),
-                Text('친구 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
-              ],
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>FriendSearchPage());
+              },
+              child: Row(
+                children: const [
+                  Icon(Icons.search, color: Colors.grey,),
+                  Text('친구 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
+                ],
+              ),
             )
           ],
         ),
         const SizedBox(height: 20,),
+        /// 친구 목록 창
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -157,7 +148,7 @@ class FriendDrawer extends GetView<TreeController> {
             ),
           );
           },
-            itemCount: DbController.to.currentUserModel.value.friendPhoneList.length,
+            itemCount: DbController.to.currentUserModel.value.friendList.length,
           ),
         )
       ],
@@ -189,14 +180,9 @@ class NoticeDrawer extends StatelessWidget {
           return ListView(
             children: [
               SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('누군가 물을 주고 간 기록입니다!',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-              ),
-              SizedBox(height: 10,),
               ...list.map((element){
               //  element 는 개별 Map - each 물 준 기록
-                String name = element['name']??'hi';
+                String name = element['name'];
                 Timestamp timestamp = element['when'] ;
                 DateTime date = timestamp.toDate();
               return Padding(

@@ -15,7 +15,7 @@ class DbController extends GetxController{
   Rx<UserModel> currentUserModel = UserModel(
     uid: '',
     phoneNumber: '',
-    name: '',
+    name: '로딩중',
     birth: '',
     sex: '',
     level: 1,
@@ -57,51 +57,13 @@ class DbController extends GetxController{
           firstName: ""
       );
     }));
+    // currentUserModel이 바뀔 때마다, 호출
     ever(currentUserModel,(_){
       _ as UserModel;
       uploadFriend(currentUserModel.value);
     });
 
     print("유저업데이트완료");
-  }
-
-
-
-  // 유저 만드는 메소드
-  Future<Rx<UserModel>> makeUserModel( ) async {
-    String uid= FirebaseAuth.instance.currentUser!.uid;
-
-
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    // 현재 내 계정 디비 가져오기
-    DocumentSnapshot doc = await users.doc(uid).get();
-    Map<String,dynamic> data= doc.data() as Map<String,dynamic>;
-
-    // 친구 폰 목록
-    List<String> friendPhoneList = List<String>.from(data['friendPhoneList'] );
-
-
-    UserModel userModel = UserModel(
-        uid:uid,
-        phoneNumber:data['phoneNumber'],
-        name:data['name'],
-        birth: data['birth'],
-        sex: data['Sex'],
-        level: data['level'],
-        exp:data['exp'],
-        createdAt: data['createdAt'].toDate(),
-        imageUrl: data['imageUrl'],
-        slideValue: data['slideValue'],
-        nickname: data['nickname'],
-        friendList: [] ,
-        friendPhoneList: friendPhoneList,
-        lastName: data['name'],
-        firstName: ""
-    );
-    print("유저모델생성완료");
-
-    return userModel.obs;
-
   }
 
   // 친구 만드는 메소드

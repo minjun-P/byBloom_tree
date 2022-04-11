@@ -54,8 +54,10 @@ class MissionController extends GetxController {
 
   /// 미션 A 댓글창 컨트롤러
   late TextEditingController commentControllerA;
+  late TextEditingController reportControllerA;
   /// 미션 B 댓글창 컨트롤러
   late TextEditingController commentControllerB;
+  late TextEditingController reportControllerB;
 
   /// 댓글 조작 메서드 모음 --------------------------------------------------------------------------
   // 해당 미션 Db 바로 아래 comments 콢렉션에 추가
@@ -138,6 +140,17 @@ class MissionController extends GetxController {
       });
     }
   }
+
+  // 신고 메서드
+  void reportComment({required int day, required String type, required String reason,required String who, required commentId}){
+    var doc = FirebaseFirestore.instance.collection('report').add({
+      'day':day,
+      'type':type,
+      'reason':reason,
+      'who': who,
+      'commentId':commentId
+    });
+  }
   /// -------------------------------------------------------------------------  댓글 조작 메서드 모음
 
 
@@ -145,8 +158,11 @@ class MissionController extends GetxController {
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
+    // 텍스트 컨트롤러 모음
     commentControllerA = TextEditingController();
+    reportControllerA = TextEditingController();
     commentControllerB = TextEditingController();
+    reportControllerB = TextEditingController();
     // day 값 스트림에 연결
     day.bindStream(missionsRef.doc('today').snapshots().map((event) => event.get('day')));
     // day 가 변경 시마다 데이터 업데이트
