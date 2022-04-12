@@ -1,5 +1,6 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
@@ -23,12 +24,24 @@ import '../forest_model.dart';
 /// 대강 만들어 놓긴 했는데 보내는 버튼도 안 넣어놨고
 /// 주환 너가 직접 만들어본 경험 있으니깐 여기는 직접 다루는게 더 편할 듯 해서 더 안 건드림
 /// 채팅 목록은 forest_model에서 가져왔으.
-class ForestChatRoom extends StatelessWidget {
 
+class ForestChatRoom extends StatefulWidget {
   ForestChatRoom({
     Key? key,
     required this.room
   }) : super(key: key);
+  final types.Room room;
+  @override
+  State<StatefulWidget> createState() {
+    return ForestChatState( room: this.room);
+  }
+}
+
+class ForestChatState extends State<ForestChatRoom>{
+  ForestChatState({
+    Key? key,
+    required this.room
+  }) ;
   final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();
   final types.Room room;
   /// 나중에 이 친구들 controller로 보내는게 깔끔할지도?
@@ -89,7 +102,7 @@ class ForestChatRoom extends StatelessWidget {
         backgroundColor: Colors.white,
         actions: [ IconButton(onPressed: (){
           _ScaffoldKey.currentState?.openEndDrawer();
-    }, icon: Icon(Icons.folder))],
+        }, icon: Icon(Icons.folder))],
       ),
 
       backgroundColor: const Color(0xffFAE7E2),
@@ -110,34 +123,34 @@ class ForestChatRoom extends StatelessWidget {
 
 
                   customMessageBuilder: (types.CustomMessage s, {required int messageWidth} )=>
-                  Container(
+                      Container(
 
-                    color: Colors.grey,
-                    child: Text('님이 미션을 완료하셨습니다'),
-                    width: Get.width*2,
-                  ),
+                        color: Colors.grey,
+                        child: Text('님이 미션을 완료하셨습니다'),
+                        width: Get.width*2,
+                      ),
 
 
                   messages: snapshot.data ?? [],
                   showUserNames: true,
                   theme: DefaultChatTheme(
-                    userNameTextStyle: TextStyle(color:Colors.black),
+                      userNameTextStyle: TextStyle(color:Colors.black),
                       backgroundColor: const Color(0xffFAE7E2),
-                    inputBackgroundColor: Colors.lightGreen,
-                    primaryColor:Colors.white,
-                    inputTextColor: Colors.black,
-                    secondaryColor: Colors.white,
+                      inputBackgroundColor: Colors.lightGreen,
+                      primaryColor:Colors.white,
+                      inputTextColor: Colors.black,
+                      secondaryColor: Colors.white,
                       inputTextStyle: TextStyle(color: Colors.black),
-                    sentMessageBodyTextStyle: TextStyle(color:Colors.black)
+                      sentMessageBodyTextStyle: TextStyle(color:Colors.black)
 
                   ),
 
                   user: types.User(
 
-                    id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
-                    firstName: DbController.to.currentUserModel.value.name,
-                    lastName: "해",
-                    imageUrl: DbController.to.currentUserModel.value.imageUrl
+                      id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
+                      firstName: DbController.to.currentUserModel.value.name,
+                      lastName: "해",
+                      imageUrl: DbController.to.currentUserModel.value.imageUrl
                   ), onSendPressed:_handleSendPressed,
                 ),
               );
@@ -151,7 +164,7 @@ class ForestChatRoom extends StatelessWidget {
 
   void _setAttachmentUploading(bool uploading) {
 
-      _isAttachmentUploading.value = uploading;
+    _isAttachmentUploading.value = uploading;
 
   }
 
@@ -262,6 +275,7 @@ class ForestChatRoom extends StatelessWidget {
     );
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"updatedAt":DateTime.now()});
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"lastMessage":message.text});
+    FirebaseAnalytics.instance.logEvent(name: 'sendmessage');
 
 
 
@@ -281,6 +295,9 @@ class ForestChatRoom extends StatelessWidget {
       child: child,
     );
   }
+
+}
+
 
 
 
@@ -405,7 +422,7 @@ class ForestChatRoom extends StatelessWidget {
     );
   }*/
 
-}
+
 
 class ChatRoomDrawer extends StatelessWidget {
   final types.Room room;

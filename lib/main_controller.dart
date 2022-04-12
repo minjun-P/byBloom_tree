@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,10 @@ class MainController extends GetxController{
     await saveTokenToDatabase(_token!);
     // 토큰이 리프레시 될 때 자동으로 데이터베이스에 토큰 저장하는 메소드 사용
     FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
+   await FirebaseAnalytics.instance.setCurrentScreen(screenName: "mainScreeen");
+    await FirebaseAnalytics.instance.logScreenView(screenName: "mainScreen");
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+    print("로그수신");
 
   }
 

@@ -22,12 +22,13 @@ class TreePage extends GetView<TreeController> {
   // 2개를 겹쳐 사용한 이유는 drawer를 앱 바 하단 영역에만 보이게 하도록 하려고!
   final GlobalKey<ScaffoldState> _insideScaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<ScaffoldState> _outsideScaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     Get.put(TreeController());
     // 임시
     Get.put(MissionController());
+
+
     return Scaffold(
       key: _outsideScaffoldKey,
       appBar: AppBar(
