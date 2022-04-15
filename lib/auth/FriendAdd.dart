@@ -98,7 +98,8 @@ Future<bool> deleteFriend(FriendModel friendtoadd) async {
   if (friendtoadd!=null&& DbController.to.currentUserModel.value.friendPhoneList.contains(friendtoadd.phoneNumber)){
 
 
-    DbController.to.currentUserModel.value.friendPhoneList.remove(friendtoadd);
+    DbController.to.currentUserModel.value.friendPhoneList.remove(friendtoadd.phoneNumber);
+    DbController.to.currentUserModel.value.friendList.remove(friendtoadd);
     database.collection('users').doc(authservice
         .getCurrentUser()
         ?.uid).update({'friendPhoneList': DbController.to.currentUserModel.value.friendPhoneList});

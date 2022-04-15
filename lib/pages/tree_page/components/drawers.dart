@@ -5,6 +5,7 @@ import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/notification_controller.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_add_page.dart';
+import 'package:bybloom_tree/pages/firend_page/friend_delete_page.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_profile_page.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_search_page.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
@@ -282,13 +283,35 @@ class MenuDrawer extends StatelessWidget {
 
               Column(
                 children: [
-                  Icon(Icons.doorbell,
+                  Icon(Icons.doorbell,size: 36,
                     color: Get.find<NotificationController>().pushalarmtrue.value ? Colors.black:Colors.grey,),
                   Text('푸쉬알람변경'),
                 ],
-              ))
+
+              )
+
+              )
+
       ),
-            )
+            ),
+            Container(
+              padding: EdgeInsets.only(top:20,bottom: 20),
+              child: InkWell(
+                  onTap: (){
+
+                    Get.to(() => FriendDeletingPage(),
+                        transition: Transition.rightToLeftWithFade);
+
+                  }, child:
+
+              Column(
+                children: [
+                  Icon(MdiIcons.delete),
+                  Text('친구삭제'),
+                ],
+              )
+             ),
+            ),
 
 
           ],
