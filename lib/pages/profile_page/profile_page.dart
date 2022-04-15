@@ -51,7 +51,7 @@ class ProfilePageState extends State<ProfilePage>{
     Get.put(ProfileController());
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 2,
         child: NestedScrollView(
           headerSliverBuilder: (context, _) {
             return [
@@ -65,83 +65,39 @@ class ProfilePageState extends State<ProfilePage>{
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
-                              height: 150,
+                              height: 120,
                               color: Color(0xffFFF9C3),
                             ),
                             Container(
-                              height: 150,
+                              height: 120,
                               color: Colors.white,
                             )
                           ],
                         ),
-                        ClipOval(
-                          child: FutureBuilder(
-                            future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
-                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                        Obx(()=>
+                          Positioned(
+                            child: DbController.to.currentUserModel.value.profileImage==''
+                                ?CircleAvatar(
+                              backgroundColor: Colors.grey.shade200,
+                            ):CircleAvatar(
+                              backgroundImage: AssetImage(
+                                  'assets/profile/${DbController.to.currentUserModel.value.profileImage}.png',
 
-                              if (snapshot.hasError){
-                                return Text('error');
-                              }
-                              if (snapshot.hasData && !snapshot.data!.exists){
-                                return Text('Document does not exist');
-                              }
-                              if (snapshot.connectionState == ConnectionState.done){
-                                return InkWell(
-                                    child: (snapshot.data!.data() as Map<String,dynamic>)['imageUrl']==''? CircularProgressIndicator(): CircleAvatar(
-                                      backgroundImage:
-                                      ExtendedNetworkImageProvider((snapshot.data!.data() as Map<String,dynamic>)['imageUrl'],cache: true,scale:1),
-
-                                      radius: 80,
-                                    ),
-                                    onDoubleTap:(){
-                                    print(downloadURL);
-                                    } ,
-                                    onLongPress: () {
-
-                                    showDialog(context: context,
-                                    builder: (context) {
-                                    return AlertDialog(
-
-                                    elevation: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height / 5,
-                                    content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                    Text('프로필변경')
-                                    ],
-                                    ),
-                                    actions: <Widget>[
-                                    TextButton(onPressed: () {
-                                    AddProfilePhoto();
-                                    _prefs.setString("profileUrl", downloadURL!);
-
-                                    Navigator.pop(context);
-                                    }, child: Text('예')),
-                                    TextButton(onPressed: () {
-                                    Navigator.pop(context);
-                                    }, child: Text('아니오'))
-                                    ],
-                                    );
-                                    });
-                                    }
-                                    ,
-                            );
-                            };
-                            return CircularProgressIndicator();
-                                        }
-                           )
+                              ),
+                              radius: 60,
+                            )
+                          ),
                         ),
                         Positioned(
-                          bottom: 20,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
-                              Text(DbController.to.currentUserModel.value.nickname,style: TextStyle(color: Color(0xffC5B785)),)
-                            ],
+                          bottom: 0,
+                          child: Obx(()=>
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
+                                Text(DbController.to.currentUserModel.value.nickname,style: TextStyle(color: Color(0xffC5B785)),)
+                              ],
+                            ),
                           )
                         )
                       ],
@@ -164,9 +120,6 @@ class ProfilePageState extends State<ProfilePage>{
                   indicatorColor: Colors.black,
                   tabs: const [
                     Tab(
-                      child: Text('나무',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
-                    ),
-                    Tab(
                       child: Text('기록',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                     ),
                     Tab(
@@ -178,10 +131,6 @@ class ProfilePageState extends State<ProfilePage>{
               Expanded(
                 child: TabBarView(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ProfileTree(),
-                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: ProfileRecord(),

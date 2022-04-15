@@ -1,10 +1,10 @@
 import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'signup_page2.dart';
+import 'signup_page_basic_information.dart';
 
-class SignupPage1 extends StatelessWidget {
-  const SignupPage1({Key? key}) : super(key: key);
+class SignupPageMain extends StatelessWidget {
+  const SignupPageMain({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class SignupPage1 extends StatelessWidget {
                 child: OutlinedButton(
                   child: const Text('시작하기',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
                   onPressed: (){
-                    Get.to(()=>const SignupPage2(),transition: Transition.rightToLeftWithFade,binding: BindingsBuilder.put(()=>SignupController()));
+                    Get.to(()=>const SignupPageBasicInformation(),transition: Transition.rightToLeftWithFade,binding: BindingsBuilder.put(()=>SignupController()));
                   },
                   style: OutlinedButton.styleFrom(
                       primary: Colors.grey,

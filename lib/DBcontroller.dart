@@ -21,7 +21,8 @@ class DbController extends GetxController{
     level: 1,
     exp: 0,
     createdAt: DateTime.now(),
-    imageUrl: '',
+    profileImage: '',
+    church: '',
     slideValue: 0,
     nickname: '',
     friendList: [],
@@ -30,10 +31,14 @@ class DbController extends GetxController{
     firstName: ''
   ).obs;
 
+  Rx<int> day = 1.obs;
+  Rx<int> waterToLimit = 0.obs;
 
   @override
   void onInit() async{
     super.onInit();
+    print('--------------------------------');
+    print(FirebaseAuth.instance.currentUser!.uid);
     currentUserModel.bindStream(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots().map((event) {
       Map<String,dynamic> data = event.data()!;
       String uid = event.id;
@@ -48,15 +53,35 @@ class DbController extends GetxController{
           level: data['level'],
           exp:data['exp'],
           createdAt: data['createdAt'].toDate(),
-          imageUrl: data['imageUrl'],
           slideValue: data['slideValue'],
           nickname: data['nickname'],
           friendList: [] ,
           friendPhoneList: friendPhoneList,
           lastName: data['name'],
-          firstName: ""
+          firstName: "",
+          profileImage: data['profileImage']??'',
+          church: data['church']??''
       );
     }));
+    day.bindStream(FirebaseFirestore.instance.collection('missions').doc('today').snapshots().map((element) => element.get('day')));
+
+    // day 바뀔 때마다 호출
+    ever(day,(day){
+      waterToLimit.bindStream(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('waterTo').doc('day$day').snapshots().map((document) {
+        int basicNum = 3;
+        // document 존재하지 않을 때
+        if (!document.exists) {
+          return basicNum;
+        } else {
+          List list = document.data()!['list'] as List;
+          int len = list.length;
+          int possible = basicNum - len;
+          return possible;
+        }
+      }));
+    });
+
     // currentUserModel이 바뀔 때마다, 호출
     ever(currentUserModel,(_){
       _ as UserModel;
@@ -97,7 +122,7 @@ class DbController extends GetxController{
           phoneNumber:friend.docs[0].data()['phoneNumber'],
           nickname: friend.docs[0].data()['nickname'],
           exp: friend.docs[0].data()['exp'],
-          imageUrl: friend.docs[0].data()['imageUrl'],
+          profileImage: friend.docs[0].data()['profileImage'],
           level: friend.docs[0].data()['level'],
           tokens: friend.docs[0].data()['tokens'],
           uid:  friend.docs[0].id

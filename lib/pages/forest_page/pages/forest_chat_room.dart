@@ -137,7 +137,6 @@ class ForestChatRoom extends StatelessWidget {
                     id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
                     firstName: DbController.to.currentUserModel.value.name,
                     lastName: "해",
-                    imageUrl: DbController.to.currentUserModel.value.imageUrl
                   ), onSendPressed:_handleSendPressed,
                 ),
               );

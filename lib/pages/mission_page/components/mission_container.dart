@@ -1,5 +1,5 @@
 import 'package:bybloom_tree/pages/mission_page/pages/type_C/mission_C_page.dart';
-import 'package:bybloom_tree/pages/mission_page/pages/type_D/mission_D_page.dart';
+import 'package:bybloom_tree/pages/mission_page/pages/type_D/mission_D_page1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

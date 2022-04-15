@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/pages/siginup_page/pages/signup_page_church.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -5,16 +6,16 @@ import 'package:get/get.dart';
 import '../signup_controller.dart';
 import '../components/signup_gauge.dart';
 import '../components/signup_textfield.dart';
-import 'signup_page3.dart';
+import 'signup_page_phone.dart';
 
 // GetView 는 Stateles s를 상속한 get 패키지의 특수 객체야. 제너릭 안에 써준 컨트롤러 클래스 타입을 그냥 controller 변수에 알아서 저장을 해줘서 편하게 쓸 수 있어.
 /// 이름, 성별, 생년월일
-class SignupPage2 extends GetView<SignupController> {
-  const SignupPage2({Key? key}) : super(key: key);
+class SignupPageBasicInformation extends GetView<SignupController> {
+  const SignupPageBasicInformation({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // 0.5초 뒤에 첫번째 textfield 알아서 클릭해주기 -> 그럼 알아서 키보드가 뜨겠지?
-    Future.delayed(const Duration(milliseconds: 500),()=>controller.page2FocusNode1.requestFocus());
+    Future.delayed(const Duration(milliseconds: 500),()=>controller.pageBasicFocusNode1.requestFocus());
 
     return SafeArea(
       child: Scaffold(
@@ -25,16 +26,16 @@ class SignupPage2 extends GetView<SignupController> {
           height: 50,
           alignment: Alignment.center,
           child: OutlinedButton(
-            child: const Text('넘어가기',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
+            child: const Text('작성완료',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
             onPressed: (){
               /// 유효성 검사 실행 - false이면 알아서 빨간색으로 바뀜.
               // 1. 성별 체크박스 유효성 검사
               controller.validateSex();
               // 2. 글로벌키(page2Key) 통해서 validate 내장 메소드 활용
-              controller.page2Key.currentState!.validate();
+              controller.pageBasicKey.currentState!.validate();
               // 유효성 검사 값이 모두 true일 경우,
-              if (controller.validateSex()&&controller.page2Key.currentState!.validate()){
-                Get.to(()=>SignupPage3(),transition: Transition.rightToLeftWithFade);
+              if (controller.validateSex()&&controller.pageBasicKey.currentState!.validate()){
+                Get.to(()=>SignupPageChurch(),transition: Transition.rightToLeftWithFade);
                 }
               },
             // 버튼 스타일 설정
@@ -69,13 +70,13 @@ class SignupPage2 extends GetView<SignupController> {
                         Flexible(
                           flex: 5,
                           child: Form(
-                            key: controller.page2Key,
+                            key: controller.pageBasicKey,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 // 위젯을 따로 만들었음. 파일 참고
                                 SignupTextField(
-                                    focusNode: controller.page2FocusNode1,
+                                    focusNode: controller.pageBasicFocusNode1,
                                     textController: controller.nameCon,
                                     keyboardType: TextInputType.name,
                                     textInputAction: TextInputAction.next,

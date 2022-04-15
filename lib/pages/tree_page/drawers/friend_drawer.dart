@@ -1,0 +1,131 @@
+import 'package:bybloom_tree/DBcontroller.dart';
+import 'package:bybloom_tree/auth/FriendAdd.dart';
+import 'package:bybloom_tree/auth/FriendModel.dart';
+import 'package:bybloom_tree/pages/firend_page/friend_profile_page.dart';
+import 'package:bybloom_tree/pages/firend_page/friend_search_page.dart';
+import 'package:extended_image/extended_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import '../tree_controller.dart';
+
+/// 좌측 친구 drawer - db 연결 필요
+class FriendDrawer extends GetView<TreeController> {
+  const FriendDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 20,),
+        Obx(()=>
+          ListTile(
+            dense: true,
+            leading: DbController.to.currentUserModel.value.profileImage==''
+                ?CircularProgressIndicator()
+                :CircleAvatar(
+              backgroundImage: AssetImage(
+                'assets/profile/${DbController.to.currentUserModel.value.profileImage}.png'
+              ),
+              radius: 40,
+            ),
+            title: Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
+            trailing: Text(
+              '프로필 변경하기',
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                  decoration: TextDecoration.underline
+              ),
+            ),
+          ),
+        ) ,
+
+        const SizedBox(height: 25,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            InkWell(
+              child:Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+              onTap: () async {
+
+                List<FriendModel>? friendlist=await findfriendwithcontact();
+                showDialog(context: context, builder:(context){
+                  if(friendlist?.length==0){
+                    return Card(
+                        child:Text("아직 가입한 친구가없네요")
+                    );
+                  }
+                  else return ListView.builder(
+                      itemCount: friendlist?.length,
+                      itemBuilder:(BuildContext context,int index){
+                        return Card(
+                            child:ListTile(
+                                leading:
+                                InkWell(
+                                    child:Text(friendlist![index].phoneNumber),
+                                    onTap:() async {
+                                      bool result=await AddFriend(friendlist[index]);
+                                      print('friendadded');
+
+                                    }
+                                )
+                            )
+
+
+
+                        );
+                      }
+                  );
+
+                });
+
+              }, ),
+            /// s에 연락처연동해서 이미가입해있는 friendmodel들 list 받아왔으니까 친구추가화면 Ui만들어서 채워넣어
+
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>FriendSearchPage());
+              },
+
+              child: Row(
+                children: const [
+                  Icon(Icons.search, color: Colors.grey,),
+                  Text('친구 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
+                ],
+              ),
+            )
+          ],
+        ),
+        const SizedBox(height: 20,),
+        /// 친구 목록 창
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: (){
+                  Get.to(()=>FriendProfilePage(friendData: DbController.to.currentUserModel.value.friendList[index],));
+                },
+                child: ListTile(
+                  title: Text(
+                    DbController.to.currentUserModel.value.friendList[index].name,
+                    style: TextStyle(
+                        fontSize: 18
+                    ),
+                  ),
+                  leading: Image.asset('assets/profile/${DbController.to.currentUserModel.value.friendList[index].profileImage}.png'),
+
+                  trailing: Icon(MdiIcons.messageProcessingOutline,color: Colors.grey.shade500,),
+                ),
+              );
+            },
+            itemCount: DbController.to.currentUserModel.value.friendList.length,
+          ),
+        )
+      ],
+    );
+  }
+}

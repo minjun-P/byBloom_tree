@@ -2,18 +2,21 @@ import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:bybloom_tree/pages/tree_page/components/waterToLimit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../mission_page/mission_controller.dart';
-import '../siginup_page/pages/signup_page1.dart';
+import '../siginup_page/pages/signup_page_main.dart';
 import 'package:bybloom_tree/pages/tree_page/components/tree_status.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'components/drawers.dart';
 import 'components/tree.dart';
 import 'package:bybloom_tree/tutorial.dart';
+
+import 'drawers/friend_drawer.dart';
+import 'drawers/menu_drawer.dart';
+import 'drawers/notice_drawer.dart';
 
 /// 나무 페이지
 class TreePage extends GetView<TreeController> {
@@ -33,13 +36,16 @@ class TreePage extends GetView<TreeController> {
       appBar: AppBar(
         centerTitle: true,
 
-        title: Image.asset(
-          'assets/title.png'
+        title: GestureDetector(
+          onTap: (){print(DbController.to.currentUserModel.toJson());},
+          child: Image.asset(
+            'assets/title.png'
+          ),
         ),
         /// 친구 목록 drawer - db 연결 필요 - 하단 Scaffold의 drawer 파라미터 참조
         leading: IconButton(
           key: tutorialKey3,
-          icon: Image.asset('assets/friend_icon.png'),
+          icon: Image.asset('assets/friend_icon.png',color: Colors.grey,),
           onPressed: (){
             _insideScaffoldKey.currentState?.openDrawer();
             },
@@ -48,14 +54,14 @@ class TreePage extends GetView<TreeController> {
           /// 알림 목록 drawer - db 연결 필요 - 하단 Scaffold의 endDrawer 파라미터 참조
           IconButton(
             key: tutorialKey2,
-            icon: const Icon(CupertinoIcons.bell),
+            icon: Image.asset('assets/bell_icon.png'),
             onPressed: (){
               _insideScaffoldKey.currentState?.openEndDrawer();
             },
           ),
           // 아직 용도가 없는 메뉴 drawer
           IconButton(
-            icon: const Icon(Icons.menu),
+            icon: Image.asset('assets/menu_icon.png'),
             onPressed: (){
               _outsideScaffoldKey.currentState?.openEndDrawer();
             },
@@ -82,29 +88,25 @@ class TreePage extends GetView<TreeController> {
                 right: 10,
                 child: TreeStatus()
             ),
-            Positioned(
-              top: 30,
-              right: 10,
-              child: WaterToLimit(),
-            )
+
           ],
         )
       )
     );
   }
-}
-/*
-class Temp extends StatelessWidget {
-  const Temp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users')
-            .where('phoneNum',isEqualTo: DbController.to.currentUserModel.friendPhoneList[0]).,
+  Widget buildCustomDrawer({required Widget child, bool left=true}){
+    return Drawer(
+      backgroundColor: Colors.grey[200],
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            //좌측이냐 아니냐 따라서 값 다르게 매기기
+            topRight: left?const Radius.circular(30):Radius.zero,
+            bottomRight: left?const Radius.circular(30):Radius.zero,
+            topLeft: left?Radius.zero:const Radius.circular(30),
+            bottomLeft: left?Radius.zero:const Radius.circular(30),
+          )
       ),
+      child: child,
     );
   }
 }
-*/

@@ -39,7 +39,10 @@ class MissionPage extends GetView<MissionController> {
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          onTap: () {
+          onTap: () async{
+            var document = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('mission_completed').doc('day24').get();
+            var data = document.data();
+            print(data!.containsKey('D'));
           },
             child: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
         backgroundColor: Colors.white,

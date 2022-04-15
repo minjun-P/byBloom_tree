@@ -23,7 +23,6 @@ class TreeStatus extends GetView<TreeController> {
   @override
   Widget build(BuildContext context) {
 
-
     return Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(10),
@@ -57,7 +56,7 @@ class TreeStatus extends GetView<TreeController> {
             children: [
               Align(
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(15)
@@ -69,7 +68,7 @@ class TreeStatus extends GetView<TreeController> {
                         Text.rich(
                             TextSpan(
                                 children: [
-                                  TextSpan(text: '성장단계 : ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+                                  TextSpan(text: '성장단계 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
                                   TextSpan(
                                       text: '${controller.level.toString()} ',
                                     style: TextStyle(fontWeight: FontWeight.bold)
@@ -80,7 +79,7 @@ class TreeStatus extends GetView<TreeController> {
                         Text.rich(
                             TextSpan(
                                 children: [
-                                  TextSpan(text: '성장치 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+                                  TextSpan(text: '성장치 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
                                   TextSpan(
                                       text: controller.exp.toString(),
                                       style: TextStyle(
@@ -93,7 +92,20 @@ class TreeStatus extends GetView<TreeController> {
                                   )
                                 ]
                             )
-                        )
+                        ),
+                        Obx(()=>
+                          Text.rich(
+                              TextSpan(
+                                  children: [
+                                    TextSpan(text: '물 주기 횟수 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
+
+                                    TextSpan(
+                                        text: DbController.to.waterToLimit.value.toString()
+                                    )
+                                  ]
+                              )
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -101,6 +113,7 @@ class TreeStatus extends GetView<TreeController> {
                 alignment: Alignment.centerLeft,
               ),
               // 받은 물의 수
+
               StreamBuilder<DocumentSnapshot<Map<String,dynamic>>>(
                 stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
                 builder: (context, snapshot){
@@ -111,7 +124,8 @@ class TreeStatus extends GetView<TreeController> {
                     return Container();
                   }
                   // 받은 물의 누적 수
-                  int len = List.castFrom(snapshot.data!.data()!['waterFrom']).length;
+
+                  int len = List.castFrom(snapshot.data!.data()!['waterFrom']??[]).length;
                   // 경험치로 환산한 물의 수
                   int waterToExp = snapshot.data!.data()!['waterToExp']??0;
                   // 표시할 최종 num
@@ -119,7 +133,8 @@ class TreeStatus extends GetView<TreeController> {
                   return Badge(
                     badgeContent: Text(finalNum.toString(),style: TextStyle(color: Colors.white),),
                     badgeColor: Colors.blueGrey,
-                    padding: EdgeInsets.all(7),
+                    elevation: 2,
+                    padding: EdgeInsets.all(10),
                     child: GestureDetector(
                       onTap: () async{
                         if (finalNum>0){
@@ -149,29 +164,24 @@ class TreeStatus extends GetView<TreeController> {
           Center(
             child: Stack(
               children: [
-                GestureDetector(
-                  onTap:(){
-                    print('hi');
-                  },
-                  child: Container(
-                    width: Get.width*0.9,
-                    height: 30,
+                Container(
+                  width: Get.width*0.9,
+                  height: 15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.white
+                  ),
+                  alignment: Alignment.centerLeft,
+
+                  child: Obx(()=> AnimatedContainer(
+                    width: Get.width*0.9*controller.exp/controller.expStructure[controller.level.toString()],
+                    duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: Colors.white
+                        color: Colors.green.shade100
                     ),
-                    alignment: Alignment.centerLeft,
-
-                    child: Obx(()=> AnimatedContainer(
-                      width: Get.width*0.9*controller.exp/controller.expStructure[controller.level.toString()],
-                      duration: const Duration(milliseconds: 200),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.green.shade100
-                      ),
-                    ),
-                    )
                   ),
+                  )
                 ),
               ],
             ),

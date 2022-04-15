@@ -4,6 +4,7 @@ import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:bybloom_tree/pages/firend_page/firend_profile_controller.dart';
 import 'package:bybloom_tree/pages/forest_page/pages/forest_chat_room.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -15,6 +16,8 @@ import '../tree_page/components/tree.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+
+import 'components/friend_tree.dart';
 
 class FriendProfilePage extends GetView<FriendProfileController> {
   const FriendProfilePage({
@@ -31,10 +34,11 @@ class FriendProfilePage extends GetView<FriendProfileController> {
       child: Scaffold(
         extendBody: true,
         body: Padding(
-          padding: const EdgeInsets.only(bottom: 120),
+          padding: const EdgeInsets.only(bottom: 170),
           child: Stack(
             children: [
-              Tree(),
+              // 친구 나무
+              FriendTree(friendData: friendData,),
               Positioned.fill(
                   child: Lottie.asset(
                       'assets/tree/shower.json',
@@ -49,17 +53,6 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                   onPressed: (){
                       Get.back();
                   },
-                ),
-              ),
-              Positioned(
-                top: 70,
-                left: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('안녕하세요',style: TextStyle(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),),
-                    Text('${friendData.name}님의 나무입니다', style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),)
-                  ],
                 ),
               ),
               Positioned(
@@ -116,9 +109,14 @@ class FriendProfilePage extends GetView<FriendProfileController> {
 
 
                       },
-                      child: Badge(
-                        child: Image.asset(
-                          'assets/watering_to_friend.png',
+                      child: Obx(()=>
+                        Badge(
+                          showBadge: controller.waterTo.contains(friendData.uid)?true:false,
+                          badgeContent: Icon(Icons.check,size: 15,),
+                          badgeColor: Colors.cyan,
+                          child: Image.asset(
+                            'assets/watering_to_friend.png',
+                          ),
                         ),
                       ),
                     ),
@@ -129,7 +127,7 @@ class FriendProfilePage extends GetView<FriendProfileController> {
           ),
         ),
         bottomNavigationBar: Container(
-          height: 150,
+          height: 190,
           padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -182,15 +180,42 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                 ],
               ),
               SizedBox(height: 20,),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildIconWithNum(MdiIcons.clockOutline,120),
-                  SizedBox(width: 40,),
-                  _buildIconWithNum(MdiIcons.checkboxOutline,120),
-                  SizedBox(width: 40,),
-                  _buildIconWithNum(MdiIcons.calendarWeekendOutline,120),
-                ],
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                child: FutureBuilder<QuerySnapshot<Map<String,dynamic>>>(
+                  future: FirebaseFirestore.instance.collection('users').doc(friendData.uid).collection('mission_completed').get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError){
+                      return Text('error');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting){
+                      return Text('Loading');
+                    }
+                    List<QueryDocumentSnapshot> docs = snapshot.data!.docs;
+                    List<QueryDocumentSnapshot> filteredDocs = docs.where((element){
+                      Map<String,dynamic> map = element.data() as Map<String,dynamic>;
+                      return map.isNotEmpty;
+                    }).toList();
+                    int sum = 0;
+                    filteredDocs.forEach((element) {
+                      Map<String,dynamic> map = element.data() as Map<String,dynamic>;
+                      sum+=map.keys.length;
+                    });
+
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildIconWithNum(MdiIcons.calendarBlank,'달성 일수',filteredDocs.length),
+                        SizedBox(width: 40,),
+                        _buildIconWithNum(MdiIcons.clockOutline,'달성 횟수',sum),
+                      ],
+                    );
+                  }
+                ),
               )
 
             ],
@@ -200,13 +225,21 @@ class FriendProfilePage extends GetView<FriendProfileController> {
     );
   }
 
-  _buildIconWithNum(IconData icon, int num) {
+  _buildIconWithNum(IconData icon, String title,int num) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon,size: 25,color: Colors.grey,),
+        SizedBox(width: 15,),
+        Column(
+          children: [
+            Icon(icon,size: 25,color: Colors.grey,),
+            Text(title,style: TextStyle(fontSize: 14,color: Colors.grey),),
+            
+          ],
+        ),
         SizedBox(width: 10,),
-        Text(num.toString(),style: TextStyle(fontSize: 16,color: Colors.grey),)
+        Text(num.toString(),style: TextStyle(fontSize: 20,color: Colors.grey),),
+        SizedBox(width: 15,),
       ],
     );
   }
