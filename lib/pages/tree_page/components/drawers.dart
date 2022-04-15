@@ -136,6 +136,9 @@ class FriendDrawer extends GetView<TreeController> {
 
           itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
+            onLongPress: (){
+
+            },
             onTap: (){
               Get.to(()=>FriendProfilePage(friendData: DbController.to.currentUserModel.value.friendList[index],));
             },

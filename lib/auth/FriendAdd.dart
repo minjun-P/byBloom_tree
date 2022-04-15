@@ -92,7 +92,22 @@ Future<bool> AddFriend(FriendModel friendtoadd) async {
   };
   return false;
 }
-
 ///친구추가하는 로직!!
+Future<bool> deleteFriend(FriendModel friendtoadd) async {
+
+  if (friendtoadd!=null&& DbController.to.currentUserModel.value.friendPhoneList.contains(friendtoadd.phoneNumber)){
+
+
+    DbController.to.currentUserModel.value.friendPhoneList.remove(friendtoadd);
+    database.collection('users').doc(authservice
+        .getCurrentUser()
+        ?.uid).update({'friendPhoneList': DbController.to.currentUserModel.value.friendPhoneList});
+    return true;
+  };
+  return false;
+}
+///친구삭제하는 로직
+
+
 
 

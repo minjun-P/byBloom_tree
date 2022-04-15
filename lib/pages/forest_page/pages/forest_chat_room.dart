@@ -428,8 +428,10 @@ class ChatRoomDrawer extends StatelessWidget {
   final types.Room room;
   const ChatRoomDrawer({Key? key, required this.room}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+    List<types.User> userexceptme=deleteme(room.users, DbController.to.currentUserModel.value.name);
     return Container(
       color: Colors.white,
       height: Get.height,
@@ -446,16 +448,23 @@ class ChatRoomDrawer extends StatelessWidget {
                 padding:EdgeInsets.all(30)
                 ,child: Column(
                   children: [
-                    Text('숲구성',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                    Text('숲구성원',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                     Container(
                       height: Get.height*0.5,
-                      child: ListView.builder(itemBuilder:
+                      child: userexceptme.length>0?ListView.builder(itemBuilder:
                    (BuildContext context, int index) {
-            return Container(
 
-            );
-            },itemCount: room.users.length),
-                    )
+                      return ListTile(
+                     title: Text(
+                     userexceptme[index].lastName??""+(userexceptme[index].firstName??""),
+                     style: TextStyle(
+                     fontSize: 18
+                     ),
+                     ),
+                     leading: CircleAvatar(backgroundColor: Colors.lime,),
+                      );
+                      },itemCount: userexceptme.length): Text("아직구성원이없어요"),
+                              )
                   ],
                 )),
             SizedBox(
@@ -505,6 +514,18 @@ class ChatRoomDrawer extends StatelessWidget {
     )
     );
   }
+}
+
+List<types.User> deleteme(List<types.User> userList, String name){
+  for(int i=0;i<userList.length;i++) {
+    if ((userList[i].firstName != null) && (userList[i].lastName != null)) {
+      if ((userList[i].firstName! + userList[i].lastName!) == name) {
+        userList.removeAt(i);
+        i--;
+      }
+    }
+  }
+  return userList;
 }
 
 
