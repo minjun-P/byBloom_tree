@@ -1,5 +1,6 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
+import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/tree_page/components/waterToLimit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'components/tree.dart';
-import 'package:bybloom_tree/tutorial.dart';
 
 import 'drawers/friend_drawer.dart';
 import 'drawers/menu_drawer.dart';
@@ -23,40 +23,43 @@ class TreePage extends GetView<TreeController> {
   TreePage({Key? key}) : super(key: key);
   // Scaffold 2개를 겹쳐서 사용했다. 각 Scaffold를 제어하기 위한 globalKey
   // 2개를 겹쳐 사용한 이유는 drawer를 앱 바 하단 영역에만 보이게 하도록 하려고!
-  final GlobalKey<ScaffoldState> _insideScaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> insideScaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<ScaffoldState> _outsideScaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     Get.put(TreeController());
     // 임시
     Get.put(MissionController());
+
+
     return Scaffold(
       key: _outsideScaffoldKey,
       appBar: AppBar(
         centerTitle: true,
 
         title: GestureDetector(
-          onTap: (){print(DbController.to.currentUserModel.toJson());},
+          onTap: (){
+
+            },
           child: Image.asset(
             'assets/title.png'
           ),
         ),
         /// 친구 목록 drawer - db 연결 필요 - 하단 Scaffold의 drawer 파라미터 참조
         leading: IconButton(
-          key: tutorialKey3,
+          key: Get.find<MainController>().tutorialKey3,
           icon: Image.asset('assets/friend_icon.png',color: Colors.grey,),
           onPressed: (){
-            _insideScaffoldKey.currentState?.openDrawer();
+            insideScaffoldKey.currentState?.openDrawer();
             },
         ),
         actions: [
           /// 알림 목록 drawer - db 연결 필요 - 하단 Scaffold의 endDrawer 파라미터 참조
           IconButton(
-            key: tutorialKey2,
+            key: Get.find<MainController>().tutorialKey2,
             icon: Image.asset('assets/bell_icon.png'),
             onPressed: (){
-              _insideScaffoldKey.currentState?.openEndDrawer();
+              insideScaffoldKey.currentState?.openEndDrawer();
             },
           ),
           // 아직 용도가 없는 메뉴 drawer
@@ -71,7 +74,7 @@ class TreePage extends GetView<TreeController> {
       /// 3개의 drawer는 모두 tab_pages 폴더의 drawers 파일에서 확인 가능
       endDrawer: const MenuDrawer(),
       body: Scaffold(
-        key: _insideScaffoldKey,
+        key: insideScaffoldKey,
         drawer: buildCustomDrawer(child: const FriendDrawer()),
         endDrawer: buildCustomDrawer(child: const NoticeDrawer(),left: false),
 

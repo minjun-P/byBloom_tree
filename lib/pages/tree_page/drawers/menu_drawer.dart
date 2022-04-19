@@ -1,6 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/notification_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:get/get.dart';
@@ -107,12 +109,20 @@ class MenuDrawer extends StatelessWidget {
           Get.back(closeOverlays: true);
         },
         btnCancelText: '네',
-        btnCancelOnPress: () {
-
-          FirebaseChatCore.instance.deleteUserFromFirestore(
-              DbController.to.currentUserModel.value.uid
-          );
-          Get.toNamed('/login');
+        btnCancelOnPress: () async {
+          // Db doc 삭제
+          FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete();
+          // auth 삭제
+          try {
+            await FirebaseChatCore.instance.deleteUserFromFirestore(FirebaseAuth.instance.currentUser!.uid);
+            await FirebaseAuth.instance.currentUser!.delete();
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'requires-recent-login') {
+              print('The user must reauthenticate before this operation can be executed.');
+            }
+          }
+          // 스택 다 지우고 로그인 화면으로
+          Get.offAllNamed('/login');
 
         }
     ).show();

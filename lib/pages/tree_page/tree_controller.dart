@@ -2,6 +2,7 @@ import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/auth/User.dart';
+
 
 /// Tree 페이지의 컨트롤러
 /// - 경험치 제어
@@ -49,7 +51,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
 
 
   @override
-  void onInit()  {
+  Future<void> onInit()  async {
     // TODO: implement onInit
     super.onInit();
     /// 레벨업 애니메이션
@@ -67,8 +69,10 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
         begin: 0,
         end: 1
     ).animate(wateringController);
-
-
+    await FirebaseAnalytics.instance
+        .setCurrentScreen(
+        screenName: 'Tree'
+    );
   }
 
 
@@ -79,6 +83,10 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
       'exp':FieldValue.increment(-expStructure[(currentLevel).toString()]),
       'level':FieldValue.increment(1)
     });
+    FirebaseAnalytics.instance.logEvent(
+        name: 'levelup',
+      parameters: {'level':currentLevel+1}
+    );
   }
 
 
@@ -104,5 +112,6 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     '5':60,
     '6':60
   };
+
 
 }

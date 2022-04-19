@@ -107,13 +107,14 @@ class TreeStatus extends GetView<TreeController> {
                           ),
                         ),
                       ],
+
                     ),
                   ),
+                  alignment: Alignment.centerLeft,
                 ),
                 alignment: Alignment.centerLeft,
               ),
               // 받은 물의 수
-
               StreamBuilder<DocumentSnapshot<Map<String,dynamic>>>(
                 stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
                 builder: (context, snapshot){
@@ -147,18 +148,17 @@ class TreeStatus extends GetView<TreeController> {
                           });
                           Get.snackbar('title', '친구들의 물주기 덕분에 경험치가 $finalNum 증가했어요!');
                           controller.wateringController.reset();
-                        }
+                          }
+                        },
 
-                      },
-                      child: Image.asset('assets/watering.png',width: 60,),
-                    ),
-                  );
+                        child: Image.asset('assets/watering.png',width: 60,),
+                      ),
+                    );
 
-                },
-              ),
-
-            ],
-          ),
+                  },
+                ),
+              ],
+            ),
           const SizedBox(height: 10,),
           /// 경험치 바, 어떻게 코드 짤지 고민을 좀 더 해보겠음
           Center(

@@ -1,5 +1,6 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
@@ -23,12 +24,24 @@ import '../forest_model.dart';
 /// 대강 만들어 놓긴 했는데 보내는 버튼도 안 넣어놨고
 /// 주환 너가 직접 만들어본 경험 있으니깐 여기는 직접 다루는게 더 편할 듯 해서 더 안 건드림
 /// 채팅 목록은 forest_model에서 가져왔으.
-class ForestChatRoom extends StatelessWidget {
 
+class ForestChatRoom extends StatefulWidget {
   ForestChatRoom({
     Key? key,
     required this.room
   }) : super(key: key);
+  final types.Room room;
+  @override
+  State<StatefulWidget> createState() {
+    return ForestChatState( room: this.room);
+  }
+}
+
+class ForestChatState extends State<ForestChatRoom>{
+  ForestChatState({
+    Key? key,
+    required this.room
+  }) ;
   final GlobalKey<ScaffoldState> _ScaffoldKey = GlobalKey<ScaffoldState>();
   final types.Room room;
   /// 나중에 이 친구들 controller로 보내는게 깔끔할지도?
@@ -89,7 +102,7 @@ class ForestChatRoom extends StatelessWidget {
         backgroundColor: Colors.white,
         actions: [ IconButton(onPressed: (){
           _ScaffoldKey.currentState?.openEndDrawer();
-    }, icon: Icon(Icons.folder))],
+        }, icon: Icon(Icons.folder))],
       ),
 
       backgroundColor: const Color(0xffFAE7E2),
@@ -110,33 +123,35 @@ class ForestChatRoom extends StatelessWidget {
 
 
                   customMessageBuilder: (types.CustomMessage s, {required int messageWidth} )=>
-                  Container(
+                      Container(
 
-                    color: Colors.grey,
-                    child: Text('님이 미션을 완료하셨습니다'),
-                    width: Get.width*2,
-                  ),
+                        color: Colors.grey,
+                        child: Text('님이 미션을 완료하셨습니다'),
+                        width: Get.width*2,
+                      ),
 
 
                   messages: snapshot.data ?? [],
                   showUserNames: true,
                   theme: DefaultChatTheme(
-                    userNameTextStyle: TextStyle(color:Colors.black),
+                      userNameTextStyle: TextStyle(color:Colors.black),
                       backgroundColor: const Color(0xffFAE7E2),
-                    inputBackgroundColor: Colors.lightGreen,
-                    primaryColor:Colors.white,
-                    inputTextColor: Colors.black,
-                    secondaryColor: Colors.white,
+                      inputBackgroundColor: Colors.lightGreen,
+                      primaryColor:Colors.white,
+                      inputTextColor: Colors.black,
+                      secondaryColor: Colors.white,
                       inputTextStyle: TextStyle(color: Colors.black),
-                    sentMessageBodyTextStyle: TextStyle(color:Colors.black)
+                      sentMessageBodyTextStyle: TextStyle(color:Colors.black)
 
                   ),
 
                   user: types.User(
 
-                    id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
-                    firstName: DbController.to.currentUserModel.value.name,
-                    lastName: "해",
+
+                      id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
+                      firstName: DbController.to.currentUserModel.value.name,
+                      lastName: "해",
+                      imageUrl: DbController.to.currentUserModel.value.profileImage
                   ), onSendPressed:_handleSendPressed,
                 ),
               );
@@ -150,7 +165,7 @@ class ForestChatRoom extends StatelessWidget {
 
   void _setAttachmentUploading(bool uploading) {
 
-      _isAttachmentUploading.value = uploading;
+    _isAttachmentUploading.value = uploading;
 
   }
 
@@ -261,6 +276,7 @@ class ForestChatRoom extends StatelessWidget {
     );
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"updatedAt":DateTime.now()});
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"lastMessage":message.text});
+    FirebaseAnalytics.instance.logEvent(name: 'sendmessage');
 
 
 
@@ -280,6 +296,9 @@ class ForestChatRoom extends StatelessWidget {
       child: child,
     );
   }
+
+}
+
 
 
 
@@ -404,14 +423,16 @@ class ForestChatRoom extends StatelessWidget {
     );
   }*/
 
-}
+
 
 class ChatRoomDrawer extends StatelessWidget {
   final types.Room room;
   const ChatRoomDrawer({Key? key, required this.room}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+    List<types.User> userexceptme=deleteme(room.users, DbController.to.currentUserModel.value.name);
     return Container(
       color: Colors.white,
       height: Get.height,
@@ -428,16 +449,23 @@ class ChatRoomDrawer extends StatelessWidget {
                 padding:EdgeInsets.all(30)
                 ,child: Column(
                   children: [
-                    Text('숲구성',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                    Text('숲구성원',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                     Container(
                       height: Get.height*0.5,
-                      child: ListView.builder(itemBuilder:
+                      child: userexceptme.length>0?ListView.builder(itemBuilder:
                    (BuildContext context, int index) {
-            return Container(
 
-            );
-            },itemCount: room.users.length),
-                    )
+                      return ListTile(
+                     title: Text(
+                     userexceptme[index].lastName??""+(userexceptme[index].firstName??""),
+                     style: TextStyle(
+                     fontSize: 18
+                     ),
+                     ),
+                     leading: CircleAvatar(backgroundColor: Colors.lime,),
+                      );
+                      },itemCount: userexceptme.length): Text("아직구성원이없어요"),
+                              )
                   ],
                 )),
             SizedBox(
@@ -487,6 +515,18 @@ class ChatRoomDrawer extends StatelessWidget {
     )
     );
   }
+}
+
+List<types.User> deleteme(List<types.User> userList, String name){
+  for(int i=0;i<userList.length;i++) {
+    if ((userList[i].firstName != null) && (userList[i].lastName != null)) {
+      if ((userList[i].firstName! + userList[i].lastName!) == name) {
+        userList.removeAt(i);
+        i--;
+      }
+    }
+  }
+  return userList;
 }
 
 

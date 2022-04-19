@@ -100,7 +100,8 @@ class DbController extends GetxController{
       friendPhoneList.forEach((phone) async {
 
         FriendModel? myFriend= await findUserFromPhone(phone);
-        currentUser.friendList.add(myFriend!);
+        if(myFriend!=null){
+        currentUser.friendList.add(myFriend);}
       });
 
       return true;

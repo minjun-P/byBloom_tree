@@ -1,6 +1,7 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendAdd.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
+import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_profile_page.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_search_page.dart';
 import 'package:extended_image/extended_image.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../../firend_page/friend_add_page.dart';
 import '../tree_controller.dart';
 
 /// 좌측 친구 drawer - db 연결 필요
@@ -86,7 +88,7 @@ class FriendDrawer extends GetView<TreeController> {
 
             GestureDetector(
               onTap: (){
-                Get.to(()=>FriendSearchPage());
+                Get.to(()=>FriendAddPage(friendincontact: [],));
               },
 
               child: Row(
@@ -102,6 +104,7 @@ class FriendDrawer extends GetView<TreeController> {
         /// 친구 목록 창
         Expanded(
           child: ListView.builder(
+
             padding: const EdgeInsets.symmetric(horizontal: 10),
 
             itemBuilder: (BuildContext context, int index) {

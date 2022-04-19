@@ -1,4 +1,5 @@
 
+import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_B/prior_mission_B.dart';
 
 import 'dart:math';
@@ -44,7 +45,7 @@ class MissionPage extends GetView<MissionController> {
             var data = document.data();
             print(data!.containsKey('D'));
           },
-            child: const Text('오늘의 바이블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))),
+            child: const Text('데일리 블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25))),
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),
@@ -52,7 +53,7 @@ class MissionPage extends GetView<MissionController> {
       body: ListView(
         padding: EdgeInsets.fromLTRB(Get.width*0.05, 0, Get.width*0.05, 100),
         children: [
-          MissionContainer(type: 'A',),
+          MissionContainer(type: 'A',key: Get.find<MainController>().tutorialKey7,),
           MissionContainer(type: 'D',),
           MissionContainer(type: 'C',),
           MissionContainer(type: 'B',),
