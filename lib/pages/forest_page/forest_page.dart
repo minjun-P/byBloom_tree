@@ -46,16 +46,16 @@ class ForestPage extends GetView<ForestController> {
       ),
       backgroundColor: Colors.white,
       body: StreamBuilder<List<types.Room>>(
-        stream: FirebaseChatCore.instance.rooms(orderByUpdatedAt: true),
+        stream: FirebaseChatCore.instance.rooms(orderByUpdatedAt: false),
         initialData: const [],
         builder: (context, snapshot) {
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          if (!snapshot.hasData) {
             return Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.only(
                 bottom: 200,
               ),
-              child: const Text('아직 가입한 숲이없어요'),
+              child:  Text("없"),
             );
           }
           return ListView.builder(
