@@ -16,6 +16,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
 
 import '../forest_model.dart';
@@ -38,6 +39,7 @@ class ForestChatRoom extends StatefulWidget {
 }
 
 class ForestChatState extends State<ForestChatRoom>{
+
   ForestChatState({
     Key? key,
     required this.room
@@ -277,6 +279,7 @@ class ForestChatState extends State<ForestChatRoom>{
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"updatedAt":DateTime.now()});
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"lastMessage":message.text});
     FirebaseAnalytics.instance.logEvent(name: 'sendmessage');
+    Get.find<ForestController>().sendFCMformessage(room,DbController.to.currentUserModel.value.name, message.text);
 
 
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:badges/badges.dart';
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
@@ -161,7 +163,11 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                   Spacer(),
                   InkWell(
                       onTap: () async {
-                        final room2=await FirebaseChatCore.instance.createRoom(types.User(id:(await finduidFromPhone(friendData.phoneNumber))!),metadata: {'name':friendData.name});
+                        String gradcolor1=(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString();
+                        String gradcolor2=(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString();
+                        String imageindex=gradcolor1+","+gradcolor2;
+
+                        final room2=await FirebaseChatCore.instance.createRoom(types.User(id:(await finduidFromPhone(friendData.phoneNumber))!),imageUrl:friendData.profileImage ,metadata: {'name':friendData.name},);
 
                         Navigator.of(context).push(
 

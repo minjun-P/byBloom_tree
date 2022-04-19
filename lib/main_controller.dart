@@ -149,9 +149,10 @@ class MainController extends GetxController{
   }
 
 
-  FirebaseFunctions functions = FirebaseFunctions.instanceFor(region: 'asia-northeast3');
+
   /// 누군가에게 푸시알림 보내기
   Future<void> sendFcm({required String token, required String title, required String body}) async {
+    FirebaseFunctions functions = FirebaseFunctions.instanceFor(region: 'asia-northeast3');
     HttpsCallable callable = functions.httpsCallable('sendFCM');
     final resp = await callable.call(<String, dynamic> {
       'token': token,

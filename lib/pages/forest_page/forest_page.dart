@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:math';
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_making_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,6 +67,10 @@ class ForestPage extends GetView<ForestController> {
             itemBuilder: (context, index) {
               final room = snapshot.data![index];
 
+              List colorindex=[];
+              if(room.type==types.RoomType.group) {
+               colorindex= controller.colorFromString(room);
+              }
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
@@ -79,13 +84,14 @@ class ForestPage extends GetView<ForestController> {
                 child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
                 height: 120,
+                  color: Colors.white,
 
                   child: Row(
 
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
 
-              Container(
+              room.type==types.RoomType.group ? Container(
               width: 80,
               height: 80,
               decoration: BoxDecoration(
@@ -95,13 +101,20 @@ class ForestPage extends GetView<ForestController> {
               end: Alignment.bottomRight,
               colors: [
               // 색 값 따로 다 설정하기 귀찮아서 그냥 랜덤으로 정해지도록 임시 설정함함
-              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1),
-              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1)
+              Color.fromRGBO(colorindex[0], colorindex[1], colorindex[2], 1),
+              Color.fromRGBO(colorindex[3], colorindex[4], colorindex[5], 1)
               ]
               ),
               boxShadow: const[
               BoxShadow(color: Colors.grey,offset: Offset(3,3),blurRadius: 3)
-              ])),
+              ])):
+              Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(image: AssetImage('assets/profile/${room.imageUrl}.png')),
+                      ))  ,
                       const SizedBox(width: 15,),
                       Expanded(
                         child: Column(
@@ -306,7 +319,7 @@ Future<types.Room> processRoomDocument(
             (u) => u['id'] != firebaseUser.uid,
       );
 
-      imageUrl = otherUser['imageUrl'] as String?;
+      imageUrl = imageUrl;
       name = '${otherUser['firstName'] ?? ''} ${otherUser['lastName'] ?? ''}'
           .trim();
     } catch (e) {

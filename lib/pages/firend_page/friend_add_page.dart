@@ -44,7 +44,7 @@ class FriendState extends State<FriendAddPage>{
                 crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: [
-                  Expanded(
+                  friendincontact.isEmpty?Text("가입한 친구가없습니다."):Expanded(
                     child: ListView.builder(
 
                       padding: const EdgeInsets.symmetric(horizontal: 10),
