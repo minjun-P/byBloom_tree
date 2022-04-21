@@ -224,7 +224,7 @@ class MissionController extends GetxController {
         mainButton: TextButton(
           child: Text('확인하러 가보기!'),
           onPressed: (){
-            Get.offAll(()=>MainScreen());
+            Get.to(()=>MainScreen());
             Future.delayed(Duration(milliseconds: 300)).then((value) => Get.find<MainController>().navigationBarIndex(0));
 
           },

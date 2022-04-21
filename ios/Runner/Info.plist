@@ -1,50 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>Bybloom Tree</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>bybloom_tree</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.879658861316-jf0ba2g32ob3masb12p817hepv9t4jbl</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>'app-1-879658861316-ios-80de6d7449873dcfe64651'</string>
-			</array>
-		</dict>
-	</array>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>FirebaseAppDelegateProxyEnabled</key> <false/>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
@@ -75,100 +31,145 @@
 				</array>
 			</dict>
 			<dict>
-				<key>NSAllowsLocalNetworking</key>
-				<true/>
-			</dict>
-			<string>NSCameraUsageDescription</string>
-			<string>Might use camera for profile</string>
-			<string>NSContactsUsageDescription</string>
-			<string>Need to use contacts to add frineds</string>
-			<string>NSPhotoLibraryUsageDescription</string>
-			<string>For profile</string>
-			<string>UILaunchStoryboardName</string>
-			<string>LaunchScreen</string>
-			<string>UIMainStoryboardFile</string>
-			<string>Main</string>
-			<string>UIStatusBarHidden</string>
-			<dict>
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>com.googleusercontent.apps.879658861316-jf0ba2g32ob3masb12p817hepv9t4jbl</string>
+					<string>'app-1-879658861316-ios-80de6d7449873dcfe64651'</string>
 				</array>
 			</dict>
 		</array>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>FirebaseAppDelegateProxyEnabled</key>
+		<false/>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>NSAppTransportSecurity</key>
 		<dict>
-			<key>NSAllowsLocalNetworking</key>
+			<key>CFBundleDevelopmentRegion</key>
+			<string>$(DEVELOPMENT_LANGUAGE)</string>
+			<key>CFBundleDisplayName</key>
+			<string>Bybloom Tree</string>
+			<key>CFBundleExecutable</key>
+			<string>$(EXECUTABLE_NAME)</string>
+			<key>CFBundleIdentifier</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CFBundleInfoDictionaryVersion</key>
+			<string>6.0</string>
+			<key>CFBundleName</key>
+			<string>bybloom_tree</string>
+			<key>CFBundlePackageType</key>
+			<string>APPL</string>
+			<key>CFBundleShortVersionString</key>
+			<string>$(FLUTTER_BUILD_NAME)</string>
+			<key>CFBundleSignature</key>
+			<string>????</string>
+			<key>CFBundleURLTypes</key>
+			<array>
+				<dict>
+					<key>CFBundleTypeRole</key>
+					<string>Editor</string>
+					<key>CFBundleURLSchemes</key>
+					<array>
+						<string>com.googleusercontent.apps.879658861316-jf0ba2g32ob3masb12p817hepv9t4jbl</string>
+					</array>
+				</dict>
+				<dict>
+					<key>NSAllowsLocalNetworking</key>
+					<true/>
+				</dict>
+				<string>NSCameraUsageDescription</string>
+				<string>Might use camera for profile</string>
+				<string>NSContactsUsageDescription</string>
+				<string>Need to use contacts to add frineds</string>
+				<string>NSPhotoLibraryUsageDescription</string>
+				<string>For profile</string>
+				<string>UILaunchStoryboardName</string>
+				<string>LaunchScreen</string>
+				<string>UIMainStoryboardFile</string>
+				<string>Main</string>
+				<string>UIStatusBarHidden</string>
+				<dict>
+					<key>CFBundleTypeRole</key>
+					<string>Editor</string>
+					<key>CFBundleURLSchemes</key>
+					<array>
+						<string>com.googleusercontent.apps.879658861316-jf0ba2g32ob3masb12p817hepv9t4jbl</string>
+					</array>
+				</dict>
+			</array>
+			<key>CFBundleVersion</key>
+			<string>$(FLUTTER_BUILD_NUMBER)</string>
+			<key>LSRequiresIPhoneOS</key>
 			<true/>
-			<key>UISupportedInterfaceOrientations</key>
-			<array>
-				<string>UIInterfaceOrientationPortrait</string>
-				<string>UIInterfaceOrientationLandscapeLeft</string>
-				<string>UIInterfaceOrientationLandscapeRight</string>
-			</array>
-			<key>UISupportedInterfaceOrientations~ipad</key>
-			<array>
-				<string>UIInterfaceOrientationPortrait</string>
-				<string>UIInterfaceOrientationPortraitUpsideDown</string>
-				<string>UIInterfaceOrientationLandscapeLeft</string>
-				<string>UIInterfaceOrientationLandscapeRight</string>
-			</array>
-			<key>UIViewControllerBasedStatusBarAppearance</key>
-			<false/>
+			<key>NSAppTransportSecurity</key>
+			<dict>
+				<key>NSAllowsLocalNetworking</key>
+				<true/>
+				<key>UISupportedInterfaceOrientations</key>
+				<array>
+					<string>UIInterfaceOrientationPortrait</string>
+					<string>UIInterfaceOrientationLandscapeLeft</string>
+					<string>UIInterfaceOrientationLandscapeRight</string>
+				</array>
+				<key>UISupportedInterfaceOrientations~ipad</key>
+				<array>
+					<string>UIInterfaceOrientationPortrait</string>
+					<string>UIInterfaceOrientationPortraitUpsideDown</string>
+					<string>UIInterfaceOrientationLandscapeLeft</string>
+					<string>UIInterfaceOrientationLandscapeRight</string>
+				</array>
+				<key>UIViewControllerBasedStatusBarAppearance</key>
+				<false/>
+			</dict>
 		</dict>
+		<key>NSAppleMusicUsageDescription</key>
+		<string>Music!</string>
+		<key>NSBluetoothAlwaysUsageDescription</key>
+		<string>bluetooth</string>
+		<key>NSBluetoothPeripheralUsageDescription</key>
+		<string>bluetooth</string>
+		<key>NSCalendarsUsageDescription</key>
+		<string>Calendars</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Might use camera for profile</string>
+		<key>NSContactsUsageDescription</key>
+		<string>Need to use contacts to add frineds</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>microphone</string>
+		<key>NSMotionUsageDescription</key>
+		<string>motion</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>For profile</string>
+		<key>NSRemindersUsageDescription</key>
+		<string>reminders</string>
+		<key>NSSpeechRecognitionUsageDescription</key>
+		<string>speech</string>
+		<key>NSUserTrackingUsageDescription</key>
+		<string>appTrackingTransparency</string>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIMainStoryboardFile</key>
+		<string>Main</string>
+		<key>UIStatusBarHidden</key>
+		<true/>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UISupportedInterfaceOrientations~ipad</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false/>
+		<key>kTCCServiceMediaLibrary</key>
+		<string>media</string>
 	</dict>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>Music!</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>bluetooth</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>bluetooth</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Calendars</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Might use camera for profile</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Need to use contacts  to add frineds</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>microphone</string>
-	<key>NSMotionUsageDescription</key>
-	<string>motion</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>For profile</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>reminders</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>speech</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>appTrackingTransparency</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UIStatusBarHidden</key>
-	<false/>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>media</string>
-</dict>
 </plist>

@@ -1,5 +1,6 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
+import 'package:bybloom_tree/pages/profile_page/tab_pages/profile_worship.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'calendar/calendar_controller.dart';
 import 'tab_pages/profile_gallery.dart';
 import 'tab_pages/profile_record.dart';
-import 'tab_pages/profile_tree.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,25 +25,6 @@ class ProfilePage extends StatefulWidget {
   }
 }
 class ProfilePageState extends State<ProfilePage>{
-  late SharedPreferences _prefs;
-
-  @override
-  initState(){
-    _loadURLfromshared();
-  }
-
-  _loadURLfromshared() async {
-    _prefs= await SharedPreferences.getInstance();
-    downloadURL= (_prefs.getString('downloadURL') ?? await _loadURLfromdatabase()) as String?;
-    if(downloadURL!=null) {
-      _prefs.setString('profileUrl', downloadURL!);
-      print('downloadURL1:$downloadURL');
-    }
-  }
-  Future<String?> _loadURLfromdatabase() async {
-    var document= await database.collection('users').doc(curuser?.uid).get();
-    return document.data()!['profileUrl'];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +32,7 @@ class ProfilePageState extends State<ProfilePage>{
     Get.put(ProfileController());
     return Scaffold(
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: NestedScrollView(
           headerSliverBuilder: (context, _) {
             return [
@@ -79,13 +60,11 @@ class ProfilePageState extends State<ProfilePage>{
                             child: DbController.to.currentUserModel.value.profileImage==''
                                 ?CircleAvatar(
                               backgroundColor: Colors.grey.shade200,
-                            ):CircleAvatar(
-                              backgroundImage: AssetImage(
+                            ):Image.asset(
                                   'assets/profile/${DbController.to.currentUserModel.value.profileImage}.png',
-
+                              width: 120,
+                              fit: BoxFit.fitWidth,
                               ),
-                              radius: 60,
-                            )
                           ),
                         ),
                         Positioned(
@@ -125,6 +104,9 @@ class ProfilePageState extends State<ProfilePage>{
                     Tab(
                       child: Text('감사일기',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                     ),
+                    Tab(
+                      child: Text('오늘의 예배',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                    ),
                   ],
                 ),
               ),
@@ -135,7 +117,8 @@ class ProfilePageState extends State<ProfilePage>{
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: ProfileRecord(),
                     ),
-                    ProfileGallery()
+                    ProfileGallery(),
+                    ProfileWorship()
                   ],
                 ),
               ),

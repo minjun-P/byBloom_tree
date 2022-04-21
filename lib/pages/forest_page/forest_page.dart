@@ -52,15 +52,8 @@ class ForestPage extends GetView<ForestController> {
         stream:   rooms(orderByUpdatedAt: true),
         initialData: const [],
         builder: (context, snapshot) {
-          print("스냅샷 ");
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(
-                bottom: 200,
-              ),
-              child: Text(FirebaseAuth.instance.currentUser!.uid??''),
-            );
+            return CircularProgressIndicator();
           }
           return ListView.builder(
             itemCount: snapshot.data!.length,

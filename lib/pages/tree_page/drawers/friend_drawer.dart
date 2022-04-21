@@ -21,6 +21,7 @@ class FriendDrawer extends GetView<TreeController> {
     return Column(
       children: [
         const SizedBox(height: 20,),
+        // 나의 프로필
         Obx(()=>
           ListTile(
             dense: true,
@@ -33,14 +34,7 @@ class FriendDrawer extends GetView<TreeController> {
               radius: 40,
             ),
             title: Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
-            trailing: Text(
-              '프로필 변경하기',
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 13,
-                  decoration: TextDecoration.underline
-              ),
-            ),
+
           ),
         ) ,
 
@@ -103,29 +97,29 @@ class FriendDrawer extends GetView<TreeController> {
         const SizedBox(height: 20,),
         /// 친구 목록 창
         Expanded(
-          child: ListView.builder(
-
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: (){
-                  Get.to(()=>FriendProfilePage(friendData: DbController.to.currentUserModel.value.friendList[index],));
-                },
-                child: ListTile(
-                  title: Text(
-                    DbController.to.currentUserModel.value.friendList[index].name,
-                    style: TextStyle(
-                        fontSize: 18
+          child: Obx(()=>
+            ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              itemCount: DbController.to.currentUserModel.value.friendList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: (){
+                    Get.to(()=>FriendProfilePage(friendData: DbController.to.currentUserModel.value.friendList[index],));
+                  },
+                  child: ListTile(
+                    title: Text(
+                      DbController.to.currentUserModel.value.friendList[index].name,
+                      style: TextStyle(
+                          fontSize: 18
+                      ),
                     ),
+                    leading: Image.asset('assets/profile/${DbController.to.currentUserModel.value.friendList[index].profileImage}.png'),
+                    trailing: Icon(MdiIcons.messageProcessingOutline,color: Colors.grey.shade500,),
                   ),
-                  leading: Image.asset('assets/profile/${DbController.to.currentUserModel.value.friendList[index].profileImage}.png'),
+                );
+              },
 
-                  trailing: Icon(MdiIcons.messageProcessingOutline,color: Colors.grey.shade500,),
-                ),
-              );
-            },
-            itemCount: DbController.to.currentUserModel.value.friendList.length,
+            ),
           ),
         )
       ],
