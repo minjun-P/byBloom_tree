@@ -1,6 +1,9 @@
 import 'dart:core';
 import 'dart:math';
+import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_making_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 import 'forest_model.dart';
@@ -46,23 +49,23 @@ class ForestPage extends GetView<ForestController> {
       ),
       backgroundColor: Colors.white,
       body: StreamBuilder<List<types.Room>>(
-        stream: FirebaseChatCore.instance.rooms(orderByUpdatedAt: false),
+
+        stream:   rooms(orderByUpdatedAt: true),
         initialData: const [],
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(
-                bottom: 200,
-              ),
-              child:  Text("없"),
-            );
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return CircularProgressIndicator();
+            
           }
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final room = snapshot.data![index];
 
+              List colorindex=[];
+              if(room.type==types.RoomType.group) {
+               colorindex= controller.colorFromString(room);
+              }
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
@@ -76,13 +79,14 @@ class ForestPage extends GetView<ForestController> {
                 child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
                 height: 120,
+                  color: Colors.white,
 
                   child: Row(
 
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
 
-              Container(
+              room.type==types.RoomType.group ? Container(
               width: 80,
               height: 80,
               decoration: BoxDecoration(
@@ -92,13 +96,20 @@ class ForestPage extends GetView<ForestController> {
               end: Alignment.bottomRight,
               colors: [
               // 색 값 따로 다 설정하기 귀찮아서 그냥 랜덤으로 정해지도록 임시 설정함함
-              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1),
-              Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1)
+              Color.fromRGBO(colorindex[0], colorindex[1], colorindex[2], 1),
+              Color.fromRGBO(colorindex[3], colorindex[4], colorindex[5], 1)
               ]
               ),
               boxShadow: const[
               BoxShadow(color: Colors.grey,offset: Offset(3,3),blurRadius: 3)
-              ])),
+              ])):
+              Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(image: AssetImage('assets/profile/${room.imageUrl}.png')),
+                      ))  ,
                       const SizedBox(width: 15,),
                       Expanded(
                         child: Column(
@@ -106,11 +117,13 @@ class ForestPage extends GetView<ForestController> {
                           children: [
                             const SizedBox(height: 10,),
                             Text(room.name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
-                            Text(
-                              room.lastMessages!=null?room.lastMessages!.last.metadata!['text']:"최근메시지없",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 14),
+                            Obx(
+                              ()=> Text(
+                               controller.lastMessages[room.id]!=null?controller.lastMessages[room.id]:"최근메시지없",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 14),
+                              ),
                             )
                           ],
                         ),
@@ -130,7 +143,7 @@ class ForestPage extends GetView<ForestController> {
                                 borderRadius: BorderRadius.circular(10)
                             ),
                             alignment: Alignment.center,
-                            child: Text(room.lastMessages!=null?room.lastMessages!.length.toString():"0",style: const TextStyle(color: Colors.white,fontSize: 14),),
+                            child: Text("0",style: const TextStyle(color: Colors.white,fontSize: 14),),
                           )
                         ],
                       )
@@ -219,4 +232,118 @@ class ForestPage extends GetView<ForestController> {
 
   }
 
+}
+Stream<List<types.Room>> rooms({bool orderByUpdatedAt = false}) {
+  final fu = FirebaseAuth.instance.currentUser;
+
+  if (fu == null) {
+
+    return const Stream.empty();
+  }
+  final collection =FirebaseFirestore.instance.
+      collection("rooms")
+      .where('userIds', arrayContains: fu.uid)
+      .orderBy('updatedAt', descending: true);
+
+   Stream<List<types.Room>> s=collection.snapshots().asyncMap(
+        (query) => processRoomsQuery(
+      fu,
+      FirebaseFirestore.instance,
+      query,
+      "users",
+    ),
+  );
+   Future<int> length=s.length;
+   length.then((value) => (print("length:${length}")));
+
+   return s;
+}
+
+Future<List<types.Room>> processRoomsQuery(
+    User firebaseUser,
+    FirebaseFirestore instance,
+    QuerySnapshot<Map<String, dynamic>> query,
+    String usersCollectionName,
+    ) async {
+  print("querying");
+  final futures = query.docs.map(
+        (doc) => processRoomDocument(
+      doc,
+      firebaseUser,
+      instance,
+      usersCollectionName,
+    ),
+  );
+   print("length:${futures.length}");
+  return await Future.wait(futures);
+}
+
+/// Returns a [types.Room] created from Firebase document
+Future<types.Room> processRoomDocument(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+    User firebaseUser,
+    FirebaseFirestore instance,
+    String usersCollectionName,
+    ) async {
+  final data = doc.data()!;
+
+  data['createdAt'] = data['createdAt']?.millisecondsSinceEpoch;
+  data['id'] = doc.id;
+  data['updatedAt'] = data['updatedAt']?.millisecondsSinceEpoch;
+
+  var imageUrl = data['imageUrl'] as String?;
+  var name = data['name'] as String?;
+  final type = data['type'] as String;
+  final userIds = data['userIds'] as List<dynamic>;
+  final userRoles = data['userRoles'] as Map<String, dynamic>?;
+  print("querying2");
+  final users = await Future.wait(
+    userIds.map(
+          (userId) => fetchUser(
+        instance,
+        userId as String,
+        usersCollectionName,
+        role: userRoles?[userId] as String?,
+      ),
+    ),
+  );
+
+  if (type == types.RoomType.direct.toShortString()) {
+    try {
+      final otherUser = users.firstWhere(
+            (u) => u['id'] != firebaseUser.uid,
+      );
+
+      imageUrl = imageUrl;
+      name = '${otherUser['firstName'] ?? ''} ${otherUser['lastName'] ?? ''}'
+          .trim();
+    } catch (e) {
+      // Do nothing if other user is not found, because he should be found.
+      // Consider falling back to some default values.
+    }
+  }
+
+  data['imageUrl'] = imageUrl;
+  data['name'] = name;
+  data['users'] = users;
+
+  if (data['lastMessages'] != null) {
+    final lastMessages = data['lastMessages'].map((lm) {
+      final author = users.firstWhere(
+            (u) => u['id'] == lm['authorId'],
+        orElse: () => {'id': lm['authorId'] as String},
+      );
+
+      lm['author'] = author;
+      lm['createdAt'] = lm['createdAt']?.millisecondsSinceEpoch;
+      lm['id'] = lm['id'] ?? '';
+      lm['updatedAt'] = lm['updatedAt']?.millisecondsSinceEpoch;
+
+      return lm;
+    }).toList();
+
+    data['lastMessages'] = lastMessages;
+  }
+
+  return types.Room.fromJson(data);
 }

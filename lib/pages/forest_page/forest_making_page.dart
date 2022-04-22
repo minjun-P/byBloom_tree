@@ -42,7 +42,11 @@ class Forest_making_state extends State<ForestMakingPage> {
           TextButton(onPressed: () async {
 
           checkbox.fillRange(0, 99,false);
-          types.Room room2= await FirebaseChatCore.instance.createGroupRoom(name: s.text, users: userlist);
+          String gradcolor1=(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString();
+          String gradcolor2=(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString();
+          String imageindex=gradcolor1+","+gradcolor2;
+
+          types.Room room2= await FirebaseChatCore.instance.createGroupRoom(name: s.text, users: userlist, imageUrl:imageindex);
 
           Navigator.pop(context);
 

@@ -19,33 +19,45 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
     }
   }
   //유저등록
-  static Future<User?> register({required String phoneNumber, required String name, required String sex, required String nickname,required String birth,required double slideValue}) async {
+  static Future<User?> register({
+    required String phoneNumber,
+    required String name,
+    required String sex,
+    required String nickname,
+    required String birth,
+    required double slideValue,
+    required String church,
+    required String profileImage
+
+  }) async {
     User? user;
 
 
     try {
-      user= await FirebaseAuth.instance.currentUser;
-      print("users/${user?.uid}");
+      String uid= FirebaseAuth.instance.currentUser!.uid;
       CollectionReference users = FirebaseFirestore.instance.collection('users');
+      // UserModel 객체 형태로 임시 생성
       UserModel s= UserModel(
         phoneNumber:phoneNumber,
         name:name,
         birth: birth,
         sex: sex,
-        level: 0,
+        level: 1,
         exp: 0,
         createdAt: DateTime.now(),
-        imageUrl: '',
         slideValue: slideValue,
         nickname: nickname,
-        uid:user!.uid,
+        uid:uid,
         friendList: [],
         friendPhoneList: [],
         lastName: name,
-        firstName: "");
-
-      users.doc(user.uid).set(s.toJson())
-          .then((value) => print("User Added"))
+        firstName: "",
+        church: church,
+        profileImage: profileImage
+      );
+      // 디비에 등록 using toJson 메서드
+      users.doc(uid).set(s.toJson())
+          .then((value) => print("${s.toJson()} 등록 완료"))
           .catchError((error) => print("Failed to add user: $error"));
 
       return user;

@@ -9,8 +9,9 @@ class UserModel{
   final String lastName;
   final String phoneNumber;
   final DateTime createdAt;
+  final String church;
+  final String profileImage;
   String nickname;
-  String imageUrl;
   int level;
   int exp;
   String sex;
@@ -30,7 +31,6 @@ class UserModel{
     required this.nickname,
     required this.createdAt,
     required this.exp,
-    required this.imageUrl,
     required this.level,
     required this.sex,
     required this.birth,
@@ -38,7 +38,9 @@ class UserModel{
     required this.friendList,
     required this.friendPhoneList,
     required this.firstName,
-    required this.lastName
+    required this.lastName,
+    required this.church,
+    required this.profileImage
 
 });
 
@@ -50,13 +52,14 @@ class UserModel{
     'createdAt': createdAt,
     'exp': exp,
     'level': level,
-    'imageUrl': imageUrl,
     'Sex':sex,
     'birth':birth,
     'slideValue':slideValue,
     'friendPhoneList':friendPhoneList,
     'firstName':firstName,
-    'lastName':lastName
+    'lastName':lastName,
+    'profileImage':profileImage,
+    'church':church
 
 
 
@@ -111,10 +114,10 @@ Future<FriendModel?> findUserFromPhone(String phoneNum) async {
         phoneNumber: friend.docs[0].data()['phoneNumber'],
         nickname: friend.docs[0].data()['nickname'],
         exp: friend.docs[0].data()['exp'],
-        imageUrl: friend.docs[0].data()['imageUrl'],
         level: friend.docs[0].data()['level'],
-        tokens: friend.docs[0].data()['tokens'],
-        uid: friend.docs[0].id
+        tokens: friend.docs[0].data()['tokens']??[],
+        uid: friend.docs[0].id,
+      profileImage: friend.docs[0].data()['profileImage']
     );
   }
 }
@@ -131,10 +134,10 @@ Future<FriendModel?> findUserFromPhone(String phoneNum) async {
           phoneNumber:friend.docs[0].data()['phoneNumber'],
           nickname: friend.docs[0].data()['nickname'],
           exp: friend.docs[0].data()['exp'],
-          imageUrl: friend.docs[0].data()['imageUrl'],
           level: friend.docs[0].data()['level'],
-          tokens: friend.docs[0].data()['tokens'],
-          uid:  friend.docs[0].id
+          tokens: friend.docs[0].data()['tokens']??[],
+          uid:  friend.docs[0].id,
+          profileImage: friend.docs[0].data()['profileImage']
       );
     }
 

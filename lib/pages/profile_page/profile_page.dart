@@ -1,5 +1,6 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
+import 'package:bybloom_tree/pages/profile_page/tab_pages/profile_worship.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'calendar/calendar_controller.dart';
 import 'tab_pages/profile_gallery.dart';
 import 'tab_pages/profile_record.dart';
-import 'tab_pages/profile_tree.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,25 +25,6 @@ class ProfilePage extends StatefulWidget {
   }
 }
 class ProfilePageState extends State<ProfilePage>{
-  late SharedPreferences _prefs;
-
-  @override
-  initState(){
-    _loadURLfromshared();
-  }
-
-  _loadURLfromshared() async {
-    _prefs= await SharedPreferences.getInstance();
-    downloadURL= (_prefs.getString('downloadURL') ?? await _loadURLfromdatabase()) as String?;
-    if(downloadURL!=null) {
-      _prefs.setString('profileUrl', downloadURL!);
-      print('downloadURL1:$downloadURL');
-    }
-  }
-  Future<String?> _loadURLfromdatabase() async {
-    var document= await database.collection('users').doc(curuser?.uid).get();
-    return document.data()!['profileUrl'];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,83 +46,37 @@ class ProfilePageState extends State<ProfilePage>{
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
-                              height: 150,
+                              height: 120,
                               color: Color(0xffFFF9C3),
                             ),
                             Container(
-                              height: 150,
+                              height: 120,
                               color: Colors.white,
                             )
                           ],
                         ),
-                        ClipOval(
-                          child: FutureBuilder(
-                            future: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get(),
-                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-
-                              if (snapshot.hasError){
-                                return Text('error');
-                              }
-                              if (snapshot.hasData && !snapshot.data!.exists){
-                                return Text('Document does not exist');
-                              }
-                              if (snapshot.connectionState == ConnectionState.done){
-                                return InkWell(
-                                    child: (snapshot.data!.data() as Map<String,dynamic>)['imageUrl']==''? CircularProgressIndicator(): CircleAvatar(
-                                      backgroundImage:
-                                      ExtendedNetworkImageProvider((snapshot.data!.data() as Map<String,dynamic>)['imageUrl'],cache: true,scale:1),
-
-                                      radius: 80,
-                                    ),
-                                    onDoubleTap:(){
-                                    print(downloadURL);
-                                    } ,
-                                    onLongPress: () {
-
-                                    showDialog(context: context,
-                                    builder: (context) {
-                                    return AlertDialog(
-
-                                    elevation: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height / 5,
-                                    content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                    Text('프로필변경')
-                                    ],
-                                    ),
-                                    actions: <Widget>[
-                                    TextButton(onPressed: () {
-                                    AddProfilePhoto();
-                                    _prefs.setString("profileUrl", downloadURL!);
-
-                                    Navigator.pop(context);
-                                    }, child: Text('예')),
-                                    TextButton(onPressed: () {
-                                    Navigator.pop(context);
-                                    }, child: Text('아니오'))
-                                    ],
-                                    );
-                                    });
-                                    }
-                                    ,
-                            );
-                            };
-                            return CircularProgressIndicator();
-                                        }
-                           )
+                        Obx(()=>
+                          Positioned(
+                            child: DbController.to.currentUserModel.value.profileImage==''
+                                ?CircleAvatar(
+                              backgroundColor: Colors.grey.shade200,
+                            ):Image.asset(
+                                  'assets/profile/${DbController.to.currentUserModel.value.profileImage}.png',
+                              width: 120,
+                              fit: BoxFit.fitWidth,
+                              ),
+                          ),
                         ),
                         Positioned(
-                          bottom: 20,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
-                              Text(DbController.to.currentUserModel.value.nickname,style: TextStyle(color: Color(0xffC5B785)),)
-                            ],
+                          bottom: 0,
+                          child: Obx(()=>
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
+                                Text(DbController.to.currentUserModel.value.nickname,style: TextStyle(color: Color(0xffC5B785)),)
+                              ],
+                            ),
                           )
                         )
                       ],
@@ -164,13 +99,13 @@ class ProfilePageState extends State<ProfilePage>{
                   indicatorColor: Colors.black,
                   tabs: const [
                     Tab(
-                      child: Text('나무',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
-                    ),
-                    Tab(
                       child: Text('기록',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                     ),
                     Tab(
                       child: Text('감사일기',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                    ),
+                    Tab(
+                      child: Text('오늘의 예배',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                     ),
                   ],
                 ),
@@ -180,13 +115,10 @@ class ProfilePageState extends State<ProfilePage>{
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ProfileTree(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: ProfileRecord(),
                     ),
-                    ProfileGallery()
+                    ProfileGallery(),
+                    ProfileWorship()
                   ],
                 ),
               ),

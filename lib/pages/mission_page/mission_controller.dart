@@ -121,24 +121,47 @@ class MissionController extends GetxController {
 */
   }
   // 미션 Db 아래가 아니라 나의 유저 데이터 아래에 저장
-  void updateComplete({required String comment, required String type}) async{
+  void updateComplete({required String comment, required String type, String? prayerCategory}) async{
     var doc = FirebaseFirestore.instance.collection('users').doc(DbController.to.currentUserModel.value.uid).collection('mission_completed').doc('day${day.value}');
     var dayRef = await doc.get();
-    if (dayRef.exists){
-      doc.update({
-        type:{
-          'contents':comment,
-          'createdAt':DateTime.now()
-        }
-      });
+    // prayerCategory 넣어주면, 타입 D이면
+    if (prayerCategory!=null){
+      if (dayRef.exists){
+        doc.update({
+          type:{
+            'contents':comment,
+            'createdAt':DateTime.now(),
+            'prayerCategory': prayerCategory
+          }
+        });
+      } else {
+        doc.set({
+          type:{
+            'contents':comment,
+            'createdAt':DateTime.now(),
+            'prayerCategory': prayerCategory
+          }
+        });
+      }
+      // prayerCategory 안 넣은 경우
     } else {
-      doc.set({
-        type:{
-          'contents':comment,
-          'createdAt':DateTime.now()
-        }
-      });
+      if (dayRef.exists){
+        doc.update({
+          type:{
+            'contents':comment,
+            'createdAt':DateTime.now(),
+          }
+        });
+      } else {
+        doc.set({
+          type:{
+            'contents':comment,
+            'createdAt':DateTime.now()
+          }
+        });
+      }
     }
+
   }
 
   // 신고 메서드
@@ -163,6 +186,7 @@ class MissionController extends GetxController {
     reportControllerA = TextEditingController();
     commentControllerB = TextEditingController();
     reportControllerB = TextEditingController();
+    missionControllerD = TextEditingController();
     // day 값 스트림에 연결
     day.bindStream(missionsRef.doc('today').snapshots().map((event) => event.get('day')));
     // day 가 변경 시마다 데이터 업데이트
@@ -178,6 +202,9 @@ class MissionController extends GetxController {
       } catch(e) {
         Future.delayed(Duration(milliseconds: 500)).then((value) => missionCompletedUpdate());
       }
+    });
+    ever(missionCompleted,(com){
+      print(com);
     });
 
 
@@ -197,7 +224,7 @@ class MissionController extends GetxController {
         mainButton: TextButton(
           child: Text('확인하러 가보기!'),
           onPressed: (){
-            Get.offAll(()=>MainScreen());
+            Get.to(()=>MainScreen());
             Future.delayed(Duration(milliseconds: 300)).then((value) => Get.find<MainController>().navigationBarIndex(0));
 
           },
@@ -224,6 +251,7 @@ class MissionController extends GetxController {
         };
       }
       Map<String,dynamic> data = event.data() as Map<String,dynamic>;
+
       if (data.containsKey('A')){
         A = true;
       } else {
@@ -241,9 +269,10 @@ class MissionController extends GetxController {
       }
       if (data.containsKey('D')){
         D = true;
-      } {
+      } else{
         D = false;
       }
+
       return {
         'A':A,
         'B':B,
@@ -262,11 +291,11 @@ class MissionController extends GetxController {
 
   Map typeMatch = {
     'A':'오늘의 말씀',
-    'B':'마가의 다락방',
+    'B':'나눔 미션',
     'C':'감사일기',
     'D':'오늘의 예배'
   };
-
+  // ---------------------------------------------------------------------------
   /// MissionB 내부 변수
   Rx<int> selectedContainer = 0.obs;
   Rx<bool> checkbox = false.obs;
@@ -295,7 +324,11 @@ class MissionController extends GetxController {
     Map map = doc as Map;
     return map['B']['contents'];
   }
+  // ----------------------------------------------------------------------------
 
-
+  /// MissionD 내부 변수
+  List prayerCategory = ['현장 예배','온라인 예배','다시 보기'];
+  Rx<int> prayerIndex = 0.obs;
+  late TextEditingController missionControllerD;
 
 }

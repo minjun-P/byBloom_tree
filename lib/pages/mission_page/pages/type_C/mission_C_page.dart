@@ -26,18 +26,15 @@ class MissionCPage extends GetView<MissionController> {
              
               Flexible(
                 flex: 8,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 50,vertical: 10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('오늘 하루 감사했던 일이 있었나요?',style: TextStyle(fontSize: 17),),
-                      Text('하루를 정리하며 짧은 일기를 써주세요:)',style: TextStyle(fontSize: 17),),
-                      SizedBox(height: 10,),
-                      Text('이 미션은 내 기록함에서'),
-                      Text('저장되며 공개되지 않습니다.')
-                    ],
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('오늘 하루 감사했던 일이 있었나요?',style: TextStyle(fontSize: 17),),
+                    Text('하루를 정리하며 짧은 일기를 써주세요:)',style: TextStyle(fontSize: 17),),
+                    SizedBox(height: 10,),
+                    Text('이 미션은 내 기록함에서'),
+                    Text('저장되며 공개되지 않습니다.')
+                  ],
                 ),
               ),
               Spacer(flex: 5,),

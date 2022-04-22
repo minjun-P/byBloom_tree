@@ -1,6 +1,8 @@
 import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_page.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -8,7 +10,6 @@ import 'pages/forest_page/forest_page.dart';
 import 'pages/mission_page/mission_page.dart';
 import 'pages/tree_page/tree_page.dart';
 import 'my_flutter_app_icons.dart';
-import 'tutorial.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class MainScreen extends GetView<MainController> {
@@ -17,28 +18,35 @@ class MainScreen extends GetView<MainController> {
   @override
   Widget build(BuildContext context) {
     // 아래 객체(WidgetsBinding)를 사용하면 build가 다 완료된 이후 콜백을 실행할 수 있다.
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async{
       /// tutorial 안내 시작하는 코드
       /// arguments가 tutorial일 때 시작하도록, 개발할땐 다른 text로 바꿔놓자.
       /// 핫 리로드 할 때마다 떠서 빡친다
-      if (Get.arguments == 'tutorialx'){
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.QUESTION,
-          animType: AnimType.BOTTOMSLIDE,
-          title: '이제 시작해볼까요?',
-          desc: '간단한 사용법 안내를 받아보시겠어요?',
-          btnCancelText: '네!',
-          btnCancelOnPress: () {
-            Get.back();
-            controller.showTutorial();
-          },
-          btnOkText: '괜찮아요',
-          btnOkOnPress: () {
-            Get.back();
-          },
-        ).show();
-      }
+      DocumentReference<Map<String,dynamic>> docRef = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid);
+      docRef.get().then((doc) {
+        Map<String,dynamic> data = doc.data()!;
+
+        if (data['tutorial']==null){
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.QUESTION,
+            animType: AnimType.BOTTOMSLIDE,
+            title: '튜토리얼입니다',
+            desc: '간단한 사용법 안내를 받아보시겠어요?',
+            btnCancelText: '네!',
+            btnCancelOnPress: () {
+              Get.back();
+              controller.showTutorial();
+            },
+            btnOkText: '괜찮아요',
+            btnOkOnPress: () {
+              Get.back();
+            },
+          ).show();
+          docRef.update({'tutorial':'done'});
+        }
+      });
+
     });
     return SafeArea(
       child: Obx(()=>WillPopScope(
@@ -90,19 +98,19 @@ class MainScreen extends GetView<MainController> {
                   type: BottomNavigationBarType.fixed,
                   items: [
                     BottomNavigationBarItem(
-                        icon: Icon(MyFlutterApp.tree, key: tutorialKey1,),
+                        icon: Icon(MyFlutterApp.tree, key: controller.tutorialKey1,),
                         label: ''
                     ),
                     BottomNavigationBarItem(
-                        icon: Icon(MyFlutterApp.event_note,key: tutorialKey4,),
+                        icon: Icon(MyFlutterApp.event_note,key: controller.tutorialKey4,),
                         label: ''
                     ),
                     BottomNavigationBarItem(
-                        icon: Icon(MdiIcons.forest, key: tutorialKey5,),
+                        icon: Icon(MdiIcons.forest, key: controller.tutorialKey5,),
                         label: ''
                     ),
                     BottomNavigationBarItem(
-                        icon: Icon(MdiIcons.folder, key: tutorialKey6,),
+                        icon: Icon(MdiIcons.folder, key: controller.tutorialKey6,),
                         label: ''
                     )
                   ],

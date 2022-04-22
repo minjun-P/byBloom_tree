@@ -1,4 +1,6 @@
+import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_C/mission_C_page.dart';
+import 'package:bybloom_tree/pages/mission_page/pages/type_D/mission_D_execute.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_D/mission_D_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -58,8 +60,8 @@ class MissionContainer extends GetView<MissionController> {
               child: Text(
                   controller.typeMatch[type],
                 style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey
+                  fontSize: 20,
+                  color: Colors.black
                 ),
 
               )
@@ -77,16 +79,16 @@ class MissionContainer extends GetView<MissionController> {
   Widget _buildMissionCompleteBox(String type) {
     return Obx(()=>AnimatedContainer(
       duration: const Duration(milliseconds: 500),
-      width: 28,
-      height: 28,
+      width: 30,
+      height: 30,
       decoration: BoxDecoration(
-        border: controller.missionCompleted[type]!
-            ?Border.all(color:Colors.green,width: 2)
-            :Border.all(color:Colors.grey,width: 1.5),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
+        color: controller.missionCompleted[type]!
+            ?Color(0xff5B5B5B)
+            :Colors.grey.shade200
       ),
       curve: Curves.linearToEaseOut,
-      child: controller.missionCompleted[type]!?const Icon(Icons.park,color: Colors.green,):null,
+      child: controller.missionCompleted[type]!?const Icon(Icons.check,color: Colors.white,):null,
 
     ));
   }

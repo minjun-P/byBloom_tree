@@ -31,8 +31,8 @@ class MissionAPage extends GetView<MissionController> {
                       Get.to(()=>MissionAComment());
                     },
                     child: controller.missionCompleted['A']!
-                        ?Text('의견 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
-                        :Text('의견 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
+                        ?Text('은혜 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
+                        :Text('은혜 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xffA0C6FF),
                     fixedSize: Size(Get.width*0.7,50)

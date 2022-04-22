@@ -21,7 +21,8 @@ class DbController extends GetxController{
     level: 1,
     exp: 0,
     createdAt: DateTime.now(),
-    imageUrl: '',
+    profileImage: '',
+    church: '',
     slideValue: 0,
     nickname: '',
     friendList: [],
@@ -30,6 +31,8 @@ class DbController extends GetxController{
     firstName: ''
   ).obs;
 
+  Rx<int> day = 1.obs;
+  Rx<int> waterToLimit = 0.obs;
 
   @override
   void onInit() async{
@@ -48,15 +51,35 @@ class DbController extends GetxController{
           level: data['level'],
           exp:data['exp'],
           createdAt: data['createdAt'].toDate(),
-          imageUrl: data['imageUrl'],
           slideValue: data['slideValue'],
           nickname: data['nickname'],
           friendList: [] ,
           friendPhoneList: friendPhoneList,
           lastName: data['name'],
-          firstName: ""
+          firstName: "",
+          profileImage: data['profileImage']??'',
+          church: data['church']??''
       );
     }));
+    day.bindStream(FirebaseFirestore.instance.collection('missions').doc('today').snapshots().map((element) => element.get('day')));
+
+    // day 바뀔 때마다 호출
+    ever(day,(day){
+      waterToLimit.bindStream(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('waterTo').doc('day$day').snapshots().map((document) {
+        int basicNum = 3;
+        // document 존재하지 않을 때
+        if (!document.exists) {
+          return basicNum;
+        } else {
+          List list = document.data()!['list'] as List;
+          int len = list.length;
+          int possible = basicNum - len;
+          return possible;
+        }
+      }));
+    });
+
     // currentUserModel이 바뀔 때마다, 호출
     ever(currentUserModel,(_){
       _ as UserModel;
@@ -67,30 +90,28 @@ class DbController extends GetxController{
   }
 
   // 친구 만드는 메소드
-  bool uploadFriend(UserModel currentUser){
+  void uploadFriend(UserModel currentUser){
     try {
       // 이미 만들어진 friendPhoneList 불러오고
       List<String> friendPhoneList = currentUser.friendPhoneList;
       // friendPhoneList 로 for 문
-      friendPhoneList.forEach((phone) async {
+      friendPhoneList.forEach((phoneNum) async {
 
-        FriendModel? myFriend= await findUserFromPhone(phone);
+        FriendModel? myFriend= await findUserFromDb(phoneNum);
         if(myFriend!=null){
-        currentUser.friendList.add(myFriend!);}
+          currentUser.friendList.add(myFriend);}
       });
 
-      return true;
     }catch(error){
       print(error);
-      return false;
     }
   }
   // 디비에서 phoneNum 가져와서 하나하나 쿼리 => FriendModel 리턴
-  Future<FriendModel?> findUserFromPhone(String phoneNum) async {
+  Future<FriendModel?> findUserFromDb(String phoneNum) async {
+    // users 컬렉션에서 검색하기
     var friend =  await FirebaseFirestore.instance.collection('users').
-    where('phoneNumber',isEqualTo:phoneNum).get()
-    ;
-
+    where('phoneNumber',isEqualTo:phoneNum).get();
+    // 검색 결과가 있으면
     if (friend.size!=0) {
       print(friend.docs[0].data()['name']);
       return FriendModel(
@@ -98,14 +119,14 @@ class DbController extends GetxController{
           phoneNumber:friend.docs[0].data()['phoneNumber'],
           nickname: friend.docs[0].data()['nickname'],
           exp: friend.docs[0].data()['exp'],
-          imageUrl: friend.docs[0].data()['imageUrl'],
+          profileImage: friend.docs[0].data()['profileImage'],
           level: friend.docs[0].data()['level'],
           tokens: friend.docs[0].data()['tokens'],
           uid:  friend.docs[0].id
       );
+    } else {
+      // 검색 결과가 없으면, 해당하는 번호를 가진 user 가 없다면
+      return null;
     }
-
-
-    return null;
   }
 }

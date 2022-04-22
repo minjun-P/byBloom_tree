@@ -14,7 +14,7 @@ import 'main_controller.dart';
 import 'main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'pages/siginup_page/pages/signup_page1.dart';
+import 'pages/siginup_page/pages/signup_page_main.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/login', page:()=> loginScreen(),binding: BindingsBuilder.put(()=>LoginController())),
           GetPage(name:'/signup', page:()=>RegisterPage()),
           // 회원 가입 첫 화면
-          GetPage(name:'/first', page: () => const SignupPage1()),
+          GetPage(name:'/first', page: () => const SignupPageMain()),
         ],
 
         title: 'byBloom MVP',

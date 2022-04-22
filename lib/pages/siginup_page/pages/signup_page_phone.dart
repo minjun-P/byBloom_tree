@@ -1,4 +1,6 @@
+import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:bybloom_tree/pages/siginup_page/components/signup_textfield.dart';
+import 'package:bybloom_tree/pages/siginup_page/pages/siginup_page_fin.dart';
 import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import '../components/signup_gauge.dart';
-import 'signup_page4.dart';
+import 'signup_page_church.dart';
 
 
 /// 전화번호
@@ -14,11 +16,11 @@ import 'signup_page4.dart';
 FirebaseAuth auth =FirebaseAuth.instance;
 
 enum Status{Waiting, Error}
-class SignupPage3 extends GetView<SignupController> {
-  SignupPage3({Key? key}) : super(key: key);
 
-  var _status = Status.Waiting;
-  var phonenumber;
+class SignupPagePhone extends GetView<SignupController> {
+  SignupPagePhone({Key? key}) : super(key: key);
+
+  final _status = Status.Waiting;
   late String verificationID;
 
 
@@ -29,40 +31,14 @@ class SignupPage3 extends GetView<SignupController> {
         controller.page3FocusNode1.requestFocus());
     return SafeArea(
       child: Scaffold(
-        bottomSheet: Container(
-          margin: const EdgeInsets.all(10),
-          height: 50,
-          child: Align(
-            alignment: Alignment.center,
-            child: OutlinedButton(
-
-              child: const Text('넘어가기',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
-              onPressed:  (){print(controller.phonesuc.value);
-              controller.phonesuc.value == true ? () {
-                Get.to(() => SignupPage4(),
-                    transition: Transition.rightToLeftWithFade);
-
-              } : (){};},
-              style: OutlinedButton.styleFrom(
-                  primary: controller.phonesuc.value == true ? Colors.blue : Colors.grey,
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  side: BorderSide(width: 2),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                  )
-              ),
-            ),
-          ),
-        ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SignupGauge(minusWidth: 120),
+              SignupGauge(minusWidth: 80),
               SizedBox(height: 30,),
-              Text('더 자세히 알려주세요!',
+              Text('휴대폰 본인 인증',
                 style: TextStyle(color: Colors.black, fontSize: 20),),
               SizedBox(height: 20,),
               Expanded(
@@ -145,7 +121,7 @@ class SignupPage3 extends GetView<SignupController> {
                                                   );
                                                 },
                                                 onFinished: (){
-                                                  if(auth.currentUser.isNull)
+                                                  if(auth.currentUser==null)
                                                   showDialog(
                                                       context: context,
                                                       builder: (context) {
@@ -182,6 +158,9 @@ class SignupPage3 extends GetView<SignupController> {
                                           });
                                         }
                                       },
+                                        style: OutlinedButton.styleFrom(
+                                            side: BorderSide(color: Colors.green,width: 2)
+                                        )
                                     ),
                                     Obx(()=>
                                       OutlinedButton(
@@ -196,6 +175,17 @@ class SignupPage3 extends GetView<SignupController> {
                                         }:null,
                                         style: OutlinedButton.styleFrom(
                                           side: controller.countdown.value?const BorderSide(color: Colors.green,width: 2):null
+                                        ),
+                                      ),
+                                    ),
+                                    Obx(()=>
+                                      Visibility(
+                                        visible: controller.phonesuc.value,
+                                        child: OutlinedButton(
+                                          child: Text('회원가입 완료'),
+                                          onPressed: (){
+                                            Get.offAll(()=>SignupPageFin());
+                                          },
                                         ),
                                       ),
                                     )
@@ -224,7 +214,7 @@ class SignupPage3 extends GetView<SignupController> {
         await auth.signInWithCredential(credential).then((value) {
           print("You are logged in successfully");
           controller.phonesuc.value=true;
-          Get.to(() => SignupPage4(),
+          Get.to(() => SignupPageFin(),
               transition: Transition.rightToLeftWithFade);
 
         });
@@ -248,7 +238,18 @@ class SignupPage3 extends GetView<SignupController> {
     await auth.signInWithCredential(credential).then((value) {
       print("You are logged in successfully");
       controller.phonesuc.value=true;
-      Get.to(() => SignupPage4(),
+      authservice.register(
+          phoneNumber: controller.phoneCon.text,
+          name: controller.nameCon.text,
+          sex: controller.userSex.value==Sex.man?'남성':'여성',
+          nickname: controller.nicknameCon.text,
+          birth: controller.birthCon.text,
+          slideValue: controller.sliderValue.value,
+          church: controller.churchCon.text,
+          // 이미지 name.png 을 넣어주기
+          profileImage: controller.profileList[controller.selectedProfile.value]
+      );
+      Get.to(() => SignupPageFin(),
           transition: Transition.rightToLeftWithFade);
     });
   }

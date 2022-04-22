@@ -5,19 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/auth/FriendAdd.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 TextEditingController textfield=TextEditingController();
 class FriendAddPage extends StatefulWidget{
-
+  final List<FriendModel> friendincontact;
+  FriendAddPage({
+    Key? key,
+    required this.friendincontact
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return FriendState();
+    return FriendState(friendincontact: friendincontact);
   }
 
 }
 
 class FriendState extends State<FriendAddPage>{
-   FriendModel? s=null;
+   FriendModel? friendtoadd=null;
+   final List<FriendModel> friendincontact;
+   FriendState({
+     Key? key,
+     required this.friendincontact
+   }):super();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +44,35 @@ class FriendState extends State<FriendAddPage>{
                 crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: [
+                  friendincontact.isEmpty?Text("가입한 친구가없습니다."):Expanded(
+                    child: ListView.builder(
+
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(
+                            friendincontact[index].name,
+                            style: TextStyle(
+                                fontSize: 18
+                            ),
+                          ),
+                          leading: Image.asset(
+                              'assets/profile/${friendincontact[index].profileImage}.png'),
+
+                          trailing: InkWell(
+                            onTap: (){
+                          AddFriend(friendtoadd!);
+
+
+                            },
+                            child: Icon(Icons.person_add,
+                              color: Colors.grey.shade500,),
+                          ),
+                        );
+                      }, itemCount: friendincontact.length,
+                    ),
+                  ),
                   Container(
                       padding:EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -49,9 +88,9 @@ class FriendState extends State<FriendAddPage>{
                           child:Icon(Icons.search),
                           onTap: () async {
                             if(textfield.text.length==11){
-                            s=await findUserFromPhone(textfield.text);}
+                            friendtoadd=await findUserFromPhone(textfield.text);}
                             else {
-                            s=await findUserFromName(textfield.text);
+                            friendtoadd=await findUserFromName(textfield.text);
                             }
                             setState(() {
 
@@ -80,7 +119,7 @@ class FriendState extends State<FriendAddPage>{
 
                 Container(
                   child:
-                    s==null? Text("아직 가입하지 않은 친구네요."):
+                    friendtoadd==null? Text("아직 가입하지 않은 친구네요."):
 
 
                         Container(
@@ -105,14 +144,14 @@ class FriendState extends State<FriendAddPage>{
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("${s!.name}"),
-                                    Text(s!.phoneNumber,style: TextStyle(color: Colors.grey),)
+                                    Text("${friendtoadd!.name}"),
+                                    Text(friendtoadd!.phoneNumber,style: TextStyle(color: Colors.grey),)
                                   ],
                                 )]
                                 ),
                                 InkWell(
                                   onTap: (){
-                                    AddFriend(s!);
+                                    AddFriend(friendtoadd!);
                                   },
                                   child: Row(
                                     children: [

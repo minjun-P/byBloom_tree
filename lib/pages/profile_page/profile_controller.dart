@@ -62,6 +62,27 @@ class ProfileController extends GetxController with GetTickerProviderStateMixin{
     });
     return diaryStream;
   }
+  Stream<List> getWorshipStream() {
+    Stream<QuerySnapshot<Map<String,dynamic>>> snapshot = missionCompletedRef.snapshots();
+    Stream<List> worshipStream = snapshot.map((event){
+      // document snapshot 으로 이루어진 리스트
+      List<QueryDocumentSnapshot> list = event.docs;
+      // 미션 D가 작성이 된 day Docs 만 필터링!
+      List<QueryDocumentSnapshot> filteredList = list.where((element) {
+        Map temp = element.data() as Map;
+        return temp['D']!=null;
+      }).toList();
+      // 미션 D 의 데이터가 순서대로 들어있는
+      List worshipList = filteredList.map((document){
+        Map<String, dynamic> map = document.data() as Map<String, dynamic>;
+        return map['D'];
+      }).toList();
+      return worshipList;
+    });
+    return worshipStream;
+  }
+
+
   Map profileComment ={
     1:'통통한 씨앗',
     2:'귀여운 새싹',

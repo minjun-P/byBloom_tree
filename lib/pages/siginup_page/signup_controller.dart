@@ -10,10 +10,11 @@ class SignupController extends GetxController{
 
 
   // --------------------------------------------------------
-  /// SignupPage2
+  /// 1. SignupPageBasicInformation
+  /// 이름, 생년월일, 성별 - 인적사항
   // form 제어용 global key
-  GlobalKey<FormState> page2Key = GlobalKey();
-  final FocusNode page2FocusNode1 = FocusNode();
+  GlobalKey<FormState> pageBasicKey = GlobalKey();
+  final FocusNode pageBasicFocusNode1 = FocusNode();
 
   // 이름 제어
   TextEditingController nameCon = TextEditingController();
@@ -33,9 +34,31 @@ class SignupController extends GetxController{
     }
     return validateOk.value;
   }
+  // ---------------------------------------------------------
+  /// 2. SignupPageChurch
+  /// 교회 참여 정도 조사
+  /// 교회 조사
+
+  Rx<double> sliderValue = 20.0.obs;
+  TextEditingController churchCon = TextEditingController();
+  GlobalKey<FormState> pageChurchKey = GlobalKey();
 
   // --------------------------------------------------------
-  /// SignupPage3
+  /// 3. SignupPageProfile
+  /// 닉네임과 프로필
+  // form 제어용 global key
+  GlobalKey<FormState> pageNicknameKey = GlobalKey();
+  final FocusNode pageNicknameFocusNode1 = FocusNode();
+  Rx<int> selectedProfile = 0.obs;
+  List<String> profileList = ['a_1','a_2','f_1','f_2','f_3','f_4','m_1','m_2','m_3'];
+
+  // 닉네임 제어
+  Rx<String> imageurl=''.obs;
+  TextEditingController nicknameCon = TextEditingController();
+
+  // --------------------------------------------------------
+  /// 4. SignupPagePhone
+  /// 전화번호 인증
   // form 제어용 global key
   GlobalKey<FormState> page3Key = GlobalKey();
   final FocusNode page3FocusNode1 = FocusNode();
@@ -50,37 +73,22 @@ class SignupController extends GetxController{
   CountdownController countdownController = CountdownController();
   Rx<bool> countdown = false.obs;
 
-  // --------------------------------------------------------
-  /// SignupPage4
-  // form 제어용 global key
-  GlobalKey<FormState> page4Key = GlobalKey();
-  final FocusNode page4FocusNode1 = FocusNode();
 
-  // 닉네임 제어
-  Rx<String> imageurl=''.obs;
-  TextEditingController nicknameCon = TextEditingController();
 
-  // ---------------------------------------------------------
-  /// SignupPage5
-  Rx<bool> checked1 = false.obs;
-  Rx<bool> checked2 = false.obs;
-  Rx<bool> checked3 = false.obs;
-  Rx<bool> checked4 = false.obs;
-  Rx<bool> checked5 = false.obs;
 
-  Rx<double> sliderValue = 20.0.obs;
 
   @override
   void onClose() {
     // TODO: implement onClose
-    page2FocusNode1.dispose();
+    pageBasicFocusNode1.dispose();
     page3FocusNode1.dispose();
-    page4FocusNode1.dispose();
+    pageNicknameFocusNode1.dispose();
     nameCon.dispose();
     birthCon.dispose();
     phoneCon.dispose();
     smsCon.dispose();
     nicknameCon.dispose();
+    churchCon.dispose();
     super.onClose();
   }
 }

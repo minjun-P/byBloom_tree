@@ -56,14 +56,6 @@ class SignupPage6 extends GetView<SignupController> {
                     /// offAll로 이전 라우트 Stack 다 없애주고
                     /// main으로 이동하는데, 이 때 tutorial 모드로 돌입하기 위해
                     /// argument를 하나 넘겨 준다. 더 안전한 방법이 있을지도 모르겠당.
-                    authservice.register(
-                        phoneNumber:controller.phoneCon.text,
-                        name: controller.nameCon.text,
-                        sex: controller.userSex.value==Sex.man?'남성':'여성',
-                        nickname: controller.nicknameCon.text,
-                        birth: controller.birthCon.text,
-                        slideValue: controller.sliderValue.value
-                        );
                     Get.offAllNamed('/main',arguments: 'tutorial');
                   },
                   child: const Text('메인 페이지로 가기')

@@ -1,5 +1,6 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
+import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,6 +30,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
   // 간단하게 하기 위해 getter from DbController 에 있는 currentUserModel
   int get exp => DbController.to.currentUserModel.value.exp;
   int get level => DbController.to.currentUserModel.value.level;
+  Rx<int> waterToLimit = 0.obs;
 
 
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
@@ -67,12 +69,10 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
         begin: 0,
         end: 1
     ).animate(wateringController);
-
     await FirebaseAnalytics.instance
         .setCurrentScreen(
         screenName: 'Tree'
     );
-
   }
 
 

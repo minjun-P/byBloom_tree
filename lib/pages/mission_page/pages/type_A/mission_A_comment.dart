@@ -82,8 +82,27 @@ class MissionAComment extends GetView<MissionController> {
                                 children: [
                                   Row(
                                     children: [
-                                      CircleAvatar(
-                                        backgroundColor: Colors.red,
+                                      FutureBuilder<DocumentSnapshot<Map<String,dynamic>>>(
+                                        future: FirebaseFirestore.instance.collection('users').doc(data['uid']).get(),
+                                        builder: (context,snapshot) {
+                                          if (snapshot.hasError) {
+                                            return CircleAvatar(
+                                              backgroundColor: Colors.grey.shade200,
+                                            );
+                                          }
+                                          if (snapshot.connectionState==ConnectionState.waiting){
+                                            return CircleAvatar(
+                                              backgroundColor: Colors.grey.shade200,
+                                            );
+                                          }
+                                          String profileImage = snapshot.data!.data()!['profileImage'];
+                                          return CircleAvatar(
+                                            backgroundImage: AssetImage(
+                                              'assets/profile/$profileImage.png',
+                                            ),
+                                            backgroundColor: Colors.white,
+                                          );
+                                        }
                                       ),
                                       SizedBox(width: 10,),
                                       Column(
