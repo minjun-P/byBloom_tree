@@ -167,7 +167,7 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                         String gradcolor2=(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString();
                         String imageindex=gradcolor1+","+gradcolor2;
 
-                        final room2=await FirebaseChatCore.instance.createRoom(types.User(id:(await finduidFromPhone(friendData.phoneNumber))!),imageUrl:friendData.profileImage ,metadata: {'name':friendData.name},);
+                        final room2=await FirebaseChatCore.instance.createRoom(types.User(id:(await finduidFromPhone(friendData.phoneNumber))!),metadata: {'name':friendData.name},);
 
                         Navigator.of(context).push(
 

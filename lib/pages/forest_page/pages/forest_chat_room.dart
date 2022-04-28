@@ -459,12 +459,12 @@ class ChatRoomDrawer extends StatelessWidget {
                    (BuildContext context, int index) {
 
                       return ListTile(
-                     title: Text(
+                     title: ((userexceptme[index].id=="unknown")?Text("탈퇴한회원"):Text(
                      userexceptme[index].lastName??""+(userexceptme[index].firstName??""),
                      style: TextStyle(
                      fontSize: 18
                      ),
-                     ),
+                     )),
                      leading: CircleAvatar(backgroundColor: Colors.lime,),
                       );
                       },itemCount: userexceptme.length): Text("아직구성원이없어요"),
@@ -488,28 +488,10 @@ class ChatRoomDrawer extends StatelessWidget {
               Column(
                 children: [
                   Icon(Icons.logout),
-                  Text('로그아웃'),
+                  Text('방나가기'),
                 ],
               )),
             ),
-            Container(
-              padding: EdgeInsets.only(top:20,bottom: 20),
-              child: InkWell(
-                  onTap: (){
-                    
-
-
-                  }, child:
-
-              Column(
-                children: [
-                  Icon(Icons.no_accounts),
-                  Text('회원탈퇴'),
-                ],
-              )
-              ),
-            ),
-          
 
 
           ],
