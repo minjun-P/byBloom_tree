@@ -54,7 +54,8 @@ class ForestPage extends GetView<ForestController> {
         initialData: const [],
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return CircularProgressIndicator();
+            return Center(
+            child:Text("아직 가입한 숲이없어요"));
 
           }
           return ListView.builder(

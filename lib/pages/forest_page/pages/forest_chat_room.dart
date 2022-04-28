@@ -1,6 +1,7 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
@@ -482,6 +483,8 @@ class ChatRoomDrawer extends StatelessWidget {
                   onTap: (){
 
                     Navigator.pop(context);
+                    deleteroomfromuser(room.id);
+                    Navigator.pop(context);
 
                   }, child:
 
@@ -513,5 +516,15 @@ List<types.User> deleteme(List<types.User> userList, String name){
   }
   return userList;
 }
+
+
+
+deleteroomfromuser(String docid) {
+
+      FirebaseFirestore.instance.collection("rooms").doc(docid).update({
+
+        "userIds":FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid]) });
+    }
+
 
 

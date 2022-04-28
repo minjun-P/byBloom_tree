@@ -110,6 +110,8 @@ class MenuDrawer extends StatelessWidget {
         },
         btnCancelText: '네',
         btnCancelOnPress: () async {
+          // Db room doc 사제
+          deleteallroomfromuser();
           // Db doc 삭제
           FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete();
           // auth 삭제
@@ -127,5 +129,18 @@ class MenuDrawer extends StatelessWidget {
         }
     ).show();
   }
+}
+deleteallroomfromuser() {
+  final doc= FirebaseFirestore.instance.collection('rooms')
+      .where('userIds', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+      .orderBy('updatedAt', descending: true).snapshots();
+  doc.forEach((element) {
+    element.docs.forEach((element) {
+      var id=element.id;
+      FirebaseFirestore.instance.collection("rooms").doc(id).update({
+
+        "userIds":FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid]) });
+    });
+  });
 }
 
