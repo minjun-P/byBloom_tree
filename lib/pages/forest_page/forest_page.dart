@@ -55,7 +55,7 @@ class ForestPage extends GetView<ForestController> {
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return CircularProgressIndicator();
-            
+
           }
           return ListView.builder(
             itemCount: snapshot.data!.length,
