@@ -100,7 +100,7 @@ class ForestChatState extends State<ForestChatRoom>{
       key: _ScaffoldKey,
       endDrawer: buildCustomDrawer(child: ChatRoomDrawer(room: this.room),left: false),
       appBar: AppBar(
-        title: Text(this.room.name!),
+        title: Text(this.room.name??""),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [ IconButton(onPressed: (){
@@ -128,8 +128,8 @@ class ForestChatState extends State<ForestChatRoom>{
                   customMessageBuilder: (types.CustomMessage s, {required int messageWidth} )=>
                       Container(
 
-                        color: Colors.grey,
-                        child: Text('님이 미션을 완료하셨습니다'),
+                        color: Colors.lightGreen,
+                        child: Text('${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다',style: TextStyle(color: Colors.white),),
                         width: Get.width*2,
                       ),
 

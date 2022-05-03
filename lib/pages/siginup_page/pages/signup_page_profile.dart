@@ -6,7 +6,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/signup_gauge.dart';
-import 'signup_page6.dart';
+
 import 'package:bybloom_tree/Profile/profilephoto.dart';
 /// 내가 만든 uploadphoto함수의 특성때문에 4~5번 페이지 순서바꿨어
 /// 닉네임, 프로필 사진

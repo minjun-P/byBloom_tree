@@ -102,25 +102,7 @@ Future<String?> finduidFromPhone(String phoneNum) async {
   return null;
 }
 
-Future<FriendModel?> findUserFromPhone(String phoneNum) async {
-  var friend = await FirebaseFirestore.instance.collection('users').
-  where('phoneNumber', isEqualTo: phoneNum).get()
-  ;
 
-  if (friend.size != 0) {
-    print(friend.docs[0].data()['name']);
-    return FriendModel(
-        name: friend.docs[0].data()['name'],
-        phoneNumber: friend.docs[0].data()['phoneNumber'],
-        nickname: friend.docs[0].data()['nickname'],
-        exp: friend.docs[0].data()['exp'],
-        level: friend.docs[0].data()['level'],
-        tokens: friend.docs[0].data()['tokens']??[],
-        uid: friend.docs[0].id,
-      profileImage: friend.docs[0].data()['profileImage']
-    );
-  }
-}
 
   Future<FriendModel?> findUserFromName(String phonename) async {
     var friend =  await FirebaseFirestore.instance.collection('users').

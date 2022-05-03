@@ -46,7 +46,7 @@ class FriendDrawer extends GetView<TreeController> {
               child:Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
               onTap: () async {
 
-                List<FriendModel>? friendlist=await findfriendwithcontact();
+                List<FriendModel>? friendlist=await findfriendwithcontact(DbController.to.currentUserModel.value.phoneNumber);
                 showDialog(context: context, builder:(context){
                   if(friendlist?.length==0){
                     return Card(

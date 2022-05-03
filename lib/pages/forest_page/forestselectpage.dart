@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:bybloom_tree/pages/forest_page/pages/forest_chat_room.dart';
 
+import '../../DBcontroller.dart';
+
 
 
 /// 숲 페이지 - 카톡처럼 클릭하면 내부 채팅방 들어가짐.
@@ -71,7 +73,10 @@ class Forest_select_state extends State<ForestselectPage>{
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final room = snapshot.data![index];
-
+              var colorindex=[];
+              if(room.type==types.RoomType.group) {
+              colorindex= colorFromString(room);
+              }
               return GestureDetector(
                   onTap: () {
                     setState(() {
@@ -95,7 +100,7 @@ class Forest_select_state extends State<ForestselectPage>{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
 
-                        Container(
+                        room.type==types.RoomType.group ? Container(
                             width: 80,
                             height: 80,
                             decoration: BoxDecoration(
@@ -105,13 +110,20 @@ class Forest_select_state extends State<ForestselectPage>{
                                     end: Alignment.bottomRight,
                                     colors: [
                                       // 색 값 따로 다 설정하기 귀찮아서 그냥 랜덤으로 정해지도록 임시 설정함함
-                                      Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1),
-                                      Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1)
+                                      Color.fromRGBO(colorindex[0], colorindex[1], colorindex[2], 1),
+                                      Color.fromRGBO(colorindex[3], colorindex[4], colorindex[5], 1)
                                     ]
                                 ),
                                 boxShadow: const[
                                   BoxShadow(color: Colors.grey,offset: Offset(3,3),blurRadius: 3)
-                                ])),
+                                ])):
+                        Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              image: DecorationImage(image: AssetImage('assets/profile/${room.imageUrl}.png')),
+                            )) ,
                         const SizedBox(width: 15,),
                         Expanded(
                           child: Column(
@@ -236,6 +248,12 @@ class Forest_select_state extends State<ForestselectPage>{
 sendmissioncompletedmessage(types.Room room){
   types.PartialCustom missioncompleted= types.PartialCustom();
   FirebaseChatCore.instance.sendMessage(missioncompleted, room.id);
-  print("room:$room.id");
+
+  Get.find<ForestController>().sendFCMformessage(room,DbController.to.currentUserModel.value.name,'${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다.');
+}
+List colorFromString(types.Room room) {
+  return room.imageUrl!.split(',')
+      .map((element) => int.parse(element))
+      .toList();
 }
 

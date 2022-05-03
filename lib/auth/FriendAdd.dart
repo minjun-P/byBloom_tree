@@ -12,32 +12,29 @@ import 'authservice.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 
 final database= FirebaseFirestore.instance;
-Future<List<FriendModel>?>  findfriendwithcontact() async {
+Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
 
    List<Contact>? mycontacts=await getPermission( );
     List<FriendModel> friendalreadysignedup=[];
-       print("length:${mycontacts?.length}");
       for(int i=0;i<mycontacts!.length;i++) {
         for(int j=0;j<mycontacts[i].phones!.length;j++){
           String phonenumber=mycontacts[i].phones![j].value as String;
-          print(phonenumber);
           if(phonenumber.length!=11){
             phonenumber=phonenumber.replaceAll('-', "");
             if(phonenumber.length!=11){
               phonenumber=phonenumber.substring(3);
             }
           }
-          print(phonenumber);
-         FriendModel? s=await findUserFromPhone(phonenumber);
-         if(s!=null){
-           print("added");
-         friendalreadysignedup.add(s);
-         };
+         if (phonenumber!=mynumber) {
+           FriendModel? s = await findUserFromPhone(phonenumber);
+           if (s != null) {
+             friendalreadysignedup.add(s);
+           };
+         }
         };
       };
       print("length:${friendalreadysignedup.length}");
       return friendalreadysignedup;
-
       // 허락해달라고 팝업띄우는 코드
     }
     ///스트링 formatter추가
@@ -108,6 +105,26 @@ Future<bool> deleteFriend(FriendModel friendtoadd) async {
   return false;
 }
 ///친구삭제하는 로직
+///
+Future<FriendModel?> findUserFromPhone(String phoneNum) async {
+  var friend = await FirebaseFirestore.instance.collection('users').
+  where('phoneNumber', isEqualTo: phoneNum).get()
+  ;
+
+  if (friend.size != 0) {
+    print(friend.docs[0].data()['name']);
+    return FriendModel(
+        name: friend.docs[0].data()['name'],
+        phoneNumber: friend.docs[0].data()['phoneNumber'],
+        nickname: friend.docs[0].data()['nickname'],
+        exp: friend.docs[0].data()['exp'],
+        level: friend.docs[0].data()['level'],
+        tokens: friend.docs[0].data()['tokens']??[],
+        uid: friend.docs[0].id,
+        profileImage: friend.docs[0].data()['profileImage']
+    );
+  }
+}
 
 
 

@@ -23,9 +23,8 @@ class SignupPageFin extends GetView<SignupController> {
               SizedBox(height: 40,),
               OutlinedButton(
                   onPressed: () async {
-                List<FriendModel>? s=await findfriendwithcontact();
+                List<FriendModel>? s=await findfriendwithcontact(controller.phoneCon.text);
                 s?.forEach((element) {
-                  print(element.phoneNumber);
                 });
                 Get.to(FriendAddPage(friendincontact: s??[]));
 
