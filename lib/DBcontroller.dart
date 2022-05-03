@@ -83,6 +83,7 @@ class DbController extends GetxController{
     // currentUserModel이 바뀔 때마다, 호출
     ever(currentUserModel,(_){
       _ as UserModel;
+      print('currentUserModel 업데이트');
       uploadFriend(currentUserModel.value);
     });
 

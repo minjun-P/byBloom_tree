@@ -117,7 +117,8 @@ class MenuDrawer extends StatelessWidget {
           // auth 삭제
           try {
             await FirebaseChatCore.instance.deleteUserFromFirestore(FirebaseAuth.instance.currentUser!.uid);
-            await FirebaseAuth.instance.currentUser!.delete();
+            FirebaseAuth.instance.currentUser!.delete();
+            FirebaseAuth.instance.signOut();
           } on FirebaseAuthException catch (e) {
             if (e.code == 'requires-recent-login') {
               print('The user must reauthenticate before this operation can be executed.');

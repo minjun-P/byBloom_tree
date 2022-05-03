@@ -33,10 +33,7 @@ class SignupPageFin extends GetView<SignupController> {
               const SizedBox(height: 40,),
               TextButton(
                   onPressed: (){
-                    /// offAll로 이전 라우트 Stack 다 없애주고
-                    /// main으로 이동하는데, 이 때 tutorial 모드로 돌입하기 위해
-                    /// argument를 하나 넘겨 준다. 더 안전한 방법이 있을지도 모르겠당.
-                    Get.offAllNamed('/main',arguments: 'tutorial');
+                    Get.offAllNamed('/main');
                   },
                   child: const Text('건너 뛰기',style: TextStyle(color: Colors.grey,fontSize: 16))
               ),

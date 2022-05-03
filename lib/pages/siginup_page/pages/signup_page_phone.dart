@@ -178,21 +178,40 @@ class SignupPagePhone extends GetView<SignupController> {
                                         ),
                                       ),
                                     ),
-                                    Obx(()=>
-                                      Visibility(
-                                        visible: controller.phonesuc.value,
-                                        child: OutlinedButton(
-                                          child: Text('회원가입 완료'),
-                                          onPressed: (){
-                                            Get.offAll(()=>SignupPageFin());
-                                          },
-                                        ),
-                                      ),
-                                    )
+
                                   ],
                                 ),
                               ],
-                            )
+                            ),
+                            SizedBox(height: 20,),
+                            Obx(()=>
+                                Visibility(
+                                  visible: controller.phonesuc.value,
+                                  child: OutlinedButton(
+                                    child: Text('회원가입 완료'),
+                                    onPressed: (){
+                                      // 디비에 계정 등록
+                                      authservice.register(
+                                          phoneNumber: controller.phoneCon.text,
+                                          name: controller.nameCon.text,
+                                          sex: controller.userSex.value==Sex.man?'남성':'여성',
+                                          nickname: controller.nicknameCon.text,
+                                          birth: controller.birthCon.text,
+                                          slideValue: controller.sliderValue.value,
+                                          church: controller.churchCon.text,
+                                          // 이미지 name.png 을 넣어주기
+                                          profileImage: controller.profileList[controller.selectedProfile.value]
+                                      );
+                                      Get.offAll(()=>SignupPageFin());
+                                    },
+                                  ),
+                                ),
+                            ),
+                          SizedBox(height: 20,),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('안드로이드 핸드폰은 인증 문자가 오면 입력 없이 자동으로 넘어갑니다.',style: TextStyle(color: Colors.grey,fontSize: 12),),
+                          )
                           ]
                       ),
                     ),
@@ -212,10 +231,8 @@ class SignupPagePhone extends GetView<SignupController> {
       phoneNumber: "+82" + controller.phoneCon.text,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential).then((value) {
-          print("You are logged in successfully");
+          print("login with phone ");
           controller.phonesuc.value=true;
-          Get.to(() => SignupPageFin(),
-              transition: Transition.rightToLeftWithFade);
 
         });
       },
@@ -236,21 +253,9 @@ class SignupPagePhone extends GetView<SignupController> {
         verificationId: verificationID, smsCode: controller.smsCon.text);
 
     await auth.signInWithCredential(credential).then((value) {
-      print("You are logged in successfully");
+      print("verify otp");
       controller.phonesuc.value=true;
-      authservice.register(
-          phoneNumber: controller.phoneCon.text,
-          name: controller.nameCon.text,
-          sex: controller.userSex.value==Sex.man?'남성':'여성',
-          nickname: controller.nicknameCon.text,
-          birth: controller.birthCon.text,
-          slideValue: controller.sliderValue.value,
-          church: controller.churchCon.text,
-          // 이미지 name.png 을 넣어주기
-          profileImage: controller.profileList[controller.selectedProfile.value]
-      );
-      Get.to(() => SignupPageFin(),
-          transition: Transition.rightToLeftWithFade);
+
     });
   }
 

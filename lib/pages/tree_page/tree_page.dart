@@ -39,7 +39,7 @@ class TreePage extends GetView<TreeController> {
 
         title: GestureDetector(
           onTap: (){
-
+              print(FirebaseAuth.instance.currentUser);
             },
           child: Image.asset(
             'assets/title.png'
