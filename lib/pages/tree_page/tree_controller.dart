@@ -110,7 +110,9 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     '3':30,
     '4':45,
     '5':60,
-    '6':60
+    '6':60,
+    '7':60,
+    '8':1000
   };
 
 

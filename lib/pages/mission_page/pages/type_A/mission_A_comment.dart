@@ -82,6 +82,7 @@ class MissionAComment extends GetView<MissionController> {
                                 children: [
                                   Row(
                                     children: [
+                                      // 프로필 사진
                                       FutureBuilder<DocumentSnapshot<Map<String,dynamic>>>(
                                         future: FirebaseFirestore.instance.collection('users').doc(data['uid']).get(),
                                         builder: (context,snapshot) {
@@ -93,6 +94,15 @@ class MissionAComment extends GetView<MissionController> {
                                           if (snapshot.connectionState==ConnectionState.waiting){
                                             return CircleAvatar(
                                               backgroundColor: Colors.grey.shade200,
+                                            );
+                                          }
+                                          // uid data 가 존재하지 않을 때, 즉 회원 탈퇴를 했을 때 처리 -> 토끼로 고정
+                                          if (!snapshot.data!.exists){
+                                            return CircleAvatar(
+                                              backgroundImage: AssetImage(
+                                                'assets/profile/a_1.png',
+                                              ),
+                                              backgroundColor: Colors.white,
                                             );
                                           }
                                           String profileImage = snapshot.data!.data()!['profileImage'];

@@ -105,7 +105,7 @@ class ProfilePageState extends State<ProfilePage>{
                       child: Text('감사일기',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                     ),
                     Tab(
-                      child: Text('오늘의 예배',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                      child: Text('오늘의예배',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 14),),
                     ),
                   ],
                 ),

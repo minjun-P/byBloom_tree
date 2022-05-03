@@ -125,6 +125,15 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                                 backgroundColor: Colors.grey.shade200,
                                               );
                                             }
+                                            // uid data 가 존재하지 않을 때, 즉 회원 탈퇴를 했을 때 처리 -> 토끼로 고정
+                                            if (!snapshot.data!.exists){
+                                              return const CircleAvatar(
+                                                backgroundImage: AssetImage(
+                                                  'assets/profile/a_1.png',
+                                                ),
+                                                backgroundColor: Colors.white,
+                                              );
+                                            }
                                             String profileImage = snapshot.data!.data()!['profileImage'];
                                             return CircleAvatar(
                                               backgroundImage: AssetImage(

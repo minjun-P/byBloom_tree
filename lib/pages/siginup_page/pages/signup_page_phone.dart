@@ -121,7 +121,6 @@ class SignupPagePhone extends GetView<SignupController> {
                                                   );
                                                 },
                                                 onFinished: (){
-                                                  if(auth.currentUser==null)
                                                   showDialog(
                                                       context: context,
                                                       builder: (context) {
@@ -150,13 +149,12 @@ class SignupPagePhone extends GetView<SignupController> {
                                         style: TextStyle(color: Colors.black),
                                       ),
                                       onPressed: (){
-                                        if (_status == Status.Waiting) {
                                           loginWithPhone();
                                           controller.countdown(true);
                                           Future.delayed(const Duration(seconds: 1),(){
                                             controller.countdownController.start();
                                           });
-                                        }
+
                                       },
                                         style: OutlinedButton.styleFrom(
                                             side: BorderSide(color: Colors.green,width: 2)
@@ -169,9 +167,7 @@ class SignupPagePhone extends GetView<SignupController> {
                                             style: TextStyle(color: controller.countdown.value?Colors.green:Colors.black)
                                         ),
                                         onPressed: controller.countdown.value?(){
-                                          if (_status == Status.Waiting) {
                                             verifyOTP();
-                                          }
                                         }:null,
                                         style: OutlinedButton.styleFrom(
                                           side: controller.countdown.value?const BorderSide(color: Colors.green,width: 2):null
@@ -208,10 +204,6 @@ class SignupPagePhone extends GetView<SignupController> {
                                 ),
                             ),
                           SizedBox(height: 20,),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('안드로이드 핸드폰은 인증 문자가 오면 입력 없이 자동으로 넘어갑니다.',style: TextStyle(color: Colors.grey,fontSize: 12),),
-                          )
                           ]
                       ),
                     ),

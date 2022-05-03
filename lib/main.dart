@@ -72,6 +72,7 @@ class MyApp extends StatelessWidget {
       initialBinding: BindingsBuilder.put(()=>NotificationController(),permanent: true),
       // 나중에 디자인이 픽스되면 한번 갈아 엎어야 할 듯.
         theme: ThemeData(
+          primaryColor: Colors.blueGrey,
           appBarTheme: const AppBarTheme(
               backgroundColor: Colors.transparent,
               elevation: 0,

@@ -14,8 +14,7 @@ class MissionCPage extends GetView<MissionController> {
         appBar: AppBar(),
         body: Center(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
+
             children: [
 
               Image.asset('assets/pray.png',width: 200,),
