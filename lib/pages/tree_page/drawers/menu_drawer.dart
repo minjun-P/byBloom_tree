@@ -110,6 +110,8 @@ class MenuDrawer extends StatelessWidget {
         },
         btnCancelText: '네',
         btnCancelOnPress: () async {
+          // 스택 다 지우고 로그인 화면으로
+          Get.offAllNamed('/login');
           // Db room doc 사제
           deleteallroomfromuser();
           // Db doc 삭제
@@ -117,15 +119,14 @@ class MenuDrawer extends StatelessWidget {
           // auth 삭제
           try {
             await FirebaseChatCore.instance.deleteUserFromFirestore(FirebaseAuth.instance.currentUser!.uid);
+            // re - authenticate 이후에 delete 가능함. 다시 인증 받는 방식으로!
             FirebaseAuth.instance.currentUser!.delete();
-            FirebaseAuth.instance.signOut();
           } on FirebaseAuthException catch (e) {
             if (e.code == 'requires-recent-login') {
               print('The user must reauthenticate before this operation can be executed.');
             }
           }
-          // 스택 다 지우고 로그인 화면으로
-          Get.offAllNamed('/login');
+
 
         }
     ).show();

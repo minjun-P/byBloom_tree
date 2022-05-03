@@ -98,8 +98,12 @@ class MainScreen extends GetView<MainController> {
                   type: BottomNavigationBarType.fixed,
                   items: [
                     BottomNavigationBarItem(
-                        icon: Icon(MyFlutterApp.tree, key: controller.tutorialKey1,),
-                        label: ''
+                        icon: Container(
+                          key: controller.tutorialKey1,
+                            child: Icon(MyFlutterApp.tree,)
+                        ),
+                        label: '',
+
                     ),
                     BottomNavigationBarItem(
                         icon: Icon(MyFlutterApp.event_note,key: controller.tutorialKey4,),
@@ -118,7 +122,6 @@ class MainScreen extends GetView<MainController> {
                     controller.changeNavigationBarIndex(index);
                   },
                   selectedItemColor: Colors.black87,
-                  unselectedItemColor: Colors.grey[300],
                   currentIndex: controller.navigationBarIndex.value,
                   showSelectedLabels: false,
                   showUnselectedLabels: false,

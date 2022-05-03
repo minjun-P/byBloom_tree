@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 import '../pages/siginup_page/components/signup_textfield.dart';
 
 
@@ -37,11 +38,11 @@ class loginScreen extends GetView<LoginController> {
          Expanded(
            child: ListView(
              children: [
-               Form(
-                 key: controller.loginpageKey,
-                 child: Column(
-                     children: <Widget>[
-                       SignupTextField(
+               Column(
+                   children: <Widget>[
+                     Form(
+                       key: controller.loginpageKey1,
+                       child: SignupTextField(
                          focusNode: controller.loginpageFocusNode1,
                          textController: controller.phoneCon,
                          keyboardType: TextInputType.phone,
@@ -66,31 +67,76 @@ class loginScreen extends GetView<LoginController> {
                            FilteringTextInputFormatter.digitsOnly
                          ],
                        ),
-                       SignupTextField(
-                         focusNode: controller.loginpageFocusNode2,
-                         textController: controller.smsCon,
-                         keyboardType: TextInputType.number,
+                     ),
+                     SizedBox(height: 20,),
+                     Stack(
+                       children: [
+                         Form(
+                           key: controller.loginpageKey2,
+                           child: SignupTextField(
+                             focusNode: controller.loginpageFocusNode2,
+                             textController: controller.smsCon,
+                             keyboardType: TextInputType.number,
 
-                         labelText: '인증번호',
-                         validator: (value) {
-                           if (value!.isEmpty) {
-                             return '올바른 인증번호 값을 입력하세요';
-                           }
-                           if (value.length != 6) {
-                             return '인증번호가 6자리가 아닙니다';
-                           }
-                           else {
-                             return null;
-                           }
-                         },
+                             labelText: '인증번호',
+                             validator: (value) {
+                               if (value!.isEmpty) {
+                                 return '올바른 인증번호 값을 입력하세요';
+                               }
+                               if (value.length != 6) {
+                                 return '인증번호가 6자리가 아닙니다';
+                               }
+                               else {
+                                 return null;
+                               }
+                             },
 
-                         // 애초에 숫자만 입력되도록
-                         inputFormatters: [
-                           FilteringTextInputFormatter.digitsOnly
-                         ],
-                       )
-                     ]
-                 ),
+                             // 애초에 숫자만 입력되도록
+                             inputFormatters: [
+                               FilteringTextInputFormatter.digitsOnly
+                             ],
+                           ),
+                         ),
+
+                         Obx(()=>
+                             Visibility(
+                               visible: controller.countdown.value,
+                               child: Positioned(
+                                 right: 30,
+                                 top: 12,
+                                 bottom: 0,
+                                 child: Countdown(
+                                   controller: controller.countdownController,
+                                   seconds: 120,
+                                   build: (context, time){
+                                     return Text(
+                                       time.toInt().toString()+' 초',
+                                       style: TextStyle(
+                                           color: Colors.blue,
+                                           fontSize: 14
+                                       ),
+                                     );
+                                   },
+                                   onFinished: (){
+                                     showDialog(
+                                         context: context,
+                                         builder: (context) {
+                                           return const AlertDialog(
+                                             title: Text('인증번호가 만료되었습니다!'),
+                                             content: Text('다시 인증번호를 받아주세요!'),
+                                           );
+                                         }
+                                     );
+                                     controller.countdown(false);
+                                   },
+                                 ),
+                               ),
+                             ),
+                         ),
+
+                       ],
+                     ),
+                   ]
                ),
                Row(
                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,16 +144,24 @@ class loginScreen extends GetView<LoginController> {
                      TextButton(
                          child: Text("인증번호받기"),
                          onPressed: () {
-                           loginWithPhone();
+                           if(controller.loginpageKey1.currentState!.validate()){
+                             loginWithPhone();
+                             controller.countdown(true);
+                             Future.delayed(const Duration(seconds: 1),(){
+                               controller.countdownController.start();
+                             });
+                           }
+
                            }
 
                      ),
                      TextButton(
-                         child: Text("로그인하기"),
+                         child: Text("인증하고 로그인"),
                          onPressed: () {
-                          {
+                           if (controller.loginpageKey2.currentState!.validate()){
                              verifyOTP();
                            }
+
                          }
                      )
                    ]

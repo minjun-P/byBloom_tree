@@ -70,7 +70,7 @@ class TreeStatus extends GetView<TreeController> {
                                 children: [
                                   TextSpan(text: '성장단계 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
                                   TextSpan(
-                                      text: '${controller.level.toString()} ',
+                                      text: controller.level<8?'${controller.level.toString()} ':'최종',
                                     style: TextStyle(fontWeight: FontWeight.bold)
                                   ),
                                 ]
@@ -172,12 +172,13 @@ class TreeStatus extends GetView<TreeController> {
                       color: Colors.white
                   ),
                   alignment: Alignment.centerLeft,
+                  clipBehavior: Clip.hardEdge,
 
                   child: Obx(()=> AnimatedContainer(
                     width: Get.width*0.9*controller.exp/controller.expStructure[controller.level.toString()],
                     duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.only(topRight: Radius.circular(30),bottomRight: Radius.circular(30)),
                         color: Colors.green.shade100
                     ),
                   ),
