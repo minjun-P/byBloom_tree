@@ -5,7 +5,6 @@ import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:bybloom_tree/pages/firend_page/firend_profile_controller.dart';
 import 'package:bybloom_tree/pages/forest_page/pages/forest_chat_room.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,9 +13,7 @@ import 'package:bybloom_tree/auth/User.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../main_controller.dart';
-import '../tree_page/components/tree.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 import 'components/friend_tree.dart';
@@ -147,16 +144,11 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        onTap: (){
-                          print(friendData.toJson());
-                        },
-                        child: Text(
-                          friendData.name,
-                          style: TextStyle(
-                              fontSize: 21
-                          ),),
-                      ),
+                      Text(
+                        friendData.name,
+                        style: TextStyle(
+                            fontSize: 21
+                        ),),
                       Text(friendData.nickname)
                     ],
                   ),

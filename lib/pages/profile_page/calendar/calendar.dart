@@ -86,6 +86,8 @@ class Calendar extends GetView<CalendarController> {
                         if (controller.eventsCompleteListLength(day)>0) {
                           // event가 존재하고 true인게 있는 날은 초록색으로 날짜 표시하기
                           return Center(child: Text('${day.day}',style: const TextStyle(color: Colors.green,fontWeight: FontWeight.bold),));
+                        } else {
+                          return null;
                         }
                       },
                       // 이벤트 표시 마커를 어떻게 build 할지 커스터마징.
@@ -117,7 +119,6 @@ class Calendar extends GetView<CalendarController> {
                   /** 날짜 터치시 상호작용 */
                   onDaySelected: (DateTime selectedDay, _){
                     controller.updateSelectedDay(selectedDay);
-                    print(controller.selectedEventsList);
                     },
                   selectedDayPredicate: (day){
                     return isSameDay(controller.selectedDay.value,day);

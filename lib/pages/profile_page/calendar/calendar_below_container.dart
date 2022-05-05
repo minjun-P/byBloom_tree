@@ -44,26 +44,21 @@ class CalendarBelowContainer extends GetView<CalendarController> {
                     GetBuilder<CalendarController>(
                       builder: (controller){
                         List eventsCategory = controller.getEventsForDay().map((event)=>event.category!).toList();
-                        return GestureDetector(
-                          onTap: (){
-                            print(eventsCategory);
-                          },
-                          child: Table(
-                            children: [
-                              TableRow(
+                        return Table(
+                          children: [
+                            TableRow(
+                              children: [
+                                Text('한줄 말씀', style: TextStyle(color: eventsCategory.contains('A')?Colors.green:Colors.black,fontSize: 20,fontWeight: eventsCategory.contains('A')?FontWeight.bold:FontWeight.w300),),
+                                Text('나눔 미션', style: TextStyle(color: eventsCategory.contains('B')?Colors.green:Colors.black,fontSize: 20,fontWeight: eventsCategory.contains('B')?FontWeight.bold:FontWeight.w300),),
+                              ]
+                            ),
+                            TableRow(
                                 children: [
-                                  Text('한줄 말씀', style: TextStyle(color: eventsCategory.contains('A')?Colors.green:Colors.black,fontSize: 20,fontWeight: eventsCategory.contains('A')?FontWeight.bold:FontWeight.w300),),
-                                  Text('나눔 미션', style: TextStyle(color: eventsCategory.contains('B')?Colors.green:Colors.black,fontSize: 20,fontWeight: eventsCategory.contains('B')?FontWeight.bold:FontWeight.w300),),
+                                  Text('감사 일기', style: TextStyle(color: eventsCategory.contains('C')?Colors.green:Colors.black,fontSize: 20,fontWeight: eventsCategory.contains('C')?FontWeight.bold:FontWeight.w300),),
+                                  Text('교회연계미션', style: TextStyle(color: eventsCategory.contains('D')?Colors.green:Colors.black,fontSize: 20,fontWeight: eventsCategory.contains('D')?FontWeight.bold:FontWeight.w300),)
                                 ]
-                              ),
-                              TableRow(
-                                  children: [
-                                    Text('감사 일기', style: TextStyle(color: eventsCategory.contains('C')?Colors.green:Colors.black,fontSize: 20,fontWeight: eventsCategory.contains('C')?FontWeight.bold:FontWeight.w300),),
-                                    Text('교회연계미션', style: TextStyle(color: eventsCategory.contains('D')?Colors.green:Colors.black,fontSize: 20,fontWeight: eventsCategory.contains('D')?FontWeight.bold:FontWeight.w300),)
-                                  ]
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         );
                       },
                     ),

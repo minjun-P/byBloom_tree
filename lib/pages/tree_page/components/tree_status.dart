@@ -1,20 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:bybloom_tree/DBcontroller.dart';
-import 'package:bybloom_tree/auth/User.dart';
-import 'package:bybloom_tree/main.dart';
-import 'package:bybloom_tree/main_controller.dart';
-import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lottie/lottie.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../../mission_page/mission_controller.dart';
-Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).snapshots();
 //유저등록
 
 class TreeStatus extends GetView<TreeController> {

@@ -1,5 +1,4 @@
 import 'package:bybloom_tree/main_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -28,7 +27,6 @@ class NotificationController extends GetxController {
       sound: true,
     );
     // 한번 이걸 프린트해서 콘솔에서 확인해봐도 된다.
-    print(settings.authorizationStatus);
     _onMessage();
     super.onInit();
     /// 임시로 precache해보기
@@ -83,7 +81,7 @@ class NotificationController extends GetxController {
       AndroidNotification? android = message.notification?.android;
 
       // android 일 때만 flutterLocalNotification 을 대신 보여주는 거임. 그래서 아래와 같은 조건문 설정.
-      if (notification != null && android != null)
+      if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           notification.title,
@@ -99,6 +97,7 @@ class NotificationController extends GetxController {
           // 넘겨줄 데이터가 있으면 아래 코드를 써주면 됨.
           // payload: message.data['argument']
         );
+      }
 
       }
       // 개발 확인 용으로 print 구문 추가
@@ -110,31 +109,17 @@ class NotificationController extends GetxController {
         print('Message also contained a notification: ${message.notification!.body}');
       }
     });
+
     /// Background 상태. Notification 서랍에서 메시지 터치하여 앱으로 돌아왔을 때의 동작은 여기서.
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage rm) {
       // 첫 인덱스로 돌아가게 만들기!!
       Get.find<MainController>().navigationBarIndex(0);
-      showDialog(
-        context: Get.overlayContext!,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('백그라운드에서 알림 누르고 들어왔을 때'),
-          );
-        }
-      );
     });
     // Terminated 상태에서 도착한 메시지에 대한 처리
     RemoteMessage? initialMessage =
     await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      showDialog(
-          context: Get.overlayContext!,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('종료상태에서 알림 누르고 들어왔을 때'),
-            );
-          }
-      );
+
     }
   }
 

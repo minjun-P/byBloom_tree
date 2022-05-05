@@ -1,18 +1,12 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
 import 'package:bybloom_tree/pages/profile_page/tab_pages/profile_worship.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'calendar/calendar_controller.dart';
 import 'tab_pages/profile_gallery.dart';
 import 'tab_pages/profile_record.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:bybloom_tree/Profile/profilephoto.dart';
 
 
 

@@ -1,6 +1,5 @@
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar.dart';
 import 'package:bybloom_tree/pages/profile_page/calendar/calendar_below_container.dart';
-import 'package:bybloom_tree/pages/profile_page/calendar/calendar_controller.dart';
 import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

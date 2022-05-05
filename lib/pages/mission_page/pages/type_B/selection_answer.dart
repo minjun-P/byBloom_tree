@@ -1,5 +1,3 @@
-import 'package:bybloom_tree/main_controller.dart';
-import 'package:bybloom_tree/main_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

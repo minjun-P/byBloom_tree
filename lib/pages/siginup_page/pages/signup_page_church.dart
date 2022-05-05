@@ -1,17 +1,15 @@
-import 'package:bybloom_tree/pages/siginup_page/components/signup_checkbox.dart';
 import 'package:bybloom_tree/pages/siginup_page/components/signup_gauge.dart';
 import 'package:bybloom_tree/pages/siginup_page/components/signup_textfield.dart';
 import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:bybloom_tree/auth/authservice.dart';
 
 
 
 
 import 'signup_page_profile.dart';
 
-/// 직분, 교회 활동 적극도 정도
+/// 회원가입 세번째 화면 - 직분, 교회 활동 적극도 정도
 class SignupPageChurch extends GetView<SignupController> {
   const SignupPageChurch({Key? key}) : super(key: key);
 
@@ -20,6 +18,7 @@ class SignupPageChurch extends GetView<SignupController> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 30,horizontal: 25),
           child: ListView(

@@ -2,14 +2,11 @@ import 'package:badges/badges.dart';
 import 'package:bybloom_tree/pages/siginup_page/components/signup_textfield.dart';
 import 'package:bybloom_tree/pages/siginup_page/pages/signup_page_phone.dart';
 import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/signup_gauge.dart';
 
-import 'package:bybloom_tree/Profile/profilephoto.dart';
-/// 내가 만든 uploadphoto함수의 특성때문에 4~5번 페이지 순서바꿨어
-/// 닉네임, 프로필 사진
+/// 회원가입 네번째 화면 - 프로필, 별명
 class SignupPageProfile extends GetView<SignupController> {
   const SignupPageProfile({Key? key}) : super(key: key);
 
@@ -18,6 +15,7 @@ class SignupPageProfile extends GetView<SignupController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         bottomSheet: Container(
           margin: const EdgeInsets.all(10),
           height: 50,

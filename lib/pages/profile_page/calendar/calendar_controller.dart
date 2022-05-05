@@ -1,14 +1,10 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../../tree_page/tree_controller.dart';
 import 'calendar_model.dart';
-import 'package:flutter/material.dart';
 /// 달력 내부 로직에 필요한 여러 코드를 모아놓음.
 class CalendarController extends GetxController {
 
@@ -127,7 +123,6 @@ class CalendarController extends GetxController {
     calendarEventList.bindStream(loadMissionCompleted());
     ever(calendarEventList, (list){
       hashedEventList.value.addAll(calendarEventList);
-      print(calendarEventList);
       update();
     });
     ever(selectedDay,(day){

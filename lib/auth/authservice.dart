@@ -1,4 +1,3 @@
-import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,13 +7,11 @@ FirebaseDatabase database=FirebaseDatabase.instance;
 class authservice {// 로그인관련 서비스총괄하는 클래스
   //유저로그
   static Future<User?> signin( String email, String password ) async {
-    User? user;
     try {
       UserCredential s= await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email, password: password);
       return s.user;
     }catch(e){
-      print(e);
       return null;
     }
   }
@@ -56,13 +53,11 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
         profileImage: profileImage
       );
       // 디비에 등록 using toJson 메서드
-      users.doc(uid).set(s.toJson())
-          .then((value) => print("${s.toJson()} 등록 완료"))
-          .catchError((error) => print("Failed to add user: $error"));
+      users.doc(uid).set(s.toJson());
 
       return user;
     }catch(e){
-      print(e);
+
       return null;
     }
 

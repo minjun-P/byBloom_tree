@@ -1,27 +1,10 @@
 import 'package:bybloom_tree/DBcontroller.dart';
-import 'package:bybloom_tree/auth/FriendModel.dart';
-import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:bybloom_tree/auth/User.dart';
-import 'package:bybloom_tree/auth/User.dart';
-
-
-/// Tree 페이지의 컨트롤러
-/// - 경험치 제어
-/// - 나무 성장단계 제어
-/// - 물받기 제어
-/// 이러한 기능이 필요할 듯 하다.
-
-
-
-
 
 class TreeController extends GetxController with GetTickerProviderStateMixin{
 
@@ -57,14 +40,14 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
     /// 레벨업 애니메이션
     levelUpAnimationController = AnimationController(
         vsync: this,
-        duration: Duration(milliseconds: 5000)
+        duration: const Duration(milliseconds: 5000)
     );
     levelUpAnimation = Tween<double>(
         begin: 0,
         end: 1
     ).animate(levelUpAnimationController);
     /// 물주기 애니메이션
-    wateringController = AnimationController(vsync: this,duration: Duration(milliseconds: 2500));
+    wateringController = AnimationController(vsync: this,duration: const Duration(milliseconds: 2500));
     wateringAnimation = Tween<double>(
         begin: 0,
         end: 1
@@ -98,7 +81,7 @@ class TreeController extends GetxController with GetTickerProviderStateMixin{
 
   Future<void> sendFcm({required String token, required String title, required String body}) async {
     HttpsCallable callable = functions.httpsCallable('sendFCM');
-    final resp = await callable.call(<String, dynamic> {
+    await callable.call(<String, dynamic> {
       'token': token,
       'title': title,
       'body': body

@@ -1,15 +1,9 @@
 import 'package:bybloom_tree/DBcontroller.dart';
-import 'package:bybloom_tree/Profile/profilephoto.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:contacts_service/contacts_service.dart';
-import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:bybloom_tree/auth/User.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'authservice.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 
 final database= FirebaseFirestore.instance;
 Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
@@ -33,7 +27,6 @@ Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
          }
         };
       };
-      print("length:${friendalreadysignedup.length}");
       return friendalreadysignedup;
       // 허락해달라고 팝업띄우는 코드
     }
@@ -43,13 +36,10 @@ Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
 Future<List<Contact>?>getPermission() async{
   var status = await Permission.contacts.status;
   if(status.isGranted){
-    print('허락됨');
     // 변수 가져오기!
     var contacts = await ContactsService.getContacts();
-    print(contacts[0].displayName);
     return contacts;
   } else if (status.isDenied){
-    print('거절됨');
     Permission.contacts.request(); // 허락해달라고 팝업띄우는 코드
   }
 }
@@ -112,7 +102,6 @@ Future<FriendModel?> findUserFromPhone(String phoneNum) async {
   ;
 
   if (friend.size != 0) {
-    print(friend.docs[0].data()['name']);
     return FriendModel(
         name: friend.docs[0].data()['name'],
         phoneNumber: friend.docs[0].data()['phoneNumber'],

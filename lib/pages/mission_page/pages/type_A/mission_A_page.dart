@@ -65,9 +65,7 @@ class MissionAPage extends GetView<MissionController> {
                           onTap: (){
                             controller.bibleIndex(element.key);
                           },
-                          child: Container(
-                              child: Text(element.value,style: TextStyle(color: Colors.white),
-                              )
+                          child: Text(element.value,style: TextStyle(color: Colors.white),
                           )
                       ),
                     )
