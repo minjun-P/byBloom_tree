@@ -26,7 +26,7 @@ class SignupPageFin extends GetView<SignupController> {
                 List<FriendModel>? s=await findfriendwithcontact(controller.phoneCon.text);
                 s?.forEach((element) {
                 });
-                Get.to(FriendAddPage(friendincontact: s??[]));
+                Get.to(FriendAddPage());
 
               }, child: Text('연락처 연동해서 친구찾기',style: TextStyle(fontSize: 18),)),
               const SizedBox(height: 40,),
