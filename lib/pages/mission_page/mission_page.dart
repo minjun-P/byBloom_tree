@@ -4,25 +4,15 @@ import 'package:bybloom_tree/pages/mission_page/pages/type_B/prior_mission_B.dar
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
 
+
 import 'package:bybloom_tree/pages/forest_page/forestselectpage.dart';
 
-import 'package:bybloom_tree/pages/profile_page/calendar/calendar_controller.dart';
-import 'package:bybloom_tree/pages/profile_page/calendar/calendar_model.dart';
-import 'package:bybloom_tree/pages/profile_page/profile_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'components/mission_container.dart';
 import 'mission_controller.dart';
-import 'pages/type_A/mission_A_page.dart';
-import 'package:bottom_drawer/bottom_drawer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+
 
 /// 미션을 확인하고 수행하는 페이지
 /// 필요 기능
@@ -39,13 +29,7 @@ class MissionPage extends GetView<MissionController> {
     Get.put(MissionController());
     return Scaffold(
       appBar: AppBar(
-        title: GestureDetector(
-          onTap: () async{
-            var document = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('mission_completed').doc('day24').get();
-            var data = document.data();
-            print(data!.containsKey('D'));
-          },
-            child: const Text('데일리 블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25))),
+        title: const Text('데일리 블룸',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
         backgroundColor: Colors.white,
         toolbarHeight: 80,
       ),

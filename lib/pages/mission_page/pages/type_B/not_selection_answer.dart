@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../../../tree_page/tree_controller.dart';
 import '../../mission_controller.dart';
 
 class NoSelectionAnswer extends GetView<MissionController> {
@@ -109,160 +108,158 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                   List<QueryDocumentSnapshot> snapshotList = snapshot.data!.docs;
                                   QueryDocumentSnapshot specificSnapshot = snapshotList[index];
                                   Map<String,dynamic> data = specificSnapshot.data() as Map<String,dynamic>;
-                                  return Container(
-                                      child: Row(
-                                        children: [
-                                          FutureBuilder<DocumentSnapshot<Map<String,dynamic>>>(
-                                          future: FirebaseFirestore.instance.collection('users').doc(data['uid']).get(),
-                                          builder: (context,snapshot) {
-                                            if (snapshot.hasError) {
-                                              return CircleAvatar(
-                                                backgroundColor: Colors.grey.shade200,
-                                              );
-                                            }
-                                            if (snapshot.connectionState==ConnectionState.waiting){
-                                              return CircleAvatar(
-                                                backgroundColor: Colors.grey.shade200,
-                                              );
-                                            }
-                                            // uid data 가 존재하지 않을 때, 즉 회원 탈퇴를 했을 때 처리 -> 토끼로 고정
-                                            if (!snapshot.data!.exists){
-                                              return const CircleAvatar(
-                                                backgroundImage: AssetImage(
-                                                  'assets/profile/a_1.png',
-                                                ),
-                                                backgroundColor: Colors.white,
-                                              );
-                                            }
-                                            String profileImage = snapshot.data!.data()!['profileImage'];
-                                            return CircleAvatar(
-                                              backgroundImage: AssetImage(
-                                                'assets/profile/$profileImage.png',
-                                              ),
-                                              backgroundColor: Colors.white,
-                                            );
-                                          }
-                                      ),
-                                          SizedBox(width: 10,),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(data['writer'], style: TextStyle(color: Colors.grey),),
-                                              SizedBox(height: 10,),
-                                              Text(data['contents'], style: TextStyle(color: Colors.black),)
-                                            ],
+                                  return Row(
+                                    children: [
+                                      FutureBuilder<DocumentSnapshot<Map<String,dynamic>>>(
+                                      future: FirebaseFirestore.instance.collection('users').doc(data['uid']).get(),
+                                      builder: (context,snapshot) {
+                                        if (snapshot.hasError) {
+                                          return CircleAvatar(
+                                            backgroundColor: Colors.grey.shade200,
+                                          );
+                                        }
+                                        if (snapshot.connectionState==ConnectionState.waiting){
+                                          return CircleAvatar(
+                                            backgroundColor: Colors.grey.shade200,
+                                          );
+                                        }
+                                        // uid data 가 존재하지 않을 때, 즉 회원 탈퇴를 했을 때 처리 -> 토끼로 고정
+                                        if (!snapshot.data!.exists){
+                                          return const CircleAvatar(
+                                            backgroundImage: AssetImage(
+                                              'assets/profile/a_1.png',
+                                            ),
+                                            backgroundColor: Colors.white,
+                                          );
+                                        }
+                                        String profileImage = snapshot.data!.data()!['profileImage'];
+                                        return CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                            'assets/profile/$profileImage.png',
                                           ),
-                                          Spacer(),
-                                          Visibility(
-                                            visible: data['uid']==DbController.to.currentUserModel.value.uid,
-                                            child: TextButton(
-                                              child: Text('삭제'),
-                                              onPressed: (){
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      // 삭제 확인 알림
-                                                      return AlertDialog(
-                                                        title: Text('정말 삭제하시겠습니까?'),
-                                                        content: OutlinedButton(
-                                                          child: Text('네'),
+                                          backgroundColor: Colors.white,
+                                        );
+                                      }
+                                  ),
+                                      SizedBox(width: 10,),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(data['writer'], style: TextStyle(color: Colors.grey),),
+                                          SizedBox(height: 10,),
+                                          Text(data['contents'], style: TextStyle(color: Colors.black),)
+                                        ],
+                                      ),
+                                      Spacer(),
+                                      Visibility(
+                                        visible: data['uid']==DbController.to.currentUserModel.value.uid,
+                                        child: TextButton(
+                                          child: Text('삭제'),
+                                          onPressed: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  // 삭제 확인 알림
+                                                  return AlertDialog(
+                                                    title: Text('정말 삭제하시겠습니까?'),
+                                                    content: OutlinedButton(
+                                                      child: Text('네'),
+                                                      onPressed: (){
+                                                        controller.deleteComment(docId:snapshotList[index].id, type: 'B');
+                                                        Get.back(closeOverlays: true);
+                                                      },
+                                                    ),
+                                                  );
+                                                }
+
+                                            );
+
+                                          },
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(
+                                          MdiIcons.heartOutline,
+                                          color: List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)
+                                              ?Colors.red
+                                              :Colors.black,
+                                          size: 20,
+                                        ),
+                                        onPressed: ()async{
+                                          if (List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)){
+                                            controller.minusLikeCount(docId: snapshotList[index].id,type: 'B');
+                                          } else {
+                                            controller.plusLikeCount(docId: snapshotList[index].id, type: 'B');
+                                            var user = await FirebaseFirestore.instance.collection('users').doc(data['uid']).get();
+                                            Map<String,dynamic> map = user.data()!;
+                                            List tokens = map['tokens'] as List;
+                                            tokens.forEach((element){
+                                              Get.find<MainController>().sendFcm(
+                                                  token: element,
+                                                  title: '띵동',
+                                                  body: '${DbController.to.currentUserModel.value.name}님이 댓글에 좋아요를 눌렀어요!'
+                                              );
+                                            });
+                                          }
+                                        },
+                                      ),
+                                      Text(
+                                          List.castFrom(data['like']).length.toString()
+                                      ),
+                                      // 삭제
+
+                                      // 신고
+                                      Visibility(
+                                        visible: data['uid']!=DbController.to.currentUserModel.value.uid,
+                                        child: TextButton(
+                                          child: Text('신고'),
+                                          onPressed: (){
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  // 삭제 확인 알림
+                                                  return AlertDialog(
+                                                    title: Text('정말 신고하시겠습니까?'),
+                                                    content: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        Text('<신고 사유>'),
+                                                        TextFormField(
+                                                          controller: controller.reportControllerA,
+                                                          maxLines: 3,
+                                                          decoration: InputDecoration(
+                                                              hintText: '사유를 입력해야 제출이 가능합니다.'
+                                                          ),
+                                                        ),
+                                                        OutlinedButton(
+                                                          child: Text('제출'),
                                                           onPressed: (){
-                                                            controller.deleteComment(docId:snapshotList[index].id, type: 'B');
-                                                            Get.back(closeOverlays: true);
+                                                            if (controller.reportControllerA.text.isNotEmpty){
+                                                              controller.reportComment(
+                                                                  day: controller.day.value,
+                                                                  type: 'B',
+                                                                  reason: controller.reportControllerA.text,
+                                                                  who: data['uid'],
+                                                                  commentId: specificSnapshot.id
+
+                                                              );
+
+                                                              controller.reportControllerA.clear();
+                                                              Get.back(closeOverlays: true);
+                                                            }
                                                           },
                                                         ),
-                                                      );
-                                                    }
-
-                                                );
-
-                                              },
-                                            ),
-                                          ),
-                                          IconButton(
-                                            icon: Icon(
-                                              MdiIcons.heartOutline,
-                                              color: List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)
-                                                  ?Colors.red
-                                                  :Colors.black,
-                                              size: 20,
-                                            ),
-                                            onPressed: ()async{
-                                              if (List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)){
-                                                controller.minusLikeCount(docId: snapshotList[index].id,type: 'B');
-                                              } else {
-                                                controller.plusLikeCount(docId: snapshotList[index].id, type: 'B');
-                                                var user = await FirebaseFirestore.instance.collection('users').doc(data['uid']).get();
-                                                Map<String,dynamic> map = user.data()!;
-                                                List tokens = map['tokens'] as List;
-                                                tokens.forEach((element){
-                                                  Get.find<MainController>().sendFcm(
-                                                      token: element,
-                                                      title: '띵동',
-                                                      body: '${DbController.to.currentUserModel.value.name}님이 댓글에 좋아요를 눌렀어요!'
+                                                      ],
+                                                    ),
                                                   );
-                                                });
-                                              }
-                                            },
-                                          ),
-                                          Text(
-                                              List.castFrom(data['like']).length.toString()
-                                          ),
-                                          // 삭제
+                                                }
 
-                                          // 신고
-                                          Visibility(
-                                            visible: data['uid']!=DbController.to.currentUserModel.value.uid,
-                                            child: TextButton(
-                                              child: Text('신고'),
-                                              onPressed: (){
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      // 삭제 확인 알림
-                                                      return AlertDialog(
-                                                        title: Text('정말 신고하시겠습니까?'),
-                                                        content: Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            Text('<신고 사유>'),
-                                                            TextFormField(
-                                                              controller: controller.reportControllerA,
-                                                              maxLines: 3,
-                                                              decoration: InputDecoration(
-                                                                  hintText: '사유를 입력해야 제출이 가능합니다.'
-                                                              ),
-                                                            ),
-                                                            OutlinedButton(
-                                                              child: Text('제출'),
-                                                              onPressed: (){
-                                                                if (controller.reportControllerA.text.isNotEmpty){
-                                                                  controller.reportComment(
-                                                                      day: controller.day.value,
-                                                                      type: 'B',
-                                                                      reason: controller.reportControllerA.text,
-                                                                      who: data['uid'],
-                                                                      commentId: specificSnapshot.id
+                                            );
 
-                                                                  );
-
-                                                                  controller.reportControllerA.clear();
-                                                                  Get.back(closeOverlays: true);
-                                                                }
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    }
-
-                                                );
-
-                                              },
-                                            ),
-                                          )
-                                        ],
+                                          },
+                                        ),
                                       )
+                                    ],
                                   );
                                 },
                                 separatorBuilder: (_,__) => const Divider(thickness: 2,),

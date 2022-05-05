@@ -8,19 +8,13 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import '../components/signup_gauge.dart';
-import 'signup_page_church.dart';
-
-
-/// 전화번호
 
 FirebaseAuth auth =FirebaseAuth.instance;
 
-enum Status{Waiting, Error}
-
+/// 회원가입 5번째 화면 - 폰인증
 class SignupPagePhone extends GetView<SignupController> {
   SignupPagePhone({Key? key}) : super(key: key);
 
-  final _status = Status.Waiting;
   late String verificationID;
 
 
@@ -31,6 +25,7 @@ class SignupPagePhone extends GetView<SignupController> {
         controller.page3FocusNode1.requestFocus());
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
           child: Column(

@@ -1,15 +1,8 @@
-import 'package:bybloom_tree/DBcontroller.dart';
-import 'package:bybloom_tree/auth/authservice.dart';
 import 'package:bybloom_tree/main_controller.dart';
-import 'package:bybloom_tree/pages/tree_page/components/waterToLimit.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../mission_page/mission_controller.dart';
-import '../siginup_page/pages/signup_page_main.dart';
 import 'package:bybloom_tree/pages/tree_page/components/tree_status.dart';
 import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'components/tree.dart';
@@ -37,13 +30,8 @@ class TreePage extends GetView<TreeController> {
       appBar: AppBar(
         centerTitle: true,
 
-        title: GestureDetector(
-          onTap: (){
-              print(FirebaseAuth.instance.currentUser);
-            },
-          child: Image.asset(
-            'assets/title.png'
-          ),
+        title: Image.asset(
+          'assets/title.png'
         ),
         /// 친구 목록 drawer - db 연결 필요 - 하단 Scaffold의 drawer 파라미터 참조
         leading: IconButton(

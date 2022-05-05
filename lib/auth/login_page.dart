@@ -25,6 +25,7 @@ class loginScreen extends GetView<LoginController> {
     // TODO: implement build
    return  SafeArea(
         child: Scaffold(
+          appBar: AppBar(),
           body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
      child: Column(

@@ -1,18 +1,10 @@
 import 'dart:core';
-import 'dart:math';
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendAdd.dart';
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'dart:core';
-import '../tree_page/tree_controller.dart';
-import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:bybloom_tree/auth/User.dart';
 
 List <bool> checkbox= List.filled(100,false);
 List<types.User> userlist=[];
@@ -51,13 +43,13 @@ class Friend_deleting_state extends State<FriendDeletingPage> {
           ),
 
 
-          Container(
+          SizedBox(
             height: Get.height*0.6,
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 10),
 
               itemBuilder: (BuildContext context, int index) {
-                return Container(
+                return SizedBox(
                     width: 100,
                     height: 100,
                     child: ListTile(

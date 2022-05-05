@@ -1,10 +1,8 @@
 
 import 'package:bybloom_tree/DBcontroller.dart';
-import 'package:bybloom_tree/auth/signup_page.dart';
 import 'package:bybloom_tree/auth/login_controller.dart';
 import 'package:bybloom_tree/notification_controller.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -59,7 +57,6 @@ class MyApp extends StatelessWidget {
         getPages: [
           GetPage(name: '/main', page:()=> const MainScreen(),bindings: [BindingsBuilder.put(()=>MainController(),permanent: true),BindingsBuilder.put(()=>DbController(),permanent: true) ]),
           GetPage(name: '/login', page:()=> loginScreen(),binding: BindingsBuilder.put(()=>LoginController())),
-          GetPage(name:'/signup', page:()=>RegisterPage()),
           // 회원 가입 첫 화면
           GetPage(name:'/first', page: () => const SignupPageMain()),
         ],

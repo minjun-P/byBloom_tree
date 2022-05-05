@@ -1,8 +1,6 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/main_controller.dart';
-import 'package:bybloom_tree/main_screen.dart';
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,12 +26,12 @@ class MissionAComment extends GetView<MissionController> {
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Container(
+                  child: SizedBox(
                     width: Get.width*0.6,
-                    child: Text('다른 사람들의 생각을 알 수 있어요. 공감되는 생각에 하트를 눌러주세요!'),
+                    child: const Text('다른 사람들의 생각을 알 수 있어요. 공감되는 생각에 하트를 눌러주세요!'),
                   ),
                 ),
-                Text('최신순'),
+                const Text('최신순'),
                 Divider(thickness: 2,color: Colors.grey,),
                 StreamBuilder<QuerySnapshot>(
                   stream: controller.missionsRef.doc('day${controller.day.value}').collection('category').doc('A').collection('comments').orderBy('createdAt',descending: true).snapshots(),
@@ -46,9 +44,9 @@ class MissionAComment extends GetView<MissionController> {
                     if (snapshot.connectionState ==ConnectionState.waiting){
                       return Expanded(
                         child: Column(
-                          children: [
+                          children: const [
                             Spacer(),
-                            Center(child: const CircularProgressIndicator()),
+                            Center(child: CircularProgressIndicator()),
                             Spacer()
                           ],
                         ),
@@ -77,170 +75,168 @@ class MissionAComment extends GetView<MissionController> {
                           List<QueryDocumentSnapshot> snapshotList = snapshot.data!.docs;
                           QueryDocumentSnapshot specificSnapshot = snapshotList[index];
                           Map<String,dynamic> data = specificSnapshot.data() as Map<String,dynamic>;
-                          return Container(
-                              child: Column(
+                          return Column(
+                            children: [
+                              Row(
                                 children: [
-                                  Row(
+                                  // 프로필 사진
+                                  FutureBuilder<DocumentSnapshot<Map<String,dynamic>>>(
+                                    future: FirebaseFirestore.instance.collection('users').doc(data['uid']).get(),
+                                    builder: (context,snapshot) {
+                                      if (snapshot.hasError) {
+                                        return CircleAvatar(
+                                          backgroundColor: Colors.grey.shade200,
+                                        );
+                                      }
+                                      if (snapshot.connectionState==ConnectionState.waiting){
+                                        return CircleAvatar(
+                                          backgroundColor: Colors.grey.shade200,
+                                        );
+                                      }
+                                      // uid data 가 존재하지 않을 때, 즉 회원 탈퇴를 했을 때 처리 -> 토끼로 고정
+                                      if (!snapshot.data!.exists){
+                                        return CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                            'assets/profile/a_1.png',
+                                          ),
+                                          backgroundColor: Colors.white,
+                                        );
+                                      }
+                                      String profileImage = snapshot.data!.data()!['profileImage'];
+                                      return CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                          'assets/profile/$profileImage.png',
+                                        ),
+                                        backgroundColor: Colors.white,
+                                      );
+                                    }
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      // 프로필 사진
-                                      FutureBuilder<DocumentSnapshot<Map<String,dynamic>>>(
-                                        future: FirebaseFirestore.instance.collection('users').doc(data['uid']).get(),
-                                        builder: (context,snapshot) {
-                                          if (snapshot.hasError) {
-                                            return CircleAvatar(
-                                              backgroundColor: Colors.grey.shade200,
-                                            );
-                                          }
-                                          if (snapshot.connectionState==ConnectionState.waiting){
-                                            return CircleAvatar(
-                                              backgroundColor: Colors.grey.shade200,
-                                            );
-                                          }
-                                          // uid data 가 존재하지 않을 때, 즉 회원 탈퇴를 했을 때 처리 -> 토끼로 고정
-                                          if (!snapshot.data!.exists){
-                                            return CircleAvatar(
-                                              backgroundImage: AssetImage(
-                                                'assets/profile/a_1.png',
-                                              ),
-                                              backgroundColor: Colors.white,
-                                            );
-                                          }
-                                          String profileImage = snapshot.data!.data()!['profileImage'];
-                                          return CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                              'assets/profile/$profileImage.png',
-                                            ),
-                                            backgroundColor: Colors.white,
-                                          );
-                                        }
-                                      ),
-                                      SizedBox(width: 10,),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(data['writer'], style: TextStyle(color: Colors.grey),),
-                                          Text(data['contents']),
-                                          SizedBox(height: 10,),
-                                        ],
-                                      ),
-                                      Spacer(),
-                                      // 삭제 로직
-
-                                      Visibility(
-                                        visible: data['uid']==DbController.to.currentUserModel.value.uid,
-                                        child: TextButton(
-                                          child: Text('삭제'),
-                                          onPressed: (){
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  // 삭제 확인 알림
-                                                  return AlertDialog(
-                                                    title: Text('정말 삭제하시겠습니까?'),
-                                                    content: OutlinedButton(
-                                                      child: Text('네'),
-                                                      onPressed: (){
-                                                        controller.deleteComment(docId:snapshotList[index].id, type: 'A');
-                                                        Get.back(closeOverlays: true);
-                                                      },
-                                                    ),
-                                                  );
-                                                }
-
-                                            );
-
-                                          },
-                                        ),
-                                      ),
-                                      // 신고
-                                      Visibility(
-                                        visible: data['uid']!=DbController.to.currentUserModel.value.uid,
-                                        child: TextButton(
-                                          child: Text('신고'),
-                                          onPressed: (){
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  // 삭제 확인 알림
-                                                  return AlertDialog(
-                                                    title: Text('정말 신고하시겠습니까?'),
-                                                    content: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Text('<신고 사유>'),
-                                                        TextFormField(
-                                                          controller: controller.reportControllerA,
-                                                          maxLines: 3,
-                                                          decoration: InputDecoration(
-                                                            hintText: '사유를 입력해야 제출이 가능합니다.'
-                                                          ),
-                                                        ),
-                                                        OutlinedButton(
-                                                          child: Text('제출'),
-                                                          onPressed: (){
-                                                            if (controller.reportControllerA.text.isNotEmpty){
-                                                              controller.reportComment(
-                                                                  day: controller.day.value,
-                                                                  type: 'A',
-                                                                  reason: controller.reportControllerA.text,
-                                                                who: data['uid'],
-                                                                commentId: specificSnapshot.id
-
-                                                              );
-
-                                                              controller.reportControllerA.clear();
-                                                              Get.back(closeOverlays: true);
-                                                            }
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                }
-
-                                            );
-
-                                          },
-                                        ),
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          MdiIcons.heartOutline,
-                                          color: List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)
-                                              ?Colors.red
-                                              :Colors.black,
-                                          size: 20,
-                                        ),
-                                        onPressed: ()async{
-                                          if (List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)){
-                                            controller.minusLikeCount(docId: snapshotList[index].id,type: 'A');
-                                          } else {
-                                            controller.plusLikeCount(docId: snapshotList[index].id, type: 'A');
-                                            var user = await FirebaseFirestore.instance.collection('users').doc(data['uid']).get();
-                                            Map<String,dynamic> map = user.data()!;
-                                            List tokens = map['tokens'] as List;
-                                            tokens.forEach((element){
-                                              Get.find<MainController>().sendFcm(
-                                                  token: element,
-                                                  title: '띵동',
-                                                  body: '${DbController.to.currentUserModel.value.name}님이 댓글에 좋아요를 눌렀어요!'
-                                              );
-                                            });
-
-                                          }
-
-                                        },
-                                      ),
-                                      Text(
-                                          List.castFrom(data['like']).length.toString()
-                                      ),
-
+                                      Text(data['writer'], style: TextStyle(color: Colors.grey),),
+                                      Text(data['contents']),
+                                      SizedBox(height: 10,),
                                     ],
                                   ),
+                                  Spacer(),
+                                  // 삭제 로직
 
+                                  Visibility(
+                                    visible: data['uid']==DbController.to.currentUserModel.value.uid,
+                                    child: TextButton(
+                                      child: Text('삭제'),
+                                      onPressed: (){
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              // 삭제 확인 알림
+                                              return AlertDialog(
+                                                title: Text('정말 삭제하시겠습니까?'),
+                                                content: OutlinedButton(
+                                                  child: Text('네'),
+                                                  onPressed: (){
+                                                    controller.deleteComment(docId:snapshotList[index].id, type: 'A');
+                                                    Get.back(closeOverlays: true);
+                                                  },
+                                                ),
+                                              );
+                                            }
+
+                                        );
+
+                                      },
+                                    ),
+                                  ),
+                                  // 신고
+                                  Visibility(
+                                    visible: data['uid']!=DbController.to.currentUserModel.value.uid,
+                                    child: TextButton(
+                                      child: Text('신고'),
+                                      onPressed: (){
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              // 삭제 확인 알림
+                                              return AlertDialog(
+                                                title: Text('정말 신고하시겠습니까?'),
+                                                content: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text('<신고 사유>'),
+                                                    TextFormField(
+                                                      controller: controller.reportControllerA,
+                                                      maxLines: 3,
+                                                      decoration: InputDecoration(
+                                                        hintText: '사유를 입력해야 제출이 가능합니다.'
+                                                      ),
+                                                    ),
+                                                    OutlinedButton(
+                                                      child: Text('제출'),
+                                                      onPressed: (){
+                                                        if (controller.reportControllerA.text.isNotEmpty){
+                                                          controller.reportComment(
+                                                              day: controller.day.value,
+                                                              type: 'A',
+                                                              reason: controller.reportControllerA.text,
+                                                            who: data['uid'],
+                                                            commentId: specificSnapshot.id
+
+                                                          );
+
+                                                          controller.reportControllerA.clear();
+                                                          Get.back(closeOverlays: true);
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }
+
+                                        );
+
+                                      },
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      MdiIcons.heartOutline,
+                                      color: List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)
+                                          ?Colors.red
+                                          :Colors.black,
+                                      size: 20,
+                                    ),
+                                    onPressed: ()async{
+                                      if (List.castFrom(data['like']).contains(DbController.to.currentUserModel.value.uid)){
+                                        controller.minusLikeCount(docId: snapshotList[index].id,type: 'A');
+                                      } else {
+                                        controller.plusLikeCount(docId: snapshotList[index].id, type: 'A');
+                                        var user = await FirebaseFirestore.instance.collection('users').doc(data['uid']).get();
+                                        Map<String,dynamic> map = user.data()!;
+                                        List tokens = map['tokens'] as List;
+                                        tokens.forEach((element){
+                                          Get.find<MainController>().sendFcm(
+                                              token: element,
+                                              title: '띵동',
+                                              body: '${DbController.to.currentUserModel.value.name}님이 댓글에 좋아요를 눌렀어요!'
+                                          );
+                                        });
+
+                                      }
+
+                                    },
+                                  ),
+                                  Text(
+                                      List.castFrom(data['like']).length.toString()
+                                  ),
 
                                 ],
-                              )
+                              ),
+
+
+                            ],
                           );
                         },
                         separatorBuilder: (_,__) => const Divider(thickness: 2,),

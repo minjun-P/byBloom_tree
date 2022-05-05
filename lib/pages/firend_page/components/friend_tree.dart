@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../tree_page/components/tree.dart';
 
 class FriendTree extends GetView<FriendProfileController> {
   const FriendTree({

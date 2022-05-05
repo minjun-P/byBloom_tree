@@ -2,14 +2,11 @@ import 'package:bybloom_tree/pages/siginup_page/pages/signup_page_church.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import '../signup_controller.dart';
 import '../components/signup_gauge.dart';
 import '../components/signup_textfield.dart';
-import 'signup_page_phone.dart';
 
-// GetView 는 Stateles s를 상속한 get 패키지의 특수 객체야. 제너릭 안에 써준 컨트롤러 클래스 타입을 그냥 controller 변수에 알아서 저장을 해줘서 편하게 쓸 수 있어.
-/// 이름, 성별, 생년월일
+/// 회원가입 두번째 화면, 이름, 생년월일, 성별
 class SignupPageBasicInformation extends GetView<SignupController> {
   const SignupPageBasicInformation({Key? key}) : super(key: key);
   @override
@@ -19,6 +16,7 @@ class SignupPageBasicInformation extends GetView<SignupController> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         // bottomSheet은 위에서 올라오는 키보드 위에 알아서 위치를 차지하는 위젯을 지정하는 파라미터임.
         // 여기에 넘어가기 버튼을 넣어놨어.
         bottomSheet: Container(

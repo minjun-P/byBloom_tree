@@ -1,6 +1,5 @@
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_B/not_selection_answer.dart';
-import 'package:bybloom_tree/pages/mission_page/pages/type_C/mission_C_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'selection_answer.dart';

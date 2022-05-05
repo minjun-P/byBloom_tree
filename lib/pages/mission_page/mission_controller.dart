@@ -9,9 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../main_controller.dart';
-import '../tree_page/tree_controller.dart';
 
 
 /// 그냥 각 미션 별로 체크 박스만 만들어놓음.
@@ -166,7 +164,7 @@ class MissionController extends GetxController {
 
   // 신고 메서드
   void reportComment({required int day, required String type, required String reason,required String who, required commentId}){
-    var doc = FirebaseFirestore.instance.collection('report').add({
+    FirebaseFirestore.instance.collection('report').add({
       'day':day,
       'type':type,
       'reason':reason,
@@ -202,9 +200,6 @@ class MissionController extends GetxController {
       } catch(e) {
         Future.delayed(Duration(milliseconds: 500)).then((value) => missionCompletedUpdate());
       }
-    });
-    ever(missionCompleted,(com){
-      print(com);
     });
 
 

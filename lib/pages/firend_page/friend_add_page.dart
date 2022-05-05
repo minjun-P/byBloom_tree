@@ -1,12 +1,9 @@
 import 'package:bybloom_tree/auth/FriendModel.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/auth/FriendAdd.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 TextEditingController textfield=TextEditingController();
 class FriendAddPage extends StatefulWidget{

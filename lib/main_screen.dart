@@ -98,10 +98,7 @@ class MainScreen extends GetView<MainController> {
                   type: BottomNavigationBarType.fixed,
                   items: [
                     BottomNavigationBarItem(
-                        icon: Container(
-                          key: controller.tutorialKey1,
-                            child: Icon(MyFlutterApp.tree,)
-                        ),
+                        icon: Icon(MyFlutterApp.tree,key: controller.tutorialKey1,),
                         label: '',
 
                     ),

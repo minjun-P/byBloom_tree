@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'signup_page_basic_information.dart';
 
+/// 회원가입 첫번 째 화면, 인사하는 화면
 class SignupPageMain extends StatelessWidget {
   const SignupPageMain({Key? key}) : super(key: key);
 

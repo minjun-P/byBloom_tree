@@ -1,10 +1,7 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendAdd.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
-import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/firend_page/friend_profile_page.dart';
-import 'package:bybloom_tree/pages/firend_page/friend_search_page.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -26,7 +23,7 @@ class FriendDrawer extends GetView<TreeController> {
           ListTile(
             dense: true,
             leading: DbController.to.currentUserModel.value.profileImage==''
-                ?CircularProgressIndicator()
+                ?const CircularProgressIndicator()
                 :CircleAvatar(
               backgroundImage: AssetImage(
                 'assets/profile/${DbController.to.currentUserModel.value.profileImage}.png'
@@ -53,7 +50,8 @@ class FriendDrawer extends GetView<TreeController> {
                         child:Text("아직 가입한 친구가없네요")
                     );
                   }
-                  else return ListView.builder(
+                  else {
+                    return ListView.builder(
                       itemCount: friendlist?.length,
                       itemBuilder:(BuildContext context,int index){
                         return Card(
@@ -63,7 +61,6 @@ class FriendDrawer extends GetView<TreeController> {
                                     child:Text(friendlist![index].phoneNumber),
                                     onTap:() async {
                                       bool result=await AddFriend(friendlist[index]);
-                                      print('friendadded');
 
                                     }
                                 )
@@ -74,6 +71,7 @@ class FriendDrawer extends GetView<TreeController> {
                         );
                       }
                   );
+                  }
 
                 });
 

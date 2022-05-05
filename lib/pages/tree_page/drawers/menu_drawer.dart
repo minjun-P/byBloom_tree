@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/notification_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -68,7 +67,6 @@ class MenuDrawer extends StatelessWidget {
                   onTap: (){
                     Get.find<NotificationController>().pushalarmtrue.value=!Get.find<NotificationController>().pushalarmtrue.value;
                     Get.find<NotificationController>().prefs.setBool('pushalarm', Get.find<NotificationController>().pushalarmtrue.value);
-                    print(Get.find<NotificationController>().pushalarmtrue.value);
                   }, child:
 
               Column(
@@ -123,7 +121,7 @@ class MenuDrawer extends StatelessWidget {
             FirebaseAuth.instance.currentUser!.delete();
           } on FirebaseAuthException catch (e) {
             if (e.code == 'requires-recent-login') {
-              print('The user must reauthenticate before this operation can be executed.');
+
             }
           }
 

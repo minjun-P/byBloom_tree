@@ -1,11 +1,9 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/mission_page/mission_controller.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class FriendProfileController extends GetxController with GetTickerProviderStateMixin {
 

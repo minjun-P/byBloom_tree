@@ -23,27 +23,20 @@ class MainController extends GetxController{
   // 다큐먼트 스냅샷
   Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
 
-  late GlobalKey tutorialKey1;
-  late GlobalKey tutorialKey2;
-  late GlobalKey tutorialKey3;
-  late GlobalKey tutorialKey4;
-  late GlobalKey tutorialKey5;
-  late GlobalKey tutorialKey6;
-  late GlobalKey tutorialKey7;
+  // 튜토리얼 용 GlobalKey 들
+  GlobalKey tutorialKey1 = GlobalKey(debugLabel:'tutorial 1');
+  GlobalKey tutorialKey2 = GlobalKey(debugLabel:'tutorial 2');
+  GlobalKey tutorialKey3 = GlobalKey(debugLabel:'tutorial 3');
+  GlobalKey tutorialKey4 = GlobalKey(debugLabel:'tutorial 4');
+  GlobalKey tutorialKey5 = GlobalKey(debugLabel:'tutorial 5');
+  GlobalKey tutorialKey6 = GlobalKey(debugLabel:'tutorial 6');
+  GlobalKey tutorialKey7 = GlobalKey(debugLabel:'tutorial 7');
 
 
   @override
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
-    // 튜토리얼 용 GlobalKey 들
-    tutorialKey1 = GlobalKey(debugLabel:'tutorial 1');
-    tutorialKey2 = GlobalKey(debugLabel:'tutorial 2');
-    tutorialKey3 = GlobalKey(debugLabel:'tutorial 3');
-    tutorialKey4 = GlobalKey(debugLabel:'tutorial 4');
-    tutorialKey5 = GlobalKey(debugLabel:'tutorial 5');
-    tutorialKey6 = GlobalKey(debugLabel:'tutorial 6');
-    tutorialKey7 = GlobalKey(debugLabel:'tutorial 7');
     // 기기의 토큰을 받아오기
     _token = await FirebaseMessaging.instance.getToken();
     // 맨 아래 정의한 메소드 통해서 받아온 토큰을 데이터베이스에 저장하기

@@ -7,14 +7,7 @@ class ProfileController extends GetxController with GetTickerProviderStateMixin{
   @override
   void onInit() async {
 
-    RxString downloadURL;
-    RxString Username;
-    RxString Usernickname;
     super.onInit();
-    Stream<Map> profileDetail() {
-      Stream<DocumentSnapshot> documentStream = fireStore.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
-      return documentStream.map((event) => {'exp':event.get('exp'),'level':event.get('level')});
-    }
     dayCount.bindStream(missionCompletedRef.snapshots().map((collection){
       List<QueryDocumentSnapshot> list =collection.docs;
       List filteredList = list.where((element) {
