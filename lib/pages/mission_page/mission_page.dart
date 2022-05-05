@@ -1,7 +1,7 @@
 
 import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_B/prior_mission_B.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
 
 import 'package:bybloom_tree/pages/forest_page/forestselectpage.dart';
@@ -79,13 +79,25 @@ class MissionPage extends GetView<MissionController> {
             alignment: Alignment.centerRight,
             child: GestureDetector(
               onTap: (){
-                Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ForestselectPage()
-                  ),
-                );
 
-
+                if(!MissionController().missionCompleted.containsValue(false)) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => ForestselectPage()
+                    ),
+                  );
+                }
+                if(MissionController().missionCompleted.containsValue(false)){
+                  Fluttertoast.showToast(
+                      msg: "아직 완료하지못한 오늘의 미션이 있습니다",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.grey,
+                      textColor: Colors.white,
+                      fontSize: 16.0
+                  );
+                }
 
 
               },

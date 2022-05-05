@@ -13,7 +13,6 @@ import 'package:bybloom_tree/pages/tree_page/tree_controller.dart';
 
 final database= FirebaseFirestore.instance;
 Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
-
    List<Contact>? mycontacts=await getPermission( );
     List<FriendModel> friendalreadysignedup=[];
       for(int i=0;i<mycontacts!.length;i++) {

@@ -62,11 +62,34 @@ class ForestPage extends GetView<ForestController> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final room = snapshot.data![index];
-
+              String name="";
+              String imageUrl="";
               List colorindex=[];
               if(room.type==types.RoomType.group) {
                colorindex= controller.colorFromString(room);
               }
+              if(room.type==types.RoomType.direct){
+                String uid="";
+                if (room.users.length==1) {
+                   uid= "알수없음";
+                  name="알수없음";
+                  imageUrl="f_2";
+                }
+                else if (DbController.to.currentUserModel.value.uid==room.users[0].id) {
+                  uid=room.users[1].id;}
+                 DbController.to.currentUserModel.value.friendList.forEach((element) {
+                    if(element.uid==uid){
+                      name=element.name;
+                      imageUrl=element.profileImage;
+                    }
+                 });
+                }
+
+
+
+
+
+
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
@@ -109,7 +132,7 @@ class ForestPage extends GetView<ForestController> {
                   height: 80,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(image: AssetImage('assets/profile/${room.imageUrl}.png')),
+                      image: DecorationImage(image: AssetImage('assets/profile/${imageUrl}.png')),
                       ))  ,
                       const SizedBox(width: 15,),
                       Expanded(
@@ -117,7 +140,7 @@ class ForestPage extends GetView<ForestController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 10,),
-                            Text(room.name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                            Text(name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
                             Obx(
                               ()=> Text(
                                controller.lastMessages[room.id]!=null?controller.lastMessages[room.id]:"최근메시지없",

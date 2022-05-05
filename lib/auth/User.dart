@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel{
-  final String uid;
+  late final String uid;
   final String name;
   final String firstName;
   final String lastName;

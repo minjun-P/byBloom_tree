@@ -82,7 +82,7 @@ class FriendDrawer extends GetView<TreeController> {
 
             GestureDetector(
               onTap: (){
-                Get.to(()=>FriendAddPage(friendincontact: [],));
+                Get.to(()=>FriendAddPage(friendincontact:[],));
               },
 
               child: Row(
