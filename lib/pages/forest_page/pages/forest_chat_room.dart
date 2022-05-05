@@ -100,6 +100,7 @@ class ForestChatState extends State<ForestChatRoom>{
       key: _ScaffoldKey,
       endDrawer: buildCustomDrawer(child: ChatRoomDrawer(room: this.room),left: false),
       appBar: AppBar(
+        leading: IconButton(onPressed:(){ Navigator.pop(context);} ,icon: Icon(Icons.arrow_back),),
         title: Text(this.room.name??""),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -450,6 +451,7 @@ class ChatRoomDrawer extends StatelessWidget {
                 padding:EdgeInsets.all(30)
                 ,child: Column(
                   children: [
+                    SizedBox(height: 100,),
                     Text('숲구성원',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                     Container(
                       height: Get.height*0.5,
@@ -465,7 +467,9 @@ class ChatRoomDrawer extends StatelessWidget {
                      )),
                      leading: CircleAvatar(backgroundColor: Colors.lime,),
                       );
-                      },itemCount: userexceptme.length): Text("아직구성원이없어요"),
+                      },itemCount: userexceptme.length): Container(
+                        padding: EdgeInsets.all(30),
+                          child: Text("아직구성원이없어요")),
                               )
                   ],
                 )),
@@ -485,11 +489,14 @@ class ChatRoomDrawer extends StatelessWidget {
 
                   }, child:
 
-              Column(
-                children: [
-                  Icon(Icons.logout),
-                  Text('방나가기'),
-                ],
+              Container(
+                padding: EdgeInsets.all(30),
+                child: Column(
+                  children: [
+                    Icon(Icons.logout),
+                    Text('방나가기'),
+                  ],
+                ),
               )),
             ),
 

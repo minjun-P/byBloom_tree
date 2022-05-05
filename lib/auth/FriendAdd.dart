@@ -7,7 +7,6 @@ import 'authservice.dart';
 
 final database= FirebaseFirestore.instance;
 Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
-
    List<Contact>? mycontacts=await getPermission( );
     List<FriendModel> friendalreadysignedup=[];
       for(int i=0;i<mycontacts!.length;i++) {

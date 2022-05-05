@@ -1,5 +1,6 @@
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/auth/FriendAdd.dart';
@@ -149,6 +150,15 @@ class FriendState extends State<FriendAddPage>{
                                 InkWell(
                                   onTap: (){
                                     AddFriend(friendtoadd!);
+                                    Fluttertoast.showToast(
+                                        msg: "${friendtoadd!.name}님 친구추가가 완료되었습니다.",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.grey,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0
+                                    );
                                   },
                                   child: Row(
                                     children: [

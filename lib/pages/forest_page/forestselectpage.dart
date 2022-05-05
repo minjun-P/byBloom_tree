@@ -73,9 +73,27 @@ class Forest_select_state extends State<ForestselectPage>{
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final room = snapshot.data![index];
+              String name="";
+              String imageUrl="";
               var colorindex=[];
               if(room.type==types.RoomType.group) {
               colorindex= colorFromString(room);
+              }
+              if(room.type==types.RoomType.direct){
+                String uid="";
+                if (room.users.length==1) {
+                  uid= "알수없음";
+                  name="알수없음";
+                  imageUrl="f_2";
+                }
+                else if (DbController.to.currentUserModel.value.uid==room.users[0].id) {
+                  uid=room.users[1].id;}
+                DbController.to.currentUserModel.value.friendList.forEach((element) {
+                  if(element.uid==uid){
+                    name=element.name;
+                    imageUrl=element.profileImage;
+                  }
+                });
               }
               return GestureDetector(
                   onTap: () {
@@ -122,7 +140,7 @@ class Forest_select_state extends State<ForestselectPage>{
                             height: 80,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              image: DecorationImage(image: AssetImage('assets/profile/${room.imageUrl}.png')),
+                              image: DecorationImage(image: AssetImage('assets/profile/${imageUrl}.png')),
                             )) ,
                         const SizedBox(width: 15,),
                         Expanded(
@@ -130,7 +148,7 @@ class Forest_select_state extends State<ForestselectPage>{
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 10,),
-                              Text(room.name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                              Text(name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
                               Text(
                                 room.lastMessages!=null?room.lastMessages!.last.metadata!['text']:"최근메시지없",
                                 maxLines: 2,
