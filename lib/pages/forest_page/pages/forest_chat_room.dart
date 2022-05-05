@@ -437,6 +437,7 @@ class ChatRoomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     List<types.User> userexceptme=deleteme(room.users, DbController.to.currentUserModel.value.name);
     return Container(
       color: Colors.white,
@@ -468,7 +469,7 @@ class ChatRoomDrawer extends StatelessWidget {
                      fontSize: 18
                      ),
                      )),
-                     leading: CircleAvatar(backgroundColor: Colors.lime,),
+                     leading:Image.asset('assets/profile/${userexceptme[index].imageUrl}.png') ,
                       );
                       },itemCount: userexceptme.length): Container(
                         padding: EdgeInsets.all(30),
@@ -485,10 +486,13 @@ class ChatRoomDrawer extends StatelessWidget {
               padding: EdgeInsets.only(top:20,bottom: 20),
               child: InkWell(
                   onTap: (){
-
-                    Navigator.pop(context);
-                    deleteroomfromuser(room.id);
-                    Navigator.pop(context);
+      print("현재방유저");
+      print(room.users);
+                    /*{
+                      Navigator.pop(context);
+                      deleteroomfromuser(room.id);
+                      Navigator.pop(context);
+                    }*/
 
                   }, child:
 

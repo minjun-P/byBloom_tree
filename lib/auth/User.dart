@@ -11,6 +11,7 @@ class UserModel{
   final DateTime createdAt;
   final String church;
   final String profileImage;
+  final String imageUrl;
   String nickname;
   int level;
   int exp;
@@ -40,7 +41,8 @@ class UserModel{
     required this.firstName,
     required this.lastName,
     required this.church,
-    required this.profileImage
+    required this.profileImage,
+    required this.imageUrl
 
 });
 

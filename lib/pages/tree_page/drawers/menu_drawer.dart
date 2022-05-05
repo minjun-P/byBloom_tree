@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bybloom_tree/notification_controller.dart';
+import 'package:bybloom_tree/pages/tree_page/Resignpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -108,22 +109,8 @@ class MenuDrawer extends StatelessWidget {
         },
         btnCancelText: '네',
         btnCancelOnPress: () async {
+          Get.toNamed('/signout');
           // 스택 다 지우고 로그인 화면으로
-          Get.offAllNamed('/login');
-          // Db room doc 사제
-          deleteallroomfromuser();
-          // Db doc 삭제
-          FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).delete();
-          // auth 삭제
-          try {
-            await FirebaseChatCore.instance.deleteUserFromFirestore(FirebaseAuth.instance.currentUser!.uid);
-            // re - authenticate 이후에 delete 가능함. 다시 인증 받는 방식으로!
-            FirebaseAuth.instance.currentUser!.delete();
-          } on FirebaseAuthException catch (e) {
-            if (e.code == 'requires-recent-login') {
-
-            }
-          }
 
 
         }

@@ -28,7 +28,8 @@ class DbController extends GetxController{
     friendList: [],
     friendPhoneList: [],
     lastName: '',
-    firstName: ''
+    firstName: '',
+    imageUrl: ''
   ).obs;
 
   Rx<int> day = 1.obs;
@@ -58,7 +59,8 @@ class DbController extends GetxController{
           lastName: data['name'],
           firstName: "",
           profileImage: data['profileImage']??'',
-          church: data['church']??''
+          church: data['church']??'',
+          imageUrl: data['imageUrl']
       );
     }));
     day.bindStream(FirebaseFirestore.instance.collection('missions').doc('today').snapshots().map((element) => element.get('day')));
