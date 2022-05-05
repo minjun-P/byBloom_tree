@@ -123,15 +123,12 @@ class ForestChatState extends State<ForestChatRoom>{
                 child: Chat(
                   showUserAvatars: true,
 
-
-
-
                   customMessageBuilder: (types.CustomMessage s, {required int messageWidth} )=>
                       Container(
                         padding: EdgeInsets.all(10),
-                        color: Colors.lightGreen,
-                        child: Text('${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다',style: TextStyle(color: Colors.white),),
-                        width: Get.width*2,
+                        color: Colors.white,
+                        child: Text('${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다',style: TextStyle(color: Colors.black),),
+                        width: Get.width*0.8,
                       ),
 
 
@@ -140,7 +137,7 @@ class ForestChatState extends State<ForestChatRoom>{
                   theme: DefaultChatTheme(
                       userNameTextStyle: TextStyle(color:Colors.black),
                       backgroundColor: const Color(0xffFAE7E2),
-                      inputBackgroundColor: Colors.lightGreen,
+                      inputBackgroundColor: Color(0xffF0F0F0),
                       primaryColor:Colors.white,
                       inputTextColor: Colors.black,
                       secondaryColor: Colors.white,

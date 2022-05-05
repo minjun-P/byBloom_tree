@@ -1,12 +1,10 @@
 import 'dart:core';
-import 'dart:math';
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_making_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
-import 'forest_model.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -140,7 +138,7 @@ class ForestPage extends GetView<ForestController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 10,),
-                            Text(name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                            Text(name,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
                             Obx(
                               ()=> Text(
                                controller.lastMessages[room.id]!=null?controller.lastMessages[room.id]:"최근메시지없",
@@ -278,7 +276,6 @@ Stream<List<types.Room>> rooms({bool orderByUpdatedAt = false}) {
     ),
   );
    Future<int> length=s.length;
-   length.then((value) => (print("length:${length}")));
 
    return s;
 }
@@ -289,7 +286,6 @@ Future<List<types.Room>> processRoomsQuery(
     QuerySnapshot<Map<String, dynamic>> query,
     String usersCollectionName,
     ) async {
-  print("querying");
   final futures = query.docs.map(
         (doc) => processRoomDocument(
       doc,
@@ -298,7 +294,6 @@ Future<List<types.Room>> processRoomsQuery(
       usersCollectionName,
     ),
   );
-   print("length:${futures.length}");
   return await Future.wait(futures);
 }
 
@@ -320,7 +315,6 @@ Future<types.Room> processRoomDocument(
   final type = data['type'] as String;
   final userIds = data['userIds'] as List<dynamic>;
   final userRoles = data['userRoles'] as Map<String, dynamic>?;
-  print("querying2");
   final users = await Future.wait(
     userIds.map(
           (userId) => fetchUser(
