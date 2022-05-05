@@ -2,17 +2,10 @@ import 'dart:core';
 import 'dart:math';
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'dart:core';
-import '../tree_page/tree_controller.dart';
-import 'forest_model.dart';
-import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'pages/forest_chat_room.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bybloom_tree/auth/User.dart';
 
 List <bool> checkbox= List.filled(100,false);
@@ -114,7 +107,6 @@ class Forest_making_state extends State<ForestMakingPage> {
                            Icon( Icons.check_circle, color: Colors.grey),
                          onTap: () async {
                              setState(()  {
-                               print(checkbox);
                                checkbox[index]=!checkbox[index];
 
                              });

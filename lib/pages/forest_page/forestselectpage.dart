@@ -1,15 +1,10 @@
 import 'dart:core';
-import 'dart:core';
-import 'dart:math';
-import 'package:bybloom_tree/pages/forest_page/forest_making_page.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
-import 'package:bybloom_tree/pages/forest_page/forest_model.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:bybloom_tree/pages/forest_page/pages/forest_chat_room.dart';
 
 import '../../DBcontroller.dart';
 
@@ -46,7 +41,6 @@ class Forest_select_state extends State<ForestselectPage>{
           TextButton(onPressed: (){
             roomstoshare.forEach((element) {
               sendmissioncompletedmessage(element);
-              print('보내기');
             });
             Navigator.pop(context);
           },
@@ -148,7 +142,7 @@ class Forest_select_state extends State<ForestselectPage>{
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 10,),
-                              Text(name??'',style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
+                              Text(name,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
                               Text(
                                 room.lastMessages!=null?room.lastMessages!.last.metadata!['text']:"최근메시지없",
                                 maxLines: 2,

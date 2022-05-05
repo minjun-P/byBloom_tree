@@ -10,37 +10,65 @@ class MissionAPage extends GetView<MissionController> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Obx(()=> Text('오늘의 말씀 day${controller.day.value}')),
-          ),
-          body: Column(
-            children: [
-              Image.asset(
-                'assets/bible_sample.png',
-                width: Get.width*0.6,
-              ),
-              SizedBox(height: 20,),
-              _buildBibleContainer(),
-              SizedBox(height: 10,),
-              Text('말씀을 터치해보세요',style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
-              SizedBox(height: 20,),
-              Obx(()=>
-                ElevatedButton(
-                    onPressed: (){
-                      Get.to(()=>MissionAComment());
-                    },
-                    child: controller.missionCompleted['A']!
-                        ?Text('은혜 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
-                        :Text('은혜 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xffA0C6FF),
-                    fixedSize: Size(Get.width*0.7,50)
+        child: Stack(
+          children: [
+            Image.asset(
+              'assets/mission_background.png',
+              width: Get.width,
+              height: Get.height,
+              fit: BoxFit.fill,
+
+            ),
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              extendBody: true,
+              appBar: AppBar(
+                title: Text('오늘의 말씀',style: TextStyle(fontSize: 20,fontWeight: FontWeight.normal),),
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: true,
+                centerTitle: false,
+                titleSpacing: 0,
+                actions: [
+                  Obx(()=> Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                          controller.missionA['성경']+' '+controller.missionA['장:절'],
+                          style: TextStyle(
+                              color: Colors.black,
+                            fontSize: 20
+                          ),
+                        ),
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
+                  ),
+                ]
+              ),
+              body: Column(
+                children: [
+                  SizedBox(height: 20,),
+                  _buildBibleContainer(),
+
+                  Spacer(),
+                  Obx(()=>
+                    ElevatedButton(
+                        onPressed: (){
+                          Get.to(()=>MissionAComment());
+                        },
+                        child: controller.missionCompleted['A']!
+                            ?Text('은혜 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
+                            :Text('은혜 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xffA0C6FF),
+                        fixedSize: Size(Get.width*0.7,50)
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30,)
+                ],
+              ),
+            ),
+          ],
         )
     );
   }
@@ -56,7 +84,6 @@ class MissionAPage extends GetView<MissionController> {
                 children :['개역개정','새번역','NIV영어'].asMap().entries.map(
                         (element) => Container(
                       decoration: BoxDecoration(
-                        color: controller.bibleIndex.value%3==element.key?Colors.indigo:Colors.grey,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: EdgeInsets.all(5),
@@ -65,7 +92,11 @@ class MissionAPage extends GetView<MissionController> {
                           onTap: (){
                             controller.bibleIndex(element.key);
                           },
-                          child: Text(element.value,style: TextStyle(color: Colors.white),
+                          child: Text(
+                              element.value,
+                              style: controller.bibleIndex.value%3==element.key
+                                  ?TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20)
+                                  :TextStyle(color: Colors.grey.shade200.withOpacity(0.5),fontWeight: FontWeight.normal,fontSize: 18)
                           )
                       ),
                     )
@@ -85,7 +116,8 @@ class MissionAPage extends GetView<MissionController> {
                           controller.missionA[element],
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            fontSize: 18,
+                            fontSize: 21,
+                            height: 1.4
                           ),
                         ),
                       );
@@ -93,12 +125,8 @@ class MissionAPage extends GetView<MissionController> {
                 ).toList()
             ),
             SizedBox(height: 10,),
-            Text(
-              controller.missionA['성경']+' '+controller.missionA['장:절'],
-              style: TextStyle(
-                  color: Colors.grey
-              ),
-            ),
+
+            Align(alignment: Alignment.center,child: Text('말씀을 터치해보세요',style: TextStyle(color: Colors.grey, fontSize: 18.5),)),
           ],
         ),
       ),
