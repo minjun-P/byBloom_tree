@@ -2,6 +2,8 @@
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/login_controller.dart';
 import 'package:bybloom_tree/notification_controller.dart';
+import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
+import 'package:bybloom_tree/pages/tree_page/Resignpage.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/login', page:()=> loginScreen(),binding: BindingsBuilder.put(()=>LoginController())),
           // 회원 가입 첫 화면
           GetPage(name:'/first', page: () => const SignupPageMain()),
+          GetPage(name:'/signout',page:()=>ResignPagePhone(),binding: BindingsBuilder.put(() => SignupController()))
         ],
 
         title: 'byBloom MVP',

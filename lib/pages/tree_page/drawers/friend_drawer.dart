@@ -24,12 +24,12 @@ class FriendDrawer extends GetView<TreeController> {
             dense: true,
             leading: DbController.to.currentUserModel.value.profileImage==''
                 ?const CircularProgressIndicator()
-                :CircleAvatar(
-              backgroundImage: AssetImage(
+                :Image.asset(
+
                 'assets/profile/${DbController.to.currentUserModel.value.profileImage}.png'
-              ),
-              radius: 40,
-            ),
+              ,width: 80,height: 80,)
+
+            ,
             title: Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
 
           ),

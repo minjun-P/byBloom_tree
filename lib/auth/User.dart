@@ -1,6 +1,7 @@
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class UserModel{
   late final String uid;
@@ -11,6 +12,7 @@ class UserModel{
   final DateTime createdAt;
   final String church;
   final String profileImage;
+  final String imageUrl;
   String nickname;
   int level;
   int exp;
@@ -40,7 +42,8 @@ class UserModel{
     required this.firstName,
     required this.lastName,
     required this.church,
-    required this.profileImage
+    required this.profileImage,
+    required this.imageUrl
 
 });
 
@@ -59,7 +62,8 @@ class UserModel{
     'firstName':firstName,
     'lastName':lastName,
     'profileImage':profileImage,
-    'church':church
+    'church':church,
+    'imageUrl':imageUrl
 
 
 

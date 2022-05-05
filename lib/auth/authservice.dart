@@ -50,7 +50,8 @@ class authservice {// 로그인관련 서비스총괄하는 클래스
         lastName: name,
         firstName: "",
         church: church,
-        profileImage: profileImage
+        profileImage: profileImage,
+        imageUrl:profileImage
       );
       // 디비에 등록 using toJson 메서드
       users.doc(uid).set(s.toJson());
