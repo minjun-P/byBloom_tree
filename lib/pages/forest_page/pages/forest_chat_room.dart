@@ -483,13 +483,11 @@ class ChatRoomDrawer extends StatelessWidget {
               padding: EdgeInsets.only(top:20,bottom: 20),
               child: InkWell(
                   onTap: (){
-      print("현재방유저");
-      print(room.users);
-                    /*{
+
                       Navigator.pop(context);
                       deleteroomfromuser(room.id);
                       Navigator.pop(context);
-                    }*/
+
 
                   }, child:
 

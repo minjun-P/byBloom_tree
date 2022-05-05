@@ -1,6 +1,7 @@
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class UserModel{
   late final String uid;
@@ -61,7 +62,8 @@ class UserModel{
     'firstName':firstName,
     'lastName':lastName,
     'profileImage':profileImage,
-    'church':church
+    'church':church,
+    'imageUrl':imageUrl
 
 
 

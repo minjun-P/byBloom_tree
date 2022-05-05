@@ -60,7 +60,7 @@ class DbController extends GetxController{
           firstName: "",
           profileImage: data['profileImage']??'',
           church: data['church']??'',
-          imageUrl: data['imageUrl']
+          imageUrl: data['profileImage']
       );
     }));
     day.bindStream(FirebaseFirestore.instance.collection('missions').doc('today').snapshots().map((element) => element.get('day')));

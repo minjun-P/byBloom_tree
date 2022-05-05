@@ -194,7 +194,9 @@ class ResignPagePhone extends GetView<SignupController> {
                                       FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('waterTo').get()
                                           .then((snapshot) {
                                         for (DocumentSnapshot ds in snapshot.docs){
+                                          print(ds.id);
                                           ds.reference.delete();
+
                                         } });
 
                                       // Db doc 삭제
