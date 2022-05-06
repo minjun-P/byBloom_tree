@@ -2,6 +2,8 @@
 import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_B/prior_mission_B.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:math';
+
 
 import 'package:bybloom_tree/pages/forest_page/forestselectpage.dart';
 
@@ -36,27 +38,27 @@ class MissionPage extends GetView<MissionController> {
         padding: EdgeInsets.fromLTRB(Get.width*0.05, 0, Get.width*0.05, 100),
         children: [
           MissionContainer(type: 'A',key: Get.find<MainController>().tutorialKey7,),
-          const MissionContainer(type: 'D',),
-          const MissionContainer(type: 'C',),
-          const MissionContainer(type: 'B',),
-          const SizedBox(height: 120,),
+          MissionContainer(type: 'D',),
+          MissionContainer(type: 'C',),
+          MissionContainer(type: 'B',),
+          SizedBox(height: 120,),
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
               onTap: (){
-                Get.to(()=>const PriorMissionB());
+                Get.to(()=>PriorMissionB());
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text('지난 나눔 보기',style: TextStyle(color: Colors.grey,fontSize: 20),),
-                  const SizedBox(width: 10,),
+                  Text('지난 나눔 보기',style: TextStyle(color: Colors.grey,fontSize: 20),),
+                  SizedBox(width: 10,),
                   Icon(MdiIcons.folder,color: Colors.grey.shade300,size: 30,)
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 10,),
+          SizedBox(height: 10,),
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
@@ -65,7 +67,7 @@ class MissionPage extends GetView<MissionController> {
                 if(!MissionController().missionCompleted.containsValue(false)) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => const ForestselectPage()
+                        builder: (context) => ForestselectPage()
                     ),
                   );
                 }
@@ -86,8 +88,8 @@ class MissionPage extends GetView<MissionController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text('숲으로 공유하기',style: TextStyle(color: Colors.grey,fontSize: 20),),
-                  const SizedBox(width: 10,),
+                  Text('숲으로 공유하기',style: TextStyle(color: Colors.grey,fontSize: 20),),
+                  SizedBox(width: 10,),
                   Icon(MdiIcons.send,color: Colors.grey.shade300,size: 30,)
                 ],
               ),

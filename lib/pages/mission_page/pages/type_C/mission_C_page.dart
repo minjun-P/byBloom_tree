@@ -18,7 +18,7 @@ class MissionCPage extends GetView<MissionController> {
             children: [
 
               Image.asset('assets/pray.png',width: 200,),
-              const Text(
+              Text(
                   '오늘의 감사 일기',
                   style: TextStyle(fontSize: 24,),
               ),
@@ -27,7 +27,7 @@ class MissionCPage extends GetView<MissionController> {
                 flex: 8,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text('오늘 하루 감사했던 일이 있었나요?',style: TextStyle(fontSize: 17),),
                     Text('하루를 정리하며 짧은 일기를 써주세요:)',style: TextStyle(fontSize: 17),),
                     SizedBox(height: 10,),
@@ -36,24 +36,24 @@ class MissionCPage extends GetView<MissionController> {
                   ],
                 ),
               ),
-              const Spacer(flex: 5,),
+              Spacer(flex: 5,),
               Obx(()=>
                 ElevatedButton(
                   onPressed: controller.missionCompleted['C']!
                       ?(){}
                       :(){
-                    Get.to(()=>const MissionCExecute());
+                    Get.to(()=>MissionCExecute());
                   },
                   child: controller.missionCompleted['C']!
-                      ?const Text('일기 작성 완료!',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
-                      :const Text('쓰러가기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
+                      ?Text('일기 작성 완료!',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
+                      :Text('쓰러가기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
                   style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffA0C6FF),
+                      primary: Color(0xffA0C6FF),
                       fixedSize: Size(Get.width*0.7,50)
                   ),
                 ),
               ),
-              const Spacer(flex: 3,),
+              Spacer(flex: 3,),
 
             ],
           ),

@@ -12,16 +12,16 @@ class MissionDExecute extends GetView<MissionController> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('오늘의 예배'),
+          title: Text('오늘의 예배'),
         ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: ListView(
               children: [
-                const SizedBox(height: 40,),
-                const Text('어떻게 예배를 드리셨나요?',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                const SizedBox(height: 20,),
+                SizedBox(height: 40,),
+                Text('어떻게 예배를 드리셨나요?',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                SizedBox(height: 20,),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
@@ -34,7 +34,7 @@ class MissionDExecute extends GetView<MissionController> {
                       children: [0,1,2].map((index){
                         return Column(
                           children: [
-                            Text(controller.prayerCategory[index],style: const TextStyle(fontWeight: FontWeight.bold),),
+                            Text(controller.prayerCategory[index],style: TextStyle(fontWeight: FontWeight.bold),),
                             Radio<String>(
                                 value: controller.prayerCategory[index],
                                 groupValue: controller.prayerCategory[controller.prayerIndex.value],
@@ -48,9 +48,9 @@ class MissionDExecute extends GetView<MissionController> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20,),
-                const Text('느낀 점을 적어주세요!',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                const SizedBox(height: 20,),
+                SizedBox(height: 20,),
+                Text('느낀 점을 적어주세요!',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                SizedBox(height: 20,),
                 Container(
                   padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
@@ -63,7 +63,7 @@ class MissionDExecute extends GetView<MissionController> {
                     maxLines: null,
                     minLines: null,
                     expands: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: '여기에 적어주세요',
                       border: UnderlineInputBorder(
                         borderSide: BorderSide.none
@@ -72,7 +72,7 @@ class MissionDExecute extends GetView<MissionController> {
                     cursorColor: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 60,),
+                SizedBox(height: 60,),
                 ElevatedButton(
                   onPressed: (){
 
@@ -91,9 +91,9 @@ class MissionDExecute extends GetView<MissionController> {
 
                     }
                   },
-                  child: const Text('제출하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
+                  child: Text('제출하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
                   style: ElevatedButton.styleFrom(
-                      primary: const Color(0xffA0C6FF),
+                      primary: Color(0xffA0C6FF),
                       fixedSize: Size(Get.width*0.7,50)
                   ),
                 ),

@@ -17,12 +17,15 @@ class SignupPageFin extends GetView<SignupController> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('이제 연락처로\n 친구들을 찾아보아요',style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
+
+              Text('이제 연락처로\n 친구들을 찾아보아요',style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
               /// 연락처연동해서 가입자중 친구리스트만 받아와서 이를 리스트타일로 뿌려주는 로직구현
-              const SizedBox(height: 40,),
+              SizedBox(height: 40,),
               OutlinedButton(
                   onPressed: () async {
+                Get.to(FriendAddPage( ));
 
+<<<<<<< HEAD
 
                 List<FriendModel>? s=await findfriendwithcontact(controller.phoneCon.text);
                 s?.forEach((element) {
@@ -31,6 +34,9 @@ class SignupPageFin extends GetView<SignupController> {
 
 
               }, child: const Text('연락처 연동해서 친구찾기',style: TextStyle(fontSize: 18),)),
+=======
+              }, child: Text('연락처 연동해서 친구찾기',style: TextStyle(fontSize: 18),)),
+>>>>>>> parent of 6cf3431 (Merge branch 'main' of https://github.com/minjun-P/byBloom_tree)
               const SizedBox(height: 40,),
               TextButton(
                   onPressed: (){

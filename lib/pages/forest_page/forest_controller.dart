@@ -54,10 +54,10 @@ class ForestController extends GetxController {
         List tokens = await getUserToken(room.users[i].id) ;
         roomtokenslist += tokens;
       }
-      for (var element in roomtokenslist) {
+      roomtokenslist.forEach((element) {
         Get.find<MainController>().sendFcm(
             token: element, title: name, body: message);
-      }
+      });
     }
   }
 }

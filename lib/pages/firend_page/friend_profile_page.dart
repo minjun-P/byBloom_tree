@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:badges/badges.dart';
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
@@ -46,7 +48,7 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                 top: 20,
                 left: 20,
                 child: IconButton(
-                    icon: const Icon(MdiIcons.arrowLeft,color: Colors.white,size: 35,),
+                    icon: Icon(MdiIcons.arrowLeft,color: Colors.white,size: 35,),
                   onPressed: (){
                       Get.back();
                   },
@@ -67,14 +69,14 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                             borderRadius: BorderRadius.circular(10)
                           ),
 
-                          padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 7),
+                          padding: EdgeInsets.symmetric(horizontal: 12,vertical: 7),
                           child: controller.waterTo.contains(friendData.uid)
-                              ?const Text('물을 주셔서 감사해요!')
-                              :const Text('친구의 나무에 물을 주세요!')
+                              ?Text('물을 주셔서 감사해요!')
+                              :Text('친구의 나무에 물을 주세요!')
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10,),
+                    SizedBox(height: 10,),
 
                     GestureDetector(
                       onTap: ()async{
@@ -86,13 +88,13 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                         }
                         // 물을 준 적이 없다면
                         if (!controller.waterTo.contains(friendData.uid)){
-                          for (var token in friendData.tokens) {
+                          friendData.tokens.forEach((token) {
                             Get.find<MainController>().sendFcm(
                                 token: token,
                                 title: '${DbController.to.currentUserModel.value.name}님이 나무에 물을 주셨어요',
                                 body: '얼른 확인해보세요!'
                             );
-                          }
+                          });
                           controller.saveWateringRecord(friendData.uid,friendData.name);
                           await controller.wateringController.forward();
                           controller.wateringController.reset();
@@ -109,7 +111,7 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                       child: Obx(()=>
                         Badge(
                           showBadge: controller.waterTo.contains(friendData.uid)?true:false,
-                          badgeContent: const Icon(Icons.check,size: 15,),
+                          badgeContent: Icon(Icons.check,size: 15,),
                           badgeColor: Colors.cyan,
                           child: Image.asset(
                             'assets/watering_to_friend.png',
@@ -125,8 +127,8 @@ class FriendProfilePage extends GetView<FriendProfileController> {
         ),
         bottomNavigationBar: Container(
           height: 190,
-          padding: const EdgeInsets.all(15),
-          decoration: const BoxDecoration(
+          padding: EdgeInsets.all(15),
+          decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           ),
@@ -134,25 +136,29 @@ class FriendProfilePage extends GetView<FriendProfileController> {
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     backgroundColor: Colors.red,
                     radius: 30,
                   ),
-                  const SizedBox(width: 20,),
+                  SizedBox(width: 20,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         friendData.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 21
                         ),),
                       Text(friendData.nickname)
                     ],
                   ),
-                  const Spacer(),
+                  Spacer(),
                   InkWell(
                       onTap: () async {
+                        String gradcolor1=(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString();
+                        String gradcolor2=(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString()+","+(142+Random().nextInt(113)).toString();
+                        String imageindex=gradcolor1+","+gradcolor2;
+
                           final room2 = await FirebaseChatCore.instance
                               .createRoom(types.User(
                               id: (await finduidFromPhone(
@@ -178,12 +184,12 @@ class FriendProfilePage extends GetView<FriendProfileController> {
 
 
                   ),
-                  const SizedBox(width: 20,)
+                  SizedBox(width: 20,)
                 ],
               ),
-              const SizedBox(height: 20,),
+              SizedBox(height: 20,),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade200,
                   borderRadius: BorderRadius.circular(20)
@@ -192,10 +198,10 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                   future: FirebaseFirestore.instance.collection('users').doc(friendData.uid).collection('mission_completed').get(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError){
-                      return const Text('error');
+                      return Text('error');
                     }
                     if (snapshot.connectionState == ConnectionState.waiting){
-                      return const Text('Loading');
+                      return Text('Loading');
                     }
                     List<QueryDocumentSnapshot> docs = snapshot.data!.docs;
                     List<QueryDocumentSnapshot> filteredDocs = docs.where((element){
@@ -203,16 +209,16 @@ class FriendProfilePage extends GetView<FriendProfileController> {
                       return map.isNotEmpty;
                     }).toList();
                     int sum = 0;
-                    for (var element in filteredDocs) {
+                    filteredDocs.forEach((element) {
                       Map<String,dynamic> map = element.data() as Map<String,dynamic>;
                       sum+=map.keys.length;
-                    }
+                    });
 
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _buildIconWithNum(MdiIcons.calendarBlank,'달성 일수',filteredDocs.length),
-                        const SizedBox(width: 40,),
+                        SizedBox(width: 40,),
                         _buildIconWithNum(MdiIcons.clockOutline,'달성 횟수',sum),
                       ],
                     );
@@ -231,17 +237,17 @@ class FriendProfilePage extends GetView<FriendProfileController> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(width: 15,),
+        SizedBox(width: 15,),
         Column(
           children: [
             Icon(icon,size: 25,color: Colors.grey,),
-            Text(title,style: const TextStyle(fontSize: 14,color: Colors.grey),),
+            Text(title,style: TextStyle(fontSize: 14,color: Colors.grey),),
             
           ],
         ),
-        const SizedBox(width: 10,),
-        Text(num.toString(),style: const TextStyle(fontSize: 20,color: Colors.grey),),
-        const SizedBox(width: 15,),
+        SizedBox(width: 10,),
+        Text(num.toString(),style: TextStyle(fontSize: 20,color: Colors.grey),),
+        SizedBox(width: 15,),
       ],
     );
   }

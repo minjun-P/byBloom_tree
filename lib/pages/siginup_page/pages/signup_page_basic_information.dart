@@ -33,7 +33,7 @@ class SignupPageBasicInformation extends GetView<SignupController> {
               controller.pageBasicKey.currentState!.validate();
               // 유효성 검사 값이 모두 true일 경우,
               if (controller.validateSex()&&controller.pageBasicKey.currentState!.validate()){
-                Get.to(()=>const SignupPageChurch(),transition: Transition.rightToLeftWithFade);
+                Get.to(()=>SignupPageChurch(),transition: Transition.rightToLeftWithFade);
                 }
               },
             // 버튼 스타일 설정

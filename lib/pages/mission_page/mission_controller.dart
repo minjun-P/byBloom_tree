@@ -198,7 +198,7 @@ class MissionController extends GetxController {
       try {
         missionCompletedUpdate();
       } catch(e) {
-        Future.delayed(const Duration(milliseconds: 500)).then((value) => missionCompletedUpdate());
+        Future.delayed(Duration(milliseconds: 500)).then((value) => missionCompletedUpdate());
       }
     });
 
@@ -213,14 +213,14 @@ class MissionController extends GetxController {
   }
 
   void clearMission() {
-    Future.delayed(const Duration(milliseconds: 300)).then((_)=>incrementExp(3));
+    Future.delayed(Duration(milliseconds: 300)).then((_)=>incrementExp(3));
     Get.snackbar('수고하셨어요', '미션을 완료해 경험치를 3 획득했습니다',
         snackPosition: SnackPosition.BOTTOM,
         mainButton: TextButton(
-          child: const Text('확인하러 가보기!'),
+          child: Text('확인하러 가보기!'),
           onPressed: (){
-            Get.to(()=>const MainScreen());
-            Future.delayed(const Duration(milliseconds: 300)).then((value) => Get.find<MainController>().navigationBarIndex(0));
+            Get.to(()=>MainScreen());
+            Future.delayed(Duration(milliseconds: 300)).then((value) => Get.find<MainController>().navigationBarIndex(0));
 
           },
         )

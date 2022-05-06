@@ -16,11 +16,11 @@ class ProfileWorship extends GetView<ProfileController> {
             builder: (context, snapshot) {
 
               if (snapshot.hasError){
-                return const Text('에러발생');
+                return Text('에러발생');
               }
 
               if (snapshot.connectionState==ConnectionState.waiting){
-                return const Text('로딩중');
+                return Text('로딩중');
               }
               List sortedList = snapshot.data!..sort((a,b){
                 Timestamp timestampA = a['createdAt'] as Timestamp;
@@ -48,29 +48,29 @@ class ProfileWorship extends GetView<ProfileController> {
     int month = date.month;
     int day = date.day;
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text.rich(
               TextSpan(
                   children: [
-                    TextSpan(text: '$month월 $day일',style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                    const TextSpan(text: '의 기록', style: TextStyle(fontSize: 16, color: Colors.grey,))
+                    TextSpan(text: '$month월 $day일',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                    TextSpan(text: '의 기록', style: TextStyle(fontSize: 16, color: Colors.grey,))
                   ]
               )
           ),
 
-          const SizedBox(height: 2,),
-          const Divider(thickness: 2,),
-          const SizedBox(height: 8,),
+          SizedBox(height: 2,),
+          Divider(thickness: 2,),
+          SizedBox(height: 8,),
           Text(contents)
         ],
       ),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
                 color: Colors.grey,
                 offset: Offset(1,1),

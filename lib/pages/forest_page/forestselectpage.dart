@@ -39,12 +39,12 @@ class Forest_select_state extends State<ForestselectPage>{
         title: const Text('숲',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
         actions: [
           TextButton(onPressed: (){
-            for (var element in roomstoshare) {
+            roomstoshare.forEach((element) {
               sendmissioncompletedmessage(element);
-            }
+            });
             Navigator.pop(context);
           },
-          child: const Text('공유하기',style: TextStyle(color: Colors.grey),),)
+          child: Text('공유하기',style: TextStyle(color: Colors.grey),),)
         ],
         backgroundColor: Colors.white,
         toolbarHeight: 80,
@@ -82,12 +82,12 @@ class Forest_select_state extends State<ForestselectPage>{
                 }
                 else if (DbController.to.currentUserModel.value.uid==room.users[0].id) {
                   uid=room.users[1].id;}
-                for (var element in DbController.to.currentUserModel.value.friendList) {
+                DbController.to.currentUserModel.value.friendList.forEach((element) {
                   if(element.uid==uid){
                     name=element.name;
                     imageUrl=element.profileImage;
                   }
-                }
+                });
               }
               return GestureDetector(
                   onTap: () {
@@ -134,7 +134,7 @@ class Forest_select_state extends State<ForestselectPage>{
                             height: 80,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              image: DecorationImage(image: AssetImage('assets/profile/$imageUrl.png')),
+                              image: DecorationImage(image: AssetImage('assets/profile/${imageUrl}.png')),
                             )) ,
                         const SizedBox(width: 15,),
                         Expanded(
@@ -258,7 +258,7 @@ class Forest_select_state extends State<ForestselectPage>{
 }
 //미션완료 메시지 보내기!!
 sendmissioncompletedmessage(types.Room room){
-  types.PartialCustom missioncompleted= const types.PartialCustom();
+  types.PartialCustom missioncompleted= types.PartialCustom();
   FirebaseChatCore.instance.sendMessage(missioncompleted, room.id);
 
   Get.find<ForestController>().sendFCMformessage(room,DbController.to.currentUserModel.value.name,'${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다.');

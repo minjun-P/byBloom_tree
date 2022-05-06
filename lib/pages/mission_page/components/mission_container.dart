@@ -1,4 +1,6 @@
+import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_C/mission_C_page.dart';
+import 'package:bybloom_tree/pages/mission_page/pages/type_D/mission_D_execute.dart';
 import 'package:bybloom_tree/pages/mission_page/pages/type_D/mission_D_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,16 +21,16 @@ class MissionContainer extends GetView<MissionController> {
       onTap: (){
         switch(type) {
           case 'A':
-            Get.to(()=>const MissionAPage());
+            Get.to(()=>MissionAPage());
             break;
           case 'B':
-            Get.to(()=>const MissionBPage());
+            Get.to(()=>MissionBPage());
             break;
           case 'C':
-            Get.to(()=>const MissionCPage());
+            Get.to(()=>MissionCPage());
             break;
           case 'D':
-            Get.to(()=>const MissionDPage());
+            Get.to(()=>MissionDPage());
             break;
 
         }
@@ -39,7 +41,7 @@ class MissionContainer extends GetView<MissionController> {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
               color: Colors.grey,
               offset: Offset(2,2),
@@ -57,7 +59,7 @@ class MissionContainer extends GetView<MissionController> {
               flex: 4,
               child: Text(
                   controller.typeMatch[type],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
                   color: Colors.black
                 ),
@@ -82,7 +84,7 @@ class MissionContainer extends GetView<MissionController> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: controller.missionCompleted[type]!
-            ?const Color(0xff5B5B5B)
+            ?Color(0xff5B5B5B)
             :Colors.grey.shade200
       ),
       curve: Curves.linearToEaseOut,

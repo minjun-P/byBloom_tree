@@ -31,11 +31,11 @@ class SignupPagePhone extends GetView<SignupController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SignupGauge(minusWidth: 80),
-              const SizedBox(height: 30,),
-              const Text('휴대폰 본인 인증',
+              SignupGauge(minusWidth: 80),
+              SizedBox(height: 30,),
+              Text('휴대폰 본인 인증',
                 style: TextStyle(color: Colors.black, fontSize: 20),),
-              const SizedBox(height: 20,),
+              SizedBox(height: 20,),
               Expanded(
                 child: ListView(
                   children: [
@@ -109,7 +109,7 @@ class SignupPagePhone extends GetView<SignupController> {
                                                 build: (context, time){
                                                   return Text(
                                                     time.toInt().toString()+' 초',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                         color: Colors.blue,
                                                       fontSize: 14
                                                     ),
@@ -135,11 +135,11 @@ class SignupPagePhone extends GetView<SignupController> {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 25,),
+                                SizedBox(width: 25,),
                                 Column(
                                   children: [
                                     OutlinedButton(
-                                      child: const Text(
+                                      child: Text(
                                           '인증번호 받기',
                                         style: TextStyle(color: Colors.black),
                                       ),
@@ -152,7 +152,7 @@ class SignupPagePhone extends GetView<SignupController> {
 
                                       },
                                         style: OutlinedButton.styleFrom(
-                                            side: const BorderSide(color: Colors.green,width: 2)
+                                            side: BorderSide(color: Colors.green,width: 2)
                                         )
                                     ),
                                     Obx(()=>
@@ -174,12 +174,12 @@ class SignupPagePhone extends GetView<SignupController> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 20,),
+                            SizedBox(height: 20,),
                             Obx(()=>
                                 Visibility(
                                   visible: controller.phonesuc.value,
                                   child: OutlinedButton(
-                                    child: const Text('회원가입 완료'),
+                                    child: Text('회원가입 완료'),
                                     onPressed: (){
                                       // 디비에 계정 등록
                                       authservice.register(
@@ -193,12 +193,12 @@ class SignupPagePhone extends GetView<SignupController> {
                                           // 이미지 name.png 을 넣어주기
                                           profileImage: controller.profileList[controller.selectedProfile.value]
                                       );
-                                      Get.offAll(()=>const SignupPageFin());
+                                      Get.offAll(()=>SignupPageFin());
                                     },
                                   ),
                                 ),
                             ),
-                          const SizedBox(height: 20,),
+                          SizedBox(height: 20,),
                           ]
                       ),
                     ),
@@ -218,11 +218,13 @@ class SignupPagePhone extends GetView<SignupController> {
       phoneNumber: "+82" + controller.phoneCon.text,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential).then((value) {
+          print("login with phone ");
           controller.phonesuc.value=true;
 
         });
       },
       verificationFailed: (FirebaseAuthException e) {
+        print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) {
         verificationID = verificationId;
@@ -238,9 +240,18 @@ class SignupPagePhone extends GetView<SignupController> {
         verificationId: verificationID, smsCode: controller.smsCon.text);
 
     await auth.signInWithCredential(credential).then((value) {
+      print("verify otp");
       controller.phonesuc.value=true;
 
     });
+  }
+
+
+  BoxDecoration get _pinPutDecoration {
+    return BoxDecoration(
+      border: Border.all(color: Colors.deepPurpleAccent),
+      borderRadius: BorderRadius.circular(15.0),
+    );
   }
 
 }
