@@ -25,10 +25,8 @@ class FriendDrawer extends GetView<TreeController> {
             leading: DbController.to.currentUserModel.value.profileImage==''
                 ?const CircularProgressIndicator()
                 :Image.asset(
-
                 'assets/profile/${DbController.to.currentUserModel.value.profileImage}.png'
               ,width: 80,height: 80,)
-
             ,
             title: Text(DbController.to.currentUserModel.value.name,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
 
@@ -68,17 +66,13 @@ class FriendDrawer extends GetView<TreeController> {
                       }
                   );
                   }
-
                 });
-
               }, ),
             /// s에 연락처연동해서 이미가입해있는 friendmodel들 list 받아왔으니까 친구추가화면 Ui만들어서 채워넣어
-
             GestureDetector(
               onTap: (){
                 Get.to(()=>const FriendAddPage());
               },
-
               child: Row(
                 children: const [
                   Icon(Icons.search, color: Colors.grey,),

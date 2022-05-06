@@ -26,19 +26,14 @@ class TreeStatus extends GetView<TreeController> {
           Obx(()=>
               Visibility(
                   visible: controller.exp>=controller.expStructure[controller.level.toString()],
-                  child: Column(
-                    children: [
-                      const Text('레벨업'),
-                      GestureDetector(
-                        onTap: ()async{
-                          controller.levelUpAnimationController.forward().then((value) => controller.levelUpAnimationController.reset());
-                          Future.delayed(const Duration(milliseconds: 3400)).then((value) => controller.levelUp(DbController.to.currentUserModel.value.level));
-                        },
-                        child: Lottie.asset(
-                            'assets/tree/levelupicon.json',
-                            width: 50,height: 50),
-                      ),
-                    ],
+                  child: GestureDetector(
+                    onTap: ()async{
+                      controller.levelUpAnimationController.forward().then((value) => controller.levelUpAnimationController.reset());
+                      Future.delayed(const Duration(milliseconds: 3400)).then((value) => controller.levelUp(DbController.to.currentUserModel.value.level));
+                    },
+                    child: Image.asset(
+                        'assets/levelup.png',
+                        width: 50,height: 50),
                   )),
           ),
           const SizedBox(height: 10,),

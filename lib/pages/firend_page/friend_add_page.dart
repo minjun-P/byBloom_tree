@@ -83,6 +83,7 @@ class FriendState extends State<FriendAddPage>{
                   borderRadius: BorderRadius.circular(15),
                   color: Colors.white
                 ),
+                //
                 child: FutureBuilder<List<Contact>?>(
                   future: getPermission(),
                   builder: (context, snapshot){
@@ -173,5 +174,8 @@ class FriendState extends State<FriendAddPage>{
         ),
       )
     );
+  }
+  _getPhoneUserFuture(){
+
   }
 }
