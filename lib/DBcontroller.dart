@@ -1,3 +1,4 @@
+import 'package:bybloom_tree/auth/FriendAdd.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,8 @@ class DbController extends GetxController{
 
   String? _token;
   String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
+  List<FriendModel>? possiblefriends;
   // 다큐먼트 스냅샷
   Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
   Rx<UserModel> currentUserModel = UserModel(
@@ -43,6 +46,7 @@ class DbController extends GetxController{
       String uid = event.id;
       // 친구 폰 목록
       List<String> friendPhoneList = List<String>.from(data['friendPhoneList'] );
+
       return UserModel(
           uid:uid,
           phoneNumber:data['phoneNumber'],
@@ -63,6 +67,11 @@ class DbController extends GetxController{
           imageUrl: data['profileImage']
       );
     }));
+
+
+
+
+
     day.bindStream(FirebaseFirestore.instance.collection('missions').doc('today').snapshots().map((element) => element.get('day')));
 
     // day 바뀔 때마다 호출
@@ -87,8 +96,9 @@ class DbController extends GetxController{
       _ as UserModel;
       print('currentUserModel 업데이트');
       uploadFriend(currentUserModel.value);
-    });
 
+    });
+    possiblefriends=await findfriendwithcontact(currentUserModel.value.phoneNumber);
     print("유저업데이트완료");
   }
 
@@ -102,7 +112,9 @@ class DbController extends GetxController{
 
         FriendModel? myFriend= await findUserFromDb(phoneNum);
         if(myFriend!=null){
-          currentUser.friendList.add(myFriend);}
+          currentUser.friendList.add(myFriend);
+           }
+
       });
 
     }catch(error){
@@ -132,4 +144,5 @@ class DbController extends GetxController{
       return null;
     }
   }
+
 }
