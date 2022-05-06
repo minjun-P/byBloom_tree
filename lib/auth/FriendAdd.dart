@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:contacts_service/contacts_service.dart';
@@ -8,8 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'authservice.dart';
 
 final database= FirebaseFirestore.instance;
-Future<List<FriendModel>>  findfriendwithcontact(String mynumber) async {
+Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
    List<Contact>? mycontacts=await getPermission( );
+
 
    List<FriendModel> friendalreadysignedin=[];
     List<String> phoneenumberlist=[];
@@ -48,6 +47,7 @@ Future<List<FriendModel>>  findfriendwithcontact(String mynumber) async {
       return friendalreadysignedin;}
 
     
+
 
       // 허락해달라고 팝업띄우는 코드
 
@@ -118,29 +118,28 @@ Future<bool> deleteFriend(FriendModel friendtoadd) async {
 }
 ///친구삭제하는 로직
 ///
+Future<FriendModel?> findUserFromPhone(String phoneNum) async {
+  var friend = await FirebaseFirestore.instance.collection('users').
+  where('phoneNumber', isEqualTo: phoneNum).get()
+  ;
 
-Future<FriendModel?> findUserFromPhone(String phoneNumber) async {
-  var friend =  await FirebaseFirestore.instance.collection('users').
-  where('phoneNumber',isEqualTo:phoneNumber).get();
-
-  if (friend.size!=0) {
-    print(friend.docs[0].data()['name']);
+  if (friend.size != 0) {
     return FriendModel(
         name: friend.docs[0].data()['name'],
-        phoneNumber:friend.docs[0].data()['phoneNumber'],
+        phoneNumber: friend.docs[0].data()['phoneNumber'],
         nickname: friend.docs[0].data()['nickname'],
         exp: friend.docs[0].data()['exp'],
         level: friend.docs[0].data()['level'],
         tokens: friend.docs[0].data()['tokens']??[],
-        uid:  friend.docs[0].id,
+        uid: friend.docs[0].id,
         profileImage: friend.docs[0].data()['profileImage']
     );
   }
 
-  return null;
+
+
+
 }
-
-
 
 
 

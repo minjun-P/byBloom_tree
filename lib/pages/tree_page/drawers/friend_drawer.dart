@@ -71,7 +71,9 @@ class FriendDrawer extends GetView<TreeController> {
             /// s에 연락처연동해서 이미가입해있는 friendmodel들 list 받아왔으니까 친구추가화면 Ui만들어서 채워넣어
             GestureDetector(
               onTap: (){
-Get.to(()=>const FriendAddPage());
+
+              Get.to(()=>const FriendAddPage());
+
               },
               child: Row(
                 children: const [

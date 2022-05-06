@@ -23,6 +23,7 @@ class SignupPageFin extends GetView<SignupController> {
               OutlinedButton(
                   onPressed: () async {
 
+
                 List<FriendModel>? s=await findfriendwithcontact(controller.phoneCon.text);
                 s?.forEach((element) {
                 });
