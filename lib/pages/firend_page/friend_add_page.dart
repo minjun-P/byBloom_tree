@@ -1,5 +1,9 @@
+
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
+
+import 'package:contacts_service/contacts_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -8,9 +12,9 @@ import 'package:bybloom_tree/auth/FriendAdd.dart';
 
 TextEditingController textfield=TextEditingController();
 class FriendAddPage extends StatefulWidget{
-  FriendAddPage({
-    Key? key,
 
+  const FriendAddPage({
+    Key? key,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -20,204 +24,167 @@ class FriendAddPage extends StatefulWidget{
 
 }
 
-class FriendState extends State<FriendAddPage> {
-  FriendModel? friendtoadd = null;
-  List<FriendModel> realpossiblefriends = [];
 
-  FriendState({
-    Key? key,
-  }) :super();
+class FriendState extends State<FriendAddPage>{
 
-  @override
-  void initState() {
-    super.initState();
-    if (DbController.to.possiblefriends != null) {
-      DbController.to.possiblefriends!.forEach((element) {
-        if ((!DbController.to.currentUserModel.value.friendPhoneList.contains(
-            element.phoneNumber))&&DbController.to.currentUserModel.value.phoneNumber!=element.phoneNumber)  {
-          realpossiblefriends.add(element);
-        }
-      });
-    }
-    print(DbController.to.possiblefriends);
-    print(realpossiblefriends.length);
-  }
-
+   FriendState({
+     Key? key,
+   }):super();
+   var friendtoadd;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("친구검색"),),
-        body:
-        Container(
-
-            width: Get.width,
-
-
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-
-                children: [
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadiusDirectional.all(
-                              Radius.circular(20)),
-                          border: Border.fromBorderSide(BorderSide(
-                              color: Colors.grey,
-                              style: BorderStyle.solid,
-                              width: 3),
-                          )
+      backgroundColor: const Color(0xffF2F4F6),
+      appBar: AppBar(),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // 친구 검색 창
+              Container(
+                  padding:const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+                      color: Colors.white,
                       ),
-                      width: Get.width * 0.7,
-                      child: Row(
-                        children: [
-                          InkWell(
-
-                            child: Icon(Icons.search),
-                            onTap: () async {
-                              if (textfield.text.length == 11) {
-                                friendtoadd =
-                                await findUserFromPhone(textfield.text);
-                              }
-                              else {
-                                friendtoadd =
-                                await findUserFromName(textfield.text);
-                              }
-                              setState(() {
-
-
-                              });
-                            },
+                  width: Get.width*0.7,
+                  child: Row(
+                    children: [
+                      InkWell(
+                        child: const Icon(Icons.search),
+                        onTap: () async {
+                          if(textfield.text.length==11){
+                            friendtoadd=await findUserFromPhone(textfield.text);}
+                          else {
+                            friendtoadd=await findUserFromName(textfield.text);
+                          }
+                          setState(() {
+                          });
+                        },
+                      ),
+                      const SizedBox(width: 10,),
+                      Expanded(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                              hintText: '친구 검색하기',
+                            border: InputBorder.none
                           ),
-                          SizedBox(
-                            width: Get.width * 0.5,
-                            child: TextFormField(
-                              decoration: InputDecoration(
-
-                                  labelText: "친구의 번호나 이름을 검색해보세요"
-                              ),
-                              controller: textfield,
-                            ),
-                          ),
-                        ],
-                      )),
-                  realpossiblefriends!.length != 0 ? Container(
-                    height: Get.height * 0.4,
-                    child: ListView.builder(
-
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              realpossiblefriends![index].name,
-                              style: TextStyle(
-                                  fontSize: 18
-                              ),
-                            ),
-                            leading: Image.asset(
-                                'assets/profile/${ realpossiblefriends![index]
-                                    .profileImage}.png'),
-
-                            trailing: InkWell(
-                              onTap: () {
-                                AddFriend(realpossiblefriends[index]);
-                              },
-                              child: Icon(Icons.person_add,
-                                color: Colors.grey.shade500,),
-                            ),
-                          );
-                        }, itemCount: realpossiblefriends!.length
-                    ),
-                  ) : Container(
-                    height: Get.height*0.4,
-                    child: Text('아직가입한친구가없네요'),
-                  ),
-
-
-                  SizedBox(
-                    height: 100,
-                  ),
-
-
-                  Container(
-                      child:
-                      friendtoadd == null ? Text("아직 가입하지 않은 친구네요.") :
-
-
-                      Container(
-                        width: Get.width * 0.7,
-                        height: Get.width * 0.3,
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadiusDirectional.all(
-                                  Radius.circular(20)),
-                              border: Border.fromBorderSide(BorderSide(
-                                  color: Colors.grey,
-                                  style: BorderStyle.solid,
-                                  width: 3))
-                          ),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Row(
-
-                                    children: [
-                                      CircleAvatar(backgroundColor: Colors.lime,
-                                        radius: 30,),
-                                      SizedBox(width: 20),
-
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start,
-                                        children: [
-                                          Text("${friendtoadd!.name}"),
-                                          Text(friendtoadd!.phoneNumber,
-                                            style: TextStyle(
-                                                color: Colors.grey),)
-                                        ],
-                                      )
-                                    ]
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    AddFriend(friendtoadd!);
-                                    Fluttertoast.showToast(
-                                        msg: "${friendtoadd!
-                                            .name}님 친구추가가 완료되었습니다.",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.grey,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0
-                                    );
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.person_add),
-
-                                    ],
-                                  ),
-                                )
-                              ]
-                          ),
+                          controller: textfield,
                         ),
-                      )
+                      ),
+                    ],
+                  )),
+              const SizedBox(height: 30,),
+              // 연락처 불러오기
+              const Align(
+                  child: Text('주소록',style: TextStyle(fontSize: 24),),
+                alignment: Alignment.centerLeft,
+              ),
+              Container(
+                height: Get.width*0.5,
+                padding: const EdgeInsets.all(15),
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white
+                ),
+                //
+                child: FutureBuilder<List<Contact>?>(
+                  future: getPermission(),
+                  builder: (context, snapshot){
+                    if (snapshot.hasError){
+                      return const Center(child: Text('error'));
+                    }
+                    if (snapshot.connectionState==ConnectionState.waiting){
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.data==null){
+                      return const Center(child: Text('권한 허용이 안되었거나 연락처 정보에 오류가 있어요'));
+                    }
+                    var phoneList = snapshot.data!;
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: phoneList.length,
+                        itemBuilder: (context, index){
+                          if (phoneList[index].phones!.isNotEmpty){
+                            return ListTile(
+                              title: Text(phoneList[index].displayName!),
+                              subtitle: Text(phoneList[index].phones![0].value!),
+                            );
+                          }else{
+                            return Container();
+                          }
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            const Spacer(),
+            Container(
+              child:
+                friendtoadd==null
+                    ?const Text("아직 가입하지 않은 친구네요.")
+                    :SizedBox(
+                      width: Get.width*0.7,
+                      height: Get.width*0.3,
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+                          border: Border.fromBorderSide(BorderSide(color:Colors.grey ,style: BorderStyle.solid,width: 3))
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children:[
+                            Row(
+                              children:[
+                          const CircleAvatar(backgroundColor: Colors.lime,radius: 30,),
+                            const SizedBox(width: 20),
 
-                  )
-
-
-                ]
-
-            )
-        )
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("${friendtoadd!.name}"),
+                                Text(friendtoadd!.phoneNumber,style: const TextStyle(color: Colors.grey),)
+                              ],
+                            )]
+                            ),
+                            InkWell(
+                              onTap: (){
+                                AddFriend(friendtoadd!);
+                                Fluttertoast.showToast(
+                                    msg: "${friendtoadd!.name}님 친구추가가 완료되었습니다.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.grey,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
+                              },
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.person_add),
+                                ],
+                              ),
+                            )]
+                        ),
+                      ),
+                    )
+                )
+          ]
+                ),
+        ),
+      )
     );
   }
-}
+  _getPhoneUserFuture(){
 
+  }
+}
 

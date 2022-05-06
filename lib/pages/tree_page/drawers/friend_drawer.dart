@@ -25,12 +25,10 @@ class FriendDrawer extends GetView<TreeController> {
             leading: DbController.to.currentUserModel.value.profileImage==''
                 ?const CircularProgressIndicator()
                 :Image.asset(
-
                 'assets/profile/${DbController.to.currentUserModel.value.profileImage}.png'
               ,width: 80,height: 80,)
-
             ,
-            title: Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
+            title: Text(DbController.to.currentUserModel.value.name,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
 
           ),
         ) ,
@@ -40,50 +38,41 @@ class FriendDrawer extends GetView<TreeController> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             InkWell(
-              child:Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+              child:const Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
               onTap: () async {
 
                 List<FriendModel>? friendlist=await findfriendwithcontact(DbController.to.currentUserModel.value.phoneNumber);
                 showDialog(context: context, builder:(context){
-                  if(friendlist?.length==0){
-                    return Card(
+                  if(friendlist!.isEmpty){
+                    return const Card(
                         child:Text("아직 가입한 친구가없네요")
                     );
                   }
                   else {
                     return ListView.builder(
-                      itemCount: friendlist?.length,
+                      itemCount: friendlist.length,
                       itemBuilder:(BuildContext context,int index){
                         return Card(
                             child:ListTile(
                                 leading:
                                 InkWell(
-                                    child:Text(friendlist![index].phoneNumber),
+                                    child:Text(friendlist[index].phoneNumber),
                                     onTap:() async {
                                       bool result=await AddFriend(friendlist[index]);
-
                                     }
                                 )
                             )
-
-
-
                         );
                       }
                   );
                   }
-
                 });
-
               }, ),
             /// s에 연락처연동해서 이미가입해있는 friendmodel들 list 받아왔으니까 친구추가화면 Ui만들어서 채워넣어
-
             GestureDetector(
               onTap: (){
-
-                Get.to(()=>FriendAddPage());
+Get.to(()=>const FriendAddPage());
               },
-
               child: Row(
                 children: const [
                   Icon(Icons.search, color: Colors.grey,),
@@ -108,7 +97,7 @@ class FriendDrawer extends GetView<TreeController> {
                   child: ListTile(
                     title: Text(
                       DbController.to.currentUserModel.value.friendList[index].name,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 18
                       ),
                     ),

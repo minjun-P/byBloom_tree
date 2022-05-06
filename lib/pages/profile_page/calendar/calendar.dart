@@ -97,7 +97,7 @@ class Calendar extends GetView<CalendarController> {
                             width: 5.5,
                             height: 5.5,
                             margin: const EdgeInsets.all(0.5),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               // 손쉽게 event 값을 불러들여서 해결
                                 color: Colors.green,
                                 shape: BoxShape.circle

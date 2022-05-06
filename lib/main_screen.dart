@@ -87,7 +87,7 @@ class MainScreen extends GetView<MainController> {
                   offset: const Offset(0,1)
                 )
               ],
-              borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20))
+              borderRadius: const BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20))
             ),
             child: ClipRRect(
               borderRadius: const BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
