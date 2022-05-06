@@ -1,7 +1,5 @@
-import 'package:bybloom_tree/auth/authservice.dart';
-import 'package:bybloom_tree/main_controller.dart';
+
 import 'package:bybloom_tree/pages/siginup_page/components/signup_textfield.dart';
-import 'package:bybloom_tree/pages/siginup_page/pages/siginup_page_fin.dart';
 import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,18 +8,14 @@ import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:timer_count_down/timer_count_down.dart';
-
 import 'drawers/menu_drawer.dart';
 
 FirebaseAuth auth =FirebaseAuth.instance;
 
-/// 회원가입 5번째 화면 - 폰인증
+/// 계정 삭제 이전, 재인증 페이지
 class ResignPagePhone extends GetView<SignupController> {
   ResignPagePhone({Key? key}) : super(key: key);
-
   late String verificationID;
-
-
   @override
   Widget build(BuildContext context) {
     // 0.5초 뒤 키보드 뜨게 하기
@@ -30,7 +24,7 @@ class ResignPagePhone extends GetView<SignupController> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title:  Text('회원탈퇴',
+          title:  const Text('회원탈퇴',
             style: TextStyle(color: Colors.black, fontSize: 20),),
         ),
         body: Padding(
@@ -38,10 +32,10 @@ class ResignPagePhone extends GetView<SignupController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30,),
-              Text('핸드폰인증하기',
+              const SizedBox(height: 30,),
+              const Text('핸드폰인증하기',
                 style: TextStyle(color: Colors.black, fontSize: 20),),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Expanded(
                 child: ListView(
                   children: [
@@ -115,7 +109,7 @@ class ResignPagePhone extends GetView<SignupController> {
                                                 build: (context, time){
                                                   return Text(
                                                     time.toInt().toString()+' 초',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.blue,
                                                         fontSize: 14
                                                     ),
@@ -141,11 +135,11 @@ class ResignPagePhone extends GetView<SignupController> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(width: 25,),
+                                const SizedBox(width: 25,),
                                 Column(
                                   children: [
                                     OutlinedButton(
-                                        child: Text(
+                                        child: const Text(
                                           '인증번호 받기',
                                           style: TextStyle(color: Colors.black),
                                         ),
@@ -158,7 +152,7 @@ class ResignPagePhone extends GetView<SignupController> {
 
                                         },
                                         style: OutlinedButton.styleFrom(
-                                            side: BorderSide(color: Colors.green,width: 2)
+                                            side: const BorderSide(color: Colors.green,width: 2)
                                         )
                                     ),
                                     Obx(()=>
@@ -180,12 +174,12 @@ class ResignPagePhone extends GetView<SignupController> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 20,),
+                            const SizedBox(height: 20,),
                             Obx(()=>
                                 Visibility(
                                   visible: controller.phonesuc.value,
                                   child: OutlinedButton(
-                                    child: Text('회원탈퇴'),
+                                    child: const Text('회원탈퇴'),
                                     onPressed: ()async {
                                       Get.offAllNamed('/login');
                                       // Db room doc 사제
@@ -194,7 +188,6 @@ class ResignPagePhone extends GetView<SignupController> {
                                       FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('waterTo').get()
                                           .then((snapshot) {
                                         for (DocumentSnapshot ds in snapshot.docs){
-                                          print(ds.id);
                                           ds.reference.delete();
 
                                         } });
@@ -217,7 +210,7 @@ class ResignPagePhone extends GetView<SignupController> {
                                   ),
                                 ),
                             ),
-                            SizedBox(height: 20,),
+                            const SizedBox(height: 20,),
                           ]
                       ),
                     ),
@@ -237,13 +230,11 @@ class ResignPagePhone extends GetView<SignupController> {
       phoneNumber: "+82" + controller.phoneCon.text,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential).then((value) {
-          print("login with phone ");
           controller.phonesuc.value=true;
 
         });
       },
       verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
       },
       codeSent: (String verificationId, int? resendToken) {
         verificationID = verificationId;
@@ -259,18 +250,9 @@ class ResignPagePhone extends GetView<SignupController> {
         verificationId: verificationID, smsCode: controller.smsCon.text);
 
     await auth.signInWithCredential(credential).then((value) {
-      print("verify otp");
       controller.phonesuc.value=true;
 
     });
-  }
-
-
-  BoxDecoration get _pinPutDecoration {
-    return BoxDecoration(
-      border: Border.all(color: Colors.deepPurpleAccent),
-      borderRadius: BorderRadius.circular(15.0),
-    );
   }
 
 }

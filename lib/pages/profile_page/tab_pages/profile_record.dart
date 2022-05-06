@@ -14,13 +14,13 @@ class ProfileRecord extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
       children: [
         _buildRecordContainer(),
-        SizedBox(height: 30,),
+        const SizedBox(height: 30,),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                     offset: Offset(2,2),
                     blurRadius: 3,
@@ -29,15 +29,15 @@ class ProfileRecord extends StatelessWidget {
                 ),
               ]
           ),
-          child: Calendar(),
+          child: const Calendar(),
         ),
-        SizedBox(height: 20,),
+        const SizedBox(height: 20,),
         Container(
 
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                     offset: Offset(2,2),
                     blurRadius: 3,
@@ -46,7 +46,7 @@ class ProfileRecord extends StatelessWidget {
                 ),
               ]
           ),
-          child: CalendarBelowContainer(),
+          child: const CalendarBelowContainer(),
           clipBehavior: Clip.hardEdge,
         )
       ],
@@ -59,7 +59,7 @@ class ProfileRecord extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
                 offset: Offset(2,2),
                 blurRadius: 3,
@@ -72,8 +72,8 @@ class ProfileRecord extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('나의 기록',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),),
-          SizedBox(height: 10,),
+          const Text('나의 기록',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),),
+          const SizedBox(height: 10,),
           Obx(()=>
             Expanded(
               child: Row(

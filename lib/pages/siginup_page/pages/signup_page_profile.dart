@@ -55,8 +55,8 @@ class SignupPageProfile extends GetView<SignupController> {
                   child:Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('프로필 사진 고르기',style: TextStyle(color: Colors.black,fontSize: 20),),
-                        Text('맘에 드는 이미지를 클릭해주세요!',style: TextStyle(color: Colors.grey,fontSize: 13),),
+                        const Text('프로필 사진 고르기',style: TextStyle(color: Colors.black,fontSize: 20),),
+                        const Text('맘에 드는 이미지를 클릭해주세요!',style: TextStyle(color: Colors.grey,fontSize: 13),),
                         const SizedBox(height: 10,),
                         Container(
                           decoration: BoxDecoration(
@@ -75,7 +75,7 @@ class SignupPageProfile extends GetView<SignupController> {
                                 child: Obx(()=>
                                     Badge(
                                       showBadge: controller.selectedProfile.value==index,
-                                      badgeContent: Icon(Icons.check,color: Colors.white,),
+                                      badgeContent: const Icon(Icons.check,color: Colors.white,),
                                       badgeColor: Colors.lightBlue,
                                       child: Image.asset(
                                         'assets/profile/${controller.profileList[index]}.png',
@@ -88,9 +88,9 @@ class SignupPageProfile extends GetView<SignupController> {
                             )),
                           ),
                         ),
-                        SizedBox(height: 30,),
-                        Text('별명 설정',style: TextStyle(color: Colors.black,fontSize: 20),),
-                        SizedBox(height: 10,),
+                        const SizedBox(height: 30,),
+                        const Text('별명 설정',style: TextStyle(color: Colors.black,fontSize: 20),),
+                        const SizedBox(height: 10,),
                         Form(
                             key: controller.pageNicknameKey,
                             child: SignupTextField(

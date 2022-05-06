@@ -21,16 +21,16 @@ class MissionBPage extends GetView<MissionController> {
                 'assets/pray.png',
                 width: 200,
               ),
-              Text('오늘의 나눔미션',style: TextStyle(fontSize: 24),),
-              SizedBox(height: 20,),
+              const Text('오늘의 나눔미션',style: TextStyle(fontSize: 24),),
+              const SizedBox(height: 20,),
               SizedBox(
                 height: 100,
                 width: Get.width*0.7,
-                child: Text(
+                child: const Text(
                   '여러분의 생각을 나누는 공간입니다.\n어떤 의견이든 좋으니 가볍게 여러분의 생각을 알려주세요!'
                 ),
               ),
-              Spacer(flex: 5,),
+              const Spacer(flex: 5,),
               Obx(()=>
                   ElevatedButton(
                     onPressed: (){
@@ -42,15 +42,15 @@ class MissionBPage extends GetView<MissionController> {
 
                     },
                     child: controller.missionCompleted['B']!
-                        ?Text('의견 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
-                        :Text('의견 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
+                        ?const Text('의견 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
+                        :const Text('의견 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
                     style: ElevatedButton.styleFrom(
-                        primary: Color(0xffA0C6FF),
+                        primary: const Color(0xffA0C6FF),
                         fixedSize: Size(Get.width*0.7,50)
                     ),
                   ),
               ),
-              Spacer(flex: 3,)
+              const Spacer(flex: 3,)
             ],
           ),
         ),

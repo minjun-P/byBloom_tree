@@ -170,48 +170,10 @@ class FriendState extends State<FriendAddPage>{
                       ),
                     )
                 )
-
-
-
-
           ]
                 ),
         ),
       )
     );
-
-
-
   }
-  _buildPhoneFutureList()async{
-    // 폰에서 친구 불러오기
-    List<Contact>? friendsInPhone = await getPermission();
-    // db에 있는 유저 목록
-    QuerySnapshot<Map<String,dynamic>> dbUsers = await FirebaseFirestore.instance.collection('users').get();
-
-    //dbUsers 를 phoneNumber 로 이루어진 리스트로 만들기
-    List phoneNumList = dbUsers.docs.map((e) {
-      String phoneNumber = e.data()['phoneNumber'];
-      return phoneNumber;
-    }).toList();
-
-    //friendsInPhone 을 phoneNumber 로 이루어진 리스트로 만들기
-    // 이게 null 이면 그냥 함수 끝내기
-    if (friendsInPhone==null){
-      return [];
-    }
-    // 숫자만 있는 리스트 만들기
-    List onlyNumPhones = friendsInPhone.map((e) {
-      if (e.phones!.isNotEmpty){
-        String phoneNum = e.phones![0].value!;
-        // 정규 표현식 이용해 숫자만 추출하기
-        String filteredPhoneNum = phoneNum.replaceAll(RegExp('[^0-9]'), '');
-        return filteredPhoneNum;
-      }
-    }).toList();
-
-    // 두 리스트 대조하기
-
-  }
-
 }

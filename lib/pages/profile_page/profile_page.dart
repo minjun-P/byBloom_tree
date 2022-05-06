@@ -41,7 +41,7 @@ class ProfilePageState extends State<ProfilePage>{
                           children: [
                             Container(
                               height: 120,
-                              color: Color(0xffFFF9C3),
+                              color: const Color(0xffFFF9C3),
                             ),
                             Container(
                               height: 120,
@@ -67,8 +67,8 @@ class ProfilePageState extends State<ProfilePage>{
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
-                                Text(DbController.to.currentUserModel.value.nickname,style: TextStyle(color: Color(0xffC5B785)),)
+                                Text(DbController.to.currentUserModel.value.name,style: const TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
+                                Text(DbController.to.currentUserModel.value.nickname,style: const TextStyle(color: Color(0xffC5B785)),)
                               ],
                             ),
                           )
@@ -104,11 +104,11 @@ class ProfilePageState extends State<ProfilePage>{
                   ],
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: TabBarView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       child: ProfileRecord(),
                     ),
                     ProfileGallery(),
