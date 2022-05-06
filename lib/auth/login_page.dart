@@ -13,7 +13,7 @@ FirebaseAuth auth =FirebaseAuth.instance;
 class loginScreen extends GetView<LoginController> {
    loginScreen({Key? key}) : super(key: key);
 
-   var phonenumber;
+
    late String verificationID;
 
   @override
