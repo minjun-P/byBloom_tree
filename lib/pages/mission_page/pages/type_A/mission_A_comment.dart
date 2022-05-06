@@ -32,7 +32,7 @@ class MissionAComment extends GetView<MissionController> {
                   ),
                 ),
                 const Text('최신순'),
-                const Divider(thickness: 2,color: Colors.grey,),
+                Divider(thickness: 2,color: Colors.grey,),
                 StreamBuilder<QuerySnapshot>(
                   stream: controller.missionsRef.doc('day${controller.day.value}').collection('category').doc('A').collection('comments').orderBy('createdAt',descending: true).snapshots(),
                   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -52,10 +52,10 @@ class MissionAComment extends GetView<MissionController> {
                         ),
                       );
                     }
-                    if (snapshot.data!.docs.isEmpty){
+                    if (snapshot.data!.docs.length==0){
                       return Expanded(
                         child: Column(
-                          children: const [
+                          children: [
                             Spacer(),
                             Center(child: Text(
                                 '아직 댓글이 없습니다',
@@ -95,7 +95,7 @@ class MissionAComment extends GetView<MissionController> {
                                       }
                                       // uid data 가 존재하지 않을 때, 즉 회원 탈퇴를 했을 때 처리 -> 토끼로 고정
                                       if (!snapshot.data!.exists){
-                                        return const CircleAvatar(
+                                        return CircleAvatar(
                                           backgroundImage: AssetImage(
                                             'assets/profile/a_1.png',
                                           ),
@@ -111,31 +111,31 @@ class MissionAComment extends GetView<MissionController> {
                                       );
                                     }
                                   ),
-                                  const SizedBox(width: 10,),
+                                  SizedBox(width: 10,),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(data['writer'], style: const TextStyle(color: Colors.grey),),
+                                      Text(data['writer'], style: TextStyle(color: Colors.grey),),
                                       Text(data['contents']),
-                                      const SizedBox(height: 10,),
+                                      SizedBox(height: 10,),
                                     ],
                                   ),
-                                  const Spacer(),
+                                  Spacer(),
                                   // 삭제 로직
 
                                   Visibility(
                                     visible: data['uid']==DbController.to.currentUserModel.value.uid,
                                     child: TextButton(
-                                      child: const Text('삭제'),
+                                      child: Text('삭제'),
                                       onPressed: (){
                                         showDialog(
                                             context: context,
                                             builder: (context) {
                                               // 삭제 확인 알림
                                               return AlertDialog(
-                                                title: const Text('정말 삭제하시겠습니까?'),
+                                                title: Text('정말 삭제하시겠습니까?'),
                                                 content: OutlinedButton(
-                                                  child: const Text('네'),
+                                                  child: Text('네'),
                                                   onPressed: (){
                                                     controller.deleteComment(docId:snapshotList[index].id, type: 'A');
                                                     Get.back(closeOverlays: true);
@@ -153,27 +153,27 @@ class MissionAComment extends GetView<MissionController> {
                                   Visibility(
                                     visible: data['uid']!=DbController.to.currentUserModel.value.uid,
                                     child: TextButton(
-                                      child: const Text('신고'),
+                                      child: Text('신고'),
                                       onPressed: (){
                                         showDialog(
                                             context: context,
                                             builder: (context) {
                                               // 삭제 확인 알림
                                               return AlertDialog(
-                                                title: const Text('정말 신고하시겠습니까?'),
+                                                title: Text('정말 신고하시겠습니까?'),
                                                 content: Column(
                                                   mainAxisSize: MainAxisSize.min,
                                                   children: [
-                                                    const Text('<신고 사유>'),
+                                                    Text('<신고 사유>'),
                                                     TextFormField(
                                                       controller: controller.reportControllerA,
                                                       maxLines: 3,
-                                                      decoration: const InputDecoration(
+                                                      decoration: InputDecoration(
                                                         hintText: '사유를 입력해야 제출이 가능합니다.'
                                                       ),
                                                     ),
                                                     OutlinedButton(
-                                                      child: const Text('제출'),
+                                                      child: Text('제출'),
                                                       onPressed: (){
                                                         if (controller.reportControllerA.text.isNotEmpty){
                                                           controller.reportComment(
@@ -244,7 +244,7 @@ class MissionAComment extends GetView<MissionController> {
                     );
                   },
                 ),
-                const SizedBox(height: 60,)
+                SizedBox(height: 60,)
               ],
             ),
           ),
@@ -252,11 +252,11 @@ class MissionAComment extends GetView<MissionController> {
           bottomSheet: !controller.missionCompleted['A']!
               ?Container(
             height: 80,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
                 color: Colors.grey.shade100,
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
-                boxShadow: const [
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+                boxShadow: [
                   BoxShadow(
                       offset: Offset(0,-0.7),
                       color: Colors.grey,
@@ -267,14 +267,14 @@ class MissionAComment extends GetView<MissionController> {
             ),
             child: Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   backgroundColor: Colors.amber,
                 ),
-                const SizedBox(width:10),
+                SizedBox(width:10),
                 Expanded(
                     child: TextFormField(
                       controller: controller.commentControllerA,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           hintText: '랄라블라로 의견 남기기'
                       ),
                       maxLines: 2,
@@ -282,7 +282,7 @@ class MissionAComment extends GetView<MissionController> {
                 ),
                 // 댓글 남기기
                 IconButton(
-                  icon: const Icon(Icons.send),
+                  icon: Icon(Icons.send),
                   onPressed: (){
                     // 텍스트가 있을 때만
                     if (controller.commentControllerA.text.isNotEmpty){

@@ -25,7 +25,7 @@ class FriendTree extends GetView<FriendProfileController> {
           stream: FirebaseFirestore.instance.collection('users').doc(friendData.uid).snapshots(),
           builder: (context,snapshot) {
             if (snapshot.hasError){
-              return const Text('error');
+              return Text('error');
             }
             if (snapshot.connectionState==ConnectionState.waiting){
               return CircularProgressIndicator(color: Colors.grey.shade200,);

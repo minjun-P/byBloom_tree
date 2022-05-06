@@ -4,11 +4,23 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
+import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
 
+import '../forest_model.dart';
 
 /// 채팅방 UI
 /// 대강 만들어 놓긴 했는데 보내는 버튼도 안 넣어놨고
@@ -16,14 +28,14 @@ import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
 /// 채팅 목록은 forest_model에서 가져왔으.
 
 class ForestChatRoom extends StatefulWidget {
-  const ForestChatRoom({
+  ForestChatRoom({
     Key? key,
     required this.room
   }) : super(key: key);
   final types.Room room;
   @override
   State<StatefulWidget> createState() {
-    return ForestChatState( room: room);
+    return ForestChatState( room: this.room);
   }
 }
 
@@ -40,17 +52,61 @@ class ForestChatState extends State<ForestChatRoom>{
   final ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    void _handleAtachmentPressed() {
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: SizedBox(
+              height: 144,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _handleImageSelection();
+                    },
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Photo'),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _handleFileSelection();
+                    },
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('File'),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Cancel'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
     return Scaffold(
       key: _ScaffoldKey,
-      endDrawer: buildCustomDrawer(child: ChatRoomDrawer(room: room),left: false),
+      endDrawer: buildCustomDrawer(child: ChatRoomDrawer(room: this.room),left: false),
       appBar: AppBar(
-        leading: IconButton(onPressed:(){ Navigator.pop(context);} ,icon: const Icon(Icons.arrow_back),),
+        leading: IconButton(onPressed:(){ Navigator.pop(context);} ,icon: Icon(Icons.arrow_back),),
         title: Text(this.room.name??""),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [ IconButton(onPressed: (){
           _ScaffoldKey.currentState?.openEndDrawer();
-        }, icon: const Icon(Icons.folder))],
+        }, icon: Icon(Icons.folder))],
       ),
 
       backgroundColor: const Color(0xffFAE7E2),
@@ -69,18 +125,18 @@ class ForestChatState extends State<ForestChatRoom>{
 
                   customMessageBuilder: (types.CustomMessage s, {required int messageWidth} )=>
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.all(10),
                         color: Colors.white,
-                        child: Text('${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다',style: const TextStyle(color: Colors.black),),
+                        child: Text('${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다',style: TextStyle(color: Colors.black),),
                         width: Get.width*0.8,
                       ),
 
 
                   messages: snapshot.data ?? [],
                   showUserNames: true,
-                  theme: const DefaultChatTheme(
+                  theme: DefaultChatTheme(
                       userNameTextStyle: TextStyle(color:Colors.black),
-                      backgroundColor: Color(0xffFAE7E2),
+                      backgroundColor: const Color(0xffFAE7E2),
                       inputBackgroundColor: Color(0xffF0F0F0),
                       primaryColor:Colors.white,
                       inputTextColor: Colors.black,
@@ -106,11 +162,113 @@ class ForestChatState extends State<ForestChatRoom>{
       ),
     );
   }
+  RxBool _isAttachmentUploading =RxBool(false);
 
+  void _setAttachmentUploading(bool uploading) {
 
+    _isAttachmentUploading.value = uploading;
 
+  }
 
+  void _handleFileSelection() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+    );
 
+    if (result != null && result.files.single.path != null) {
+      _setAttachmentUploading(true);
+      final name = result.files.single.name;
+      final filePath = result.files.single.path!;
+      final file = File(filePath);
+
+      try {
+        final reference = FirebaseStorage.instance.ref(name);
+        await reference.putFile(file);
+        final uri = await reference.getDownloadURL();
+
+        final message = types.PartialFile(
+          mimeType: lookupMimeType(filePath),
+          name: name,
+          size: result.files.single.size,
+          uri: uri,
+        );
+
+        FirebaseChatCore.instance.sendMessage(message, this.room.id);
+        _setAttachmentUploading(false);
+      } finally {
+        _setAttachmentUploading(false);
+      }
+    }
+  }
+
+  void _handleImageSelection() async {
+    final result = await ImagePicker().pickImage(
+      imageQuality: 70,
+      maxWidth: 1440,
+      source: ImageSource.gallery,
+    );
+
+    if (result != null) {
+      _setAttachmentUploading(true);
+      final file = File(result.path);
+      final size = file.lengthSync();
+      final bytes = await result.readAsBytes();
+      final image = await decodeImageFromList(bytes);
+      final name = result.name;
+
+      try {
+        final reference = FirebaseStorage.instance.ref(name);
+        await reference.putFile(file);
+        final uri = await reference.getDownloadURL();
+
+        final message = types.PartialImage(
+          height: image.height.toDouble(),
+          name: name,
+          size: size,
+          uri: uri,
+          width: image.width.toDouble(),
+        );
+
+        FirebaseChatCore.instance.sendMessage(
+          message,
+          this.room.id,
+        );
+        _setAttachmentUploading(false);
+      } finally {
+        _setAttachmentUploading(false);
+      }
+    }
+  }
+
+  void _handleMessageTap(BuildContext context, types.Message message) async {
+    if (message is types.FileMessage) {
+      var localPath = message.uri;
+
+      if (message.uri.startsWith('http')) {
+        final client = http.Client();
+        final request = await client.get(Uri.parse(message.uri));
+        final bytes = request.bodyBytes;
+        final documentsDir = (await getApplicationDocumentsDirectory()).path;
+        localPath = '$documentsDir/${message.name}';
+
+        if (!File(localPath).existsSync()) {
+          final file = File(localPath);
+          await file.writeAsBytes(bytes);
+        }
+      }
+
+      await OpenFile.open(localPath);
+    }
+  }
+
+  void _handlePreviewDataFetched(
+      types.TextMessage message,
+      types.PreviewData previewData,
+      ) {
+    final updatedMessage = message.copyWith(previewData: previewData);
+
+    FirebaseChatCore.instance.updateMessage(updatedMessage, this.room.id);
+  }
 
   void _handleSendPressed(types.PartialText message) {
     FirebaseChatCore.instance.sendMessage(
@@ -291,38 +449,38 @@ class ChatRoomDrawer extends StatelessWidget {
           children: [
 
             Container(
-                padding:const EdgeInsets.all(30)
+                padding:EdgeInsets.all(30)
                 ,child: Column(
                   children: [
-                    const SizedBox(height: 100,),
-                    const Text('숲구성원',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                    SizedBox(
+                    SizedBox(height: 100,),
+                    Text('숲구성원',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                    Container(
                       height: Get.height*0.5,
-                      child: userexceptme.isNotEmpty?ListView.builder(itemBuilder:
+                      child: userexceptme.length>0?ListView.builder(itemBuilder:
                    (BuildContext context, int index) {
 
                       return ListTile(
-                     title: ((userexceptme[index].id=="unknown")?const Text("탈퇴한회원"):Text(
+                     title: ((userexceptme[index].id=="unknown")?Text("탈퇴한회원"):Text(
                      userexceptme[index].lastName??""+(userexceptme[index].firstName??""),
-                     style: const TextStyle(
+                     style: TextStyle(
                      fontSize: 18
                      ),
                      )),
                      leading:Image.asset('assets/profile/${userexceptme[index].imageUrl}.png') ,
                       );
                       },itemCount: userexceptme.length): Container(
-                        padding: const EdgeInsets.all(30),
-                          child: const Text("아직구성원이없어요")),
+                        padding: EdgeInsets.all(30),
+                          child: Text("아직구성원이없어요")),
                               )
                   ],
                 )),
-            const SizedBox(
+            SizedBox(
               height: 50,
             ),
            Row(
              children: [
             Container(
-              padding: const EdgeInsets.only(top:20,bottom: 20),
+              padding: EdgeInsets.only(top:20,bottom: 20),
               child: InkWell(
                   onTap: (){
 
@@ -334,9 +492,9 @@ class ChatRoomDrawer extends StatelessWidget {
                   }, child:
 
               Container(
-                padding: const EdgeInsets.all(30),
+                padding: EdgeInsets.all(30),
                 child: Column(
-                  children: const [
+                  children: [
                     Icon(Icons.logout),
                     Text('방나가기'),
                   ],

@@ -9,29 +9,30 @@ class DbController extends GetxController{
 
   static DbController get to => Get.find();
 
+  String? _token;
   String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
   List<FriendModel>? possiblefriends;
   // 다큐먼트 스냅샷
   Stream<DocumentSnapshot> documentStream= FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots();
   Rx<UserModel> currentUserModel = UserModel(
-    uid: '',
-    phoneNumber: '',
-    name: '로딩중',
-    birth: '',
-    sex: '',
-    level: 1,
-    exp: 0,
-    createdAt: DateTime.now(),
-    profileImage: '',
-    church: '',
-    slideValue: 0,
-    nickname: '',
-    friendList: [],
-    friendPhoneList: [],
-    lastName: '',
-    firstName: '',
-    imageUrl: ''
+      uid: '',
+      phoneNumber: '',
+      name: '로딩중',
+      birth: '',
+      sex: '',
+      level: 1,
+      exp: 0,
+      createdAt: DateTime.now(),
+      profileImage: '',
+      church: '',
+      slideValue: 0,
+      nickname: '',
+      friendList: [],
+      friendPhoneList: [],
+      lastName: '',
+      firstName: '',
+      imageUrl: ''
   ).obs;
 
   Rx<int> day = 1.obs;
@@ -93,28 +94,32 @@ class DbController extends GetxController{
     // currentUserModel이 바뀔 때마다, 호출
     ever(currentUserModel,(_){
       _ as UserModel;
+      print('currentUserModel 업데이트');
       uploadFriend(currentUserModel.value);
-
 
     });
     possiblefriends=await findfriendwithcontact(currentUserModel.value.phoneNumber);
     print("유저업데이트완료");
-
   }
 
   // 친구 만드는 메소드
   void uploadFriend(UserModel currentUser){
+    try {
       // 이미 만들어진 friendPhoneList 불러오고
       List<String> friendPhoneList = currentUser.friendPhoneList;
       // friendPhoneList 로 for 문
       friendPhoneList.forEach((phoneNum) async {
+
         FriendModel? myFriend= await findUserFromDb(phoneNum);
         if(myFriend!=null){
           currentUser.friendList.add(myFriend);
-           }
+        }
 
       });
 
+    }catch(error){
+      print(error);
+    }
   }
   // 디비에서 phoneNum 가져와서 하나하나 쿼리 => FriendModel 리턴
   Future<FriendModel?> findUserFromDb(String phoneNum) async {
@@ -123,6 +128,7 @@ class DbController extends GetxController{
     where('phoneNumber',isEqualTo:phoneNum).get();
     // 검색 결과가 있으면
     if (friend.size!=0) {
+      print(friend.docs[0].data()['name']);
       return FriendModel(
           name: friend.docs[0].data()['name'],
           phoneNumber:friend.docs[0].data()['phoneNumber'],

@@ -1,5 +1,7 @@
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class UserModel{
   late final String uid;
@@ -82,16 +84,26 @@ Future<String?> findUserNameFromPhone(String phoneNum) async {
   where('phoneNumber',isEqualTo:phoneNum).
   snapshots().first;
 
-  return friend.docs[0].data()['nickname'];
+  if (friend != null) {
+    return friend.docs[0].data()['nickname'];
 
+
+}
+
+  return null;
 }
 Future<String?> finduidFromPhone(String phoneNum) async {
   var friend =  await FirebaseFirestore.instance.collection('users').
   where('phoneNumber',isEqualTo:phoneNum).
   snapshots().first;
 
-  return friend.docs[0].id;
+  if (friend != null) {
+    return friend.docs[0].id;
 
+
+  }
+
+  return null;
 }
 
 
@@ -102,6 +114,7 @@ Future<String?> finduidFromPhone(String phoneNum) async {
     ;
 
     if (friend.size!=0) {
+      print(friend.docs[0].data()['name']);
       return FriendModel(
           name: friend.docs[0].data()['name'],
           phoneNumber:friend.docs[0].data()['phoneNumber'],

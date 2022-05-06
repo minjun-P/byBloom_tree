@@ -33,9 +33,9 @@ class SelectionAnswer extends GetView<MissionController> {
                 Container(
                   alignment: Alignment.topCenter,
                   width: Get.width,
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20),
                   height: 120,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40),bottomRight: Radius.circular(40)),
                       boxShadow: [
                         BoxShadow(
@@ -49,7 +49,7 @@ class SelectionAnswer extends GetView<MissionController> {
                     width: 230,
                     child: Text(
                       missionData['제목'],
-                      style: const TextStyle(fontSize: 22),
+                      style: TextStyle(fontSize: 22),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -65,9 +65,9 @@ class SelectionAnswer extends GetView<MissionController> {
                     if (snapshot.connectionState ==ConnectionState.waiting){
                       return Expanded(
                         child: Column(
-                          children: const [
+                          children: [
                             Spacer(),
-                            Center(child: CircularProgressIndicator()),
+                            Center(child: const CircularProgressIndicator()),
                             Spacer()
                           ],
                         ),
@@ -90,13 +90,13 @@ class SelectionAnswer extends GetView<MissionController> {
                                   child: Stack(
                                     children: [
                                       Container(
-                                          margin: const EdgeInsets.symmetric(
+                                          margin: EdgeInsets.symmetric(
                                               vertical: 7),
-                                          padding: const EdgeInsets.symmetric(
+                                          padding: EdgeInsets.symmetric(
                                               horizontal: 10, vertical: 10),
                                           alignment: Alignment.centerLeft,
                                           decoration: BoxDecoration(
-                                              boxShadow: const [
+                                              boxShadow: [
                                                 BoxShadow(color: Colors.grey,
                                                     blurRadius: 2,
                                                     spreadRadius: 0,
@@ -116,7 +116,7 @@ class SelectionAnswer extends GetView<MissionController> {
                                           child: Text(
                                             'A.' + element.toString() + ' ' +
                                                 list[element - 1],
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 20,
 
                                             ),
@@ -142,10 +142,10 @@ class SelectionAnswer extends GetView<MissionController> {
                                                         : 0,
                                                     heightFactor: 1,
                                                     child: Container(
-                                                      margin: const EdgeInsets
+                                                      margin: EdgeInsets
                                                           .symmetric(
                                                           vertical: 7),
-                                                      padding: const EdgeInsets
+                                                      padding: EdgeInsets
                                                           .symmetric(
                                                           horizontal: 10,
                                                           vertical: 10),
@@ -180,7 +180,7 @@ class SelectionAnswer extends GetView<MissionController> {
                                                 return Text(
                                                   (snapshot.data! * 100)
                                                       .toStringAsFixed(0) + '%',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                       fontWeight: FontWeight
                                                           .bold,
                                                       fontSize: 20,
@@ -195,7 +195,7 @@ class SelectionAnswer extends GetView<MissionController> {
                                   ),
                                 )
                             ).toList(),
-                            const SizedBox(height: 5,),
+                            SizedBox(height: 5,),
                             Visibility(
                               visible: controller.missionCompleted['B']!|prior,
                               child: FutureBuilder<double>(
@@ -210,12 +210,12 @@ class SelectionAnswer extends GetView<MissionController> {
                                   }
                               ),
                             ),
-                            const SizedBox(height: 10,),
+                            SizedBox(height: 10,),
                             ElevatedButton(
                                 child: controller.missionCompleted['B']!|prior
-                                    ? const Text('제출 완료', style: TextStyle(
+                                    ? Text('제출 완료', style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),)
-                                    : const Text('제출하기', style: TextStyle(
+                                    : Text('제출하기', style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),),
                                 onPressed: controller.missionCompleted['B']!|prior
@@ -239,7 +239,7 @@ class SelectionAnswer extends GetView<MissionController> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                    primary: const Color(0xffA0C6FF),
+                                    primary: Color(0xffA0C6FF),
                                     fixedSize: Size(Get.width * 0.7, 50)
                                 )
                             ),

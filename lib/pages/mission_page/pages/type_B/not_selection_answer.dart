@@ -37,8 +37,8 @@ class NoSelectionAnswer extends GetView<MissionController> {
                 Container(
                   alignment: Alignment.topCenter,
                   width: Get.width,
-                  padding: const EdgeInsets.all(20),
-                  decoration: const BoxDecoration(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40),bottomRight: Radius.circular(40)),
                       boxShadow: [
                         BoxShadow(
@@ -52,7 +52,7 @@ class NoSelectionAnswer extends GetView<MissionController> {
                     width: 230,
                     child: Text(
                       missionData['제목'],
-                      style: const TextStyle(fontSize: 22),
+                      style: TextStyle(fontSize: 22),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -68,18 +68,18 @@ class NoSelectionAnswer extends GetView<MissionController> {
                     if (snapshot.connectionState ==ConnectionState.waiting){
                       return Expanded(
                         child: Column(
-                          children: const [
+                          children: [
                             Spacer(),
-                            Center(child: CircularProgressIndicator()),
+                            Center(child: const CircularProgressIndicator()),
                             Spacer()
                           ],
                         ),
                       );
                     }
-                    if (snapshot.data!.docs.isEmpty){
+                    if (snapshot.data!.docs.length==0){
                       return Expanded(
                         child: Column(
-                          children: const [
+                          children: [
                             Spacer(flex: 1,),
                             Center(child: Text(
                               '아직 댓글이 없습니다',
@@ -97,9 +97,9 @@ class NoSelectionAnswer extends GetView<MissionController> {
                         padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
                         child: Column(
                           children: [
-                            const SizedBox(height: 10,),
-                            const Divider(thickness: 2,),
-                            const SizedBox(height: 10,),
+                            SizedBox(height: 10,),
+                            Divider(thickness: 2,),
+                            SizedBox(height: 10,),
                             Expanded(
                               child: ListView.separated(
                                 itemCount: snapshot.data!.docs.length,
@@ -141,29 +141,29 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                         );
                                       }
                                   ),
-                                      const SizedBox(width: 10,),
+                                      SizedBox(width: 10,),
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(data['writer'], style: const TextStyle(color: Colors.grey),),
-                                          const SizedBox(height: 10,),
-                                          Text(data['contents'], style: const TextStyle(color: Colors.black),)
+                                          Text(data['writer'], style: TextStyle(color: Colors.grey),),
+                                          SizedBox(height: 10,),
+                                          Text(data['contents'], style: TextStyle(color: Colors.black),)
                                         ],
                                       ),
-                                      const Spacer(),
+                                      Spacer(),
                                       Visibility(
                                         visible: data['uid']==DbController.to.currentUserModel.value.uid,
                                         child: TextButton(
-                                          child: const Text('삭제'),
+                                          child: Text('삭제'),
                                           onPressed: (){
                                             showDialog(
                                                 context: context,
                                                 builder: (context) {
                                                   // 삭제 확인 알림
                                                   return AlertDialog(
-                                                    title: const Text('정말 삭제하시겠습니까?'),
+                                                    title: Text('정말 삭제하시겠습니까?'),
                                                     content: OutlinedButton(
-                                                      child: const Text('네'),
+                                                      child: Text('네'),
                                                       onPressed: (){
                                                         controller.deleteComment(docId:snapshotList[index].id, type: 'B');
                                                         Get.back(closeOverlays: true);
@@ -212,27 +212,27 @@ class NoSelectionAnswer extends GetView<MissionController> {
                                       Visibility(
                                         visible: data['uid']!=DbController.to.currentUserModel.value.uid,
                                         child: TextButton(
-                                          child: const Text('신고'),
+                                          child: Text('신고'),
                                           onPressed: (){
                                             showDialog(
                                                 context: context,
                                                 builder: (context) {
                                                   // 삭제 확인 알림
                                                   return AlertDialog(
-                                                    title: const Text('정말 신고하시겠습니까?'),
+                                                    title: Text('정말 신고하시겠습니까?'),
                                                     content: Column(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        const Text('<신고 사유>'),
+                                                        Text('<신고 사유>'),
                                                         TextFormField(
                                                           controller: controller.reportControllerA,
                                                           maxLines: 3,
-                                                          decoration: const InputDecoration(
+                                                          decoration: InputDecoration(
                                                               hintText: '사유를 입력해야 제출이 가능합니다.'
                                                           ),
                                                         ),
                                                         OutlinedButton(
-                                                          child: const Text('제출'),
+                                                          child: Text('제출'),
                                                           onPressed: (){
                                                             if (controller.reportControllerA.text.isNotEmpty){
                                                               controller.reportComment(
@@ -278,11 +278,11 @@ class NoSelectionAnswer extends GetView<MissionController> {
             bottomSheet: controller.missionCompleted['B']!|prior
                 ?null:Container(
               height: 120,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                   color: Colors.grey.shade100,
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
-                  boxShadow: const [
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+                  boxShadow: [
                     BoxShadow(
                         offset: Offset(0,-0.7),
                         color: Colors.grey,
@@ -297,14 +297,14 @@ class NoSelectionAnswer extends GetView<MissionController> {
                   Expanded(
                     child: Row(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           backgroundColor: Colors.amber,
                         ),
-                        const SizedBox(width:10),
+                        SizedBox(width:10),
                         Expanded(
                             child: TextFormField(
                               controller: controller.commentControllerB,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                   hintText: '의견 남기기'
                               ),
                               maxLines: 2,
@@ -312,7 +312,7 @@ class NoSelectionAnswer extends GetView<MissionController> {
                         ),
                         // 댓글 남기기
                         IconButton(
-                          icon: const Icon(Icons.send),
+                          icon: Icon(Icons.send),
                           onPressed: (){
                             // 텍스트가 있을 때만
                             if (controller.commentControllerB.text.isNotEmpty){
@@ -340,7 +340,7 @@ class NoSelectionAnswer extends GetView<MissionController> {
                               },
                             ),
                         ),
-                        const Text('익명으로 남기기!')
+                        Text('익명으로 남기기!')
                       ],
                     ),
                   ),

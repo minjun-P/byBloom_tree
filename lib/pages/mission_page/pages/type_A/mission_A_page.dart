@@ -23,7 +23,7 @@ class MissionAPage extends GetView<MissionController> {
               backgroundColor: Colors.transparent,
               extendBody: true,
               appBar: AppBar(
-                title: const Text('오늘의 말씀',style: TextStyle(fontSize: 20,fontWeight: FontWeight.normal),),
+                title: Text('오늘의 말씀',style: TextStyle(fontSize: 20,fontWeight: FontWeight.normal),),
                 backgroundColor: Colors.transparent,
                 automaticallyImplyLeading: true,
                 centerTitle: false,
@@ -34,7 +34,7 @@ class MissionAPage extends GetView<MissionController> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                           controller.missionA['성경']+' '+controller.missionA['장:절'],
-                          style: const TextStyle(
+                          style: TextStyle(
                               color: Colors.black,
                             fontSize: 20
                           ),
@@ -46,25 +46,25 @@ class MissionAPage extends GetView<MissionController> {
               ),
               body: Column(
                 children: [
-                  const SizedBox(height: 20,),
+                  SizedBox(height: 20,),
                   _buildBibleContainer(),
 
-                  const Spacer(),
+                  Spacer(),
                   Obx(()=>
                     ElevatedButton(
                         onPressed: (){
-                          Get.to(()=>const MissionAComment());
+                          Get.to(()=>MissionAComment());
                         },
                         child: controller.missionCompleted['A']!
-                            ?const Text('은혜 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
-                            :const Text('은혜 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
+                            ?Text('은혜 구경하기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
+                            :Text('은혜 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xffA0C6FF),
+                        primary: Color(0xffA0C6FF),
                         fixedSize: Size(Get.width*0.7,50)
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30,)
+                  SizedBox(height: 30,)
                 ],
               ),
             ),
@@ -86,8 +86,8 @@ class MissionAPage extends GetView<MissionController> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.all(3),
+                      padding: EdgeInsets.all(5),
+                      margin: EdgeInsets.all(3),
                       child: GestureDetector(
                           onTap: (){
                             controller.bibleIndex(element.key);
@@ -95,14 +95,14 @@ class MissionAPage extends GetView<MissionController> {
                           child: Text(
                               element.value,
                               style: controller.bibleIndex.value%3==element.key
-                                  ?const TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20)
+                                  ?TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20)
                                   :TextStyle(color: Colors.grey.shade200.withOpacity(0.5),fontWeight: FontWeight.normal,fontSize: 18)
                           )
                       ),
                     )
                 ).toList()
             ),
-            const SizedBox(height: 10,),
+            SizedBox(height: 10,),
 
             IndexedStack(
                 index: controller.bibleIndex.value%3,
@@ -114,7 +114,7 @@ class MissionAPage extends GetView<MissionController> {
                         },
                         child: Text(
                           controller.missionA[element],
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 21,
                             height: 1.4
@@ -124,8 +124,9 @@ class MissionAPage extends GetView<MissionController> {
                     }
                 ).toList()
             ),
-            const SizedBox(height: 10,),
-            const Align(alignment: Alignment.center,child: Text('말씀을 터치해보세요',style: TextStyle(color: Colors.grey, fontSize: 18.5),)),
+            SizedBox(height: 10,),
+
+            Align(alignment: Alignment.center,child: Text('말씀을 터치해보세요',style: TextStyle(color: Colors.grey, fontSize: 18.5),)),
           ],
         ),
       ),

@@ -25,12 +25,12 @@ class FriendProfileController extends GetxController with GetTickerProviderState
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    wateringController = AnimationController(vsync: this,duration: const Duration(milliseconds: 2500));
+    wateringController = AnimationController(vsync: this,duration: Duration(milliseconds: 2500));
     wateringAnimation = Tween<double>(
       begin: 0,
       end: 1
     ).animate(wateringController);
-    containerController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000))
+    containerController = AnimationController(vsync: this, duration: Duration(milliseconds: 1000))
     ..repeat(reverse: true);
     containerAnimation = Tween<Offset>(
       begin: Offset.zero,

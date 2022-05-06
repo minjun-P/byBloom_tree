@@ -17,7 +17,7 @@ class NotificationController extends GetxController {
     /// 자동 권한 확보 상태
     prefs = await SharedPreferences.getInstance();
     pushalarmtrue.value = prefs.getBool('pushalarm') ?? true;
-    await messaging.requestPermission(
+    NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -30,8 +30,8 @@ class NotificationController extends GetxController {
     _onMessage();
     super.onInit();
     /// 임시로 precache해보기
-    precacheImage(const AssetImage('assets/tree/background_basic.jpg'), Get.context!);
-    precacheImage(const AssetImage('assets/tree/background_dark.jpg'), Get.context!);
+    precacheImage(AssetImage('assets/tree/background_basic.jpg'), Get.context!);
+    precacheImage(AssetImage('assets/tree/background_dark.jpg'), Get.context!);
 
 
 
@@ -100,8 +100,13 @@ class NotificationController extends GetxController {
       }
 
       }
+      // 개발 확인 용으로 print 구문 추가
+      print('foreground 상황에서 메시지를 받았다.');
+      // 데이터 유무 확인
+      print('Message data: ${message.data}');
       // notification 유무 확인
       if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification!.body}');
       }
     });
 

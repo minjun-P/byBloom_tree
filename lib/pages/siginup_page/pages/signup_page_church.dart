@@ -23,10 +23,10 @@ class SignupPageChurch extends GetView<SignupController> {
           padding: const EdgeInsets.symmetric(vertical: 30,horizontal: 25),
           child: ListView(
             children: [
-              const SignupGauge(minusWidth: 160),
+              SignupGauge(minusWidth: 160),
               const SizedBox(height: 30,),
               const Text('교회를 다니고 계신가요?',style: TextStyle(color: Colors.black,fontSize: 20),),
-              const SizedBox(height: 5,),
+              SizedBox(height: 5,),
               Form(
                 key: controller.pageChurchKey,
                 child: SignupTextField(
