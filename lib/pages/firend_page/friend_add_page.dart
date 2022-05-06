@@ -175,7 +175,4 @@ class FriendState extends State<FriendAddPage>{
       )
     );
   }
-  _getPhoneUserFuture(){
-
-  }
 }
