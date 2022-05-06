@@ -21,7 +21,7 @@ class FriendSearchPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20)
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     fillColor: Colors.blue,
                     icon: Icon(Icons.search),
                     hintText: '친구 검색하기',
@@ -30,25 +30,25 @@ class FriendSearchPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 30,),
-            Text('원하는 친구가 없으시면', style: TextStyle(color: Colors.grey),),
-            Text('초대링크를 클립보드에 복사해보세요', style: TextStyle(color: Colors.grey)),
+            const SizedBox(height: 30,),
+            const Text('원하는 친구가 없으시면', style: TextStyle(color: Colors.grey),),
+            const Text('초대링크를 클립보드에 복사해보세요', style: TextStyle(color: Colors.grey)),
             Expanded(
               child: ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 30),
                   itemBuilder: (context, index) {
                     return ListTile(
-                      contentPadding: EdgeInsets.all(8),
-                      leading: CircleAvatar(backgroundColor: Colors.grey,),
+                      contentPadding: const EdgeInsets.all(8),
+                      leading: const CircleAvatar(backgroundColor: Colors.grey,),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: const [
                           Text('진가영'),
                           Text('010-4222-2568',style: TextStyle(color: Colors.grey),)
                         ],
                       ),
                       trailing: IconButton(
-                        icon: Icon(MdiIcons.accountPlus),
+                        icon: const Icon(MdiIcons.accountPlus),
                         onPressed: (){},
                       ),
                     );

@@ -19,7 +19,7 @@ class MissionDPage extends GetView<MissionController> {
             children: [
 
               Image.asset('assets/pray.png',width: 200,),
-              Text(
+              const Text(
                 '오늘의 예배',
                 style: TextStyle(fontSize: 24,),
               ),
@@ -28,7 +28,7 @@ class MissionDPage extends GetView<MissionController> {
                 flex: 8,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: const [
                     Text('오늘의 예배에 참석하셨나요',style: TextStyle(fontSize: 17),),
                     Text('예배의 느낀 점을 간단히 정리해볼까요?',style: TextStyle(fontSize: 17),),
                     SizedBox(height: 10,),
@@ -37,24 +37,24 @@ class MissionDPage extends GetView<MissionController> {
                   ],
                 ),
               ),
-              Spacer(flex: 5,),
+              const Spacer(flex: 5,),
               Obx(()=>
                   ElevatedButton(
                     onPressed: controller.missionCompleted['D']!
                         ?(){}
                         :(){
-                      Get.to(()=>MissionDExecute());
+                      Get.to(()=>const MissionDExecute());
                     },
                     child: controller.missionCompleted['D']!
-                        ?Text('작성 완료!',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
-                        :Text('느낀점 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
+                        ?const Text('작성 완료!',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),)
+                        :const Text('느낀점 남기기',style: TextStyle(fontSize: 23,color: Colors.white,fontWeight: FontWeight.bold),),
                     style: ElevatedButton.styleFrom(
-                        primary: Color(0xffA0C6FF),
+                        primary: const Color(0xffA0C6FF),
                         fixedSize: Size(Get.width*0.7,50)
                     ),
                   ),
               ),
-              Spacer(flex: 3,),
+              const Spacer(flex: 3,),
 
             ],
           ),
