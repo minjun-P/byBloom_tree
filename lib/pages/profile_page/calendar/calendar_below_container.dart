@@ -18,7 +18,7 @@ class CalendarBelowContainer extends GetView<CalendarController> {
               child: Container(
                 key: ValueKey<int>(controller.selectedDay.value.day),
                 padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 30),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.white
                 ),
                 child: Column(

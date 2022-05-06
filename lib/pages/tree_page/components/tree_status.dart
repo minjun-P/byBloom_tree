@@ -28,11 +28,11 @@ class TreeStatus extends GetView<TreeController> {
                   visible: controller.exp>=controller.expStructure[controller.level.toString()],
                   child: Column(
                     children: [
-                      Text('레벨업'),
+                      const Text('레벨업'),
                       GestureDetector(
                         onTap: ()async{
                           controller.levelUpAnimationController.forward().then((value) => controller.levelUpAnimationController.reset());
-                          Future.delayed(Duration(milliseconds: 3400)).then((value) => controller.levelUp(DbController.to.currentUserModel.value.level));
+                          Future.delayed(const Duration(milliseconds: 3400)).then((value) => controller.levelUp(DbController.to.currentUserModel.value.level));
                         },
                         child: Lottie.asset(
                             'assets/tree/levelupicon.json',
@@ -41,14 +41,14 @@ class TreeStatus extends GetView<TreeController> {
                     ],
                   )),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Align(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(15)
@@ -60,10 +60,10 @@ class TreeStatus extends GetView<TreeController> {
                         Text.rich(
                             TextSpan(
                                 children: [
-                                  TextSpan(text: '성장단계 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
+                                  const TextSpan(text: '성장단계 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
                                   TextSpan(
                                       text: controller.level<8?'${controller.level.toString()} ':'최종',
-                                    style: TextStyle(fontWeight: FontWeight.bold)
+                                    style: const TextStyle(fontWeight: FontWeight.bold)
                                   ),
                                 ]
                             )
@@ -71,7 +71,7 @@ class TreeStatus extends GetView<TreeController> {
                         Text.rich(
                             TextSpan(
                                 children: [
-                                  TextSpan(text: '성장치 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
+                                  const TextSpan(text: '성장치 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
                                   TextSpan(
                                       text: controller.exp.toString(),
                                       style: TextStyle(
@@ -89,7 +89,7 @@ class TreeStatus extends GetView<TreeController> {
                           Text.rich(
                               TextSpan(
                                   children: [
-                                    TextSpan(text: '물 주기 횟수 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
+                                    const TextSpan(text: '물 주기 횟수 ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
 
                                     TextSpan(
                                         text: DbController.to.waterToLimit.value.toString()
@@ -111,7 +111,7 @@ class TreeStatus extends GetView<TreeController> {
                 stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
                 builder: (context, snapshot){
                   if (snapshot.hasError){
-                    return Text('Error');
+                    return const Text('Error');
                   }
                   if (snapshot.connectionState == ConnectionState.waiting){
                     return Container();
@@ -124,10 +124,10 @@ class TreeStatus extends GetView<TreeController> {
                   // 표시할 최종 num
                   int finalNum = len-waterToExp;
                   return Badge(
-                    badgeContent: Text(finalNum.toString(),style: TextStyle(color: Colors.white),),
+                    badgeContent: Text(finalNum.toString(),style: const TextStyle(color: Colors.white),),
                     badgeColor: Colors.blueGrey,
                     elevation: 2,
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: GestureDetector(
                       onTap: () async{
                         if (finalNum>0){
@@ -170,7 +170,7 @@ class TreeStatus extends GetView<TreeController> {
                     width: Get.width*0.9*controller.exp/controller.expStructure[controller.level.toString()],
                     duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(topRight: Radius.circular(30),bottomRight: Radius.circular(30)),
+                        borderRadius: const BorderRadius.only(topRight: Radius.circular(30),bottomRight: Radius.circular(30)),
                         color: Colors.green.shade100
                     ),
                   ),

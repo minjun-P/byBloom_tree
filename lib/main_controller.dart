@@ -10,7 +10,6 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'pages/tree_page/tree_page.dart';
 
 /// 메인 컨트롤러
 /// 1. 네비게이션 바, 메인스크린 컨트롤
@@ -46,7 +45,6 @@ class MainController extends GetxController{
    await FirebaseAnalytics.instance.setCurrentScreen(screenName: "mainScreeen");
     await FirebaseAnalytics.instance.logScreenView(screenName: "mainScreen");
     await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
-    print("로그수신");
 
   }
 
@@ -112,7 +110,7 @@ class MainController extends GetxController{
             changeNavigationBarIndex(1);
           }
           if(target.identify == '7'){
-            Get.to(()=>MissionAPage());
+            Get.to(()=>const MissionAPage());
           }
         },
         onFinish: (){
@@ -147,7 +145,7 @@ class MainController extends GetxController{
   Future<void> sendFcm({required String token, required String title, required String body}) async {
     FirebaseFunctions functions = FirebaseFunctions.instanceFor(region: 'asia-northeast3');
     HttpsCallable callable = functions.httpsCallable('sendFCM');
-    final resp = await callable.call(<String, dynamic> {
+    await callable.call(<String, dynamic> {
       'token': token,
       'title': title,
       'body': body
@@ -305,8 +303,8 @@ Widget buildAlert({required List<String> messages,required bool left}) {
     crossAxisAlignment: left?CrossAxisAlignment.start:CrossAxisAlignment.end,
     children: messages.map((element) {
       return Container(
-        padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-        margin: EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+        margin: const EdgeInsets.symmetric(vertical: 6),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10)

@@ -129,7 +129,7 @@ class CalendarController extends GetxController {
       selectedEventsList.value = getEventsForDay().map((event)=>event.category!).toList();
       update();
     });
-    Future.delayed(Duration(milliseconds: 1000)).then((value) => update());
+    Future.delayed(const Duration(milliseconds: 1000)).then((value) => update());
     super.onInit();
   }
 
