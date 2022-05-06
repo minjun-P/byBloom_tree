@@ -1,4 +1,9 @@
+
+import 'package:bybloom_tree/DBcontroller.dart';
+import 'package:bybloom_tree/auth/FriendModel.dart';
+
 import 'package:contacts_service/contacts_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -7,6 +12,7 @@ import 'package:bybloom_tree/auth/FriendAdd.dart';
 
 TextEditingController textfield=TextEditingController();
 class FriendAddPage extends StatefulWidget{
+
   const FriendAddPage({
     Key? key,
   }) : super(key: key);
@@ -15,7 +21,9 @@ class FriendAddPage extends StatefulWidget{
     return FriendState();
   }
 
+
 }
+
 
 class FriendState extends State<FriendAddPage>{
 
@@ -175,4 +183,5 @@ class FriendState extends State<FriendAddPage>{
       )
     );
   }
+
 }

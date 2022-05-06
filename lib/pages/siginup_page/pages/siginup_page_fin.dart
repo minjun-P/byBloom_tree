@@ -22,10 +22,12 @@ class SignupPageFin extends GetView<SignupController> {
               const SizedBox(height: 40,),
               OutlinedButton(
                   onPressed: () async {
+
                 List<FriendModel>? s=await findfriendwithcontact(controller.phoneCon.text);
                 s?.forEach((element) {
                 });
                 Get.to(const FriendAddPage());
+
 
               }, child: const Text('연락처 연동해서 친구찾기',style: TextStyle(fontSize: 18),)),
               const SizedBox(height: 40,),

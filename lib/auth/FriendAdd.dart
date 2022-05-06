@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bybloom_tree/DBcontroller.dart';
 import 'package:bybloom_tree/auth/FriendModel.dart';
 import 'package:contacts_service/contacts_service.dart';
@@ -6,29 +8,49 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'authservice.dart';
 
 final database= FirebaseFirestore.instance;
-Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
+Future<List<FriendModel>>  findfriendwithcontact(String mynumber) async {
    List<Contact>? mycontacts=await getPermission( );
-    List<FriendModel> friendalreadysignedup=[];
-      for(int i=0;i<mycontacts!.length;i++) {
-        for(int j=0;j<mycontacts[i].phones!.length;j++){
-          String phonenumber=mycontacts[i].phones![j].value as String;
-          if(phonenumber.length!=11){
-            phonenumber=phonenumber.replaceAll('-', "");
-            if(phonenumber.length!=11){
-              phonenumber=phonenumber.substring(3);
-            }
-          }
-         if (phonenumber!=mynumber) {
-           FriendModel? s = await findUserFromPhone(phonenumber);
-           if (s != null) {
-             friendalreadysignedup.add(s);
+
+   List<FriendModel> friendalreadysignedin=[];
+    List<String> phoneenumberlist=[];
+       if(mycontacts!=null) {
+         for (int i = 0; i < mycontacts!.length; i++) {
+           for (int j = 0; j < mycontacts[i].phones!.length; j++) {
+             String phonenumber = mycontacts[i].phones![j].value as String;
+             if (phonenumber.length != 11) {
+               phonenumber = phonenumber.replaceAll('-', "");
+               if (phonenumber.length != 11) {
+                 phonenumber = phonenumber.substring(3);
+               }
+             }
+             if (phonenumber != mynumber) {
+               phoneenumberlist.add(phonenumber);
+             };
            }
-         }
-        }
-      }
-      return friendalreadysignedup;
+         };
+       }
+        var s = await FirebaseFirestore.instance.collection('users').get();
+        List dbphoneenumberlist=[];
+        s.docs.forEach((element) {
+          if(phoneenumberlist.contains(element.data()['phoneNumber'])){
+            friendalreadysignedin.add(FriendModel(
+                tokens: element.data()['tokens'],
+                phoneNumber: element.data()['phoneNumber'],
+                nickname: element.data()['nickname'],
+                profileImage: element.data()['profileImage'],
+                uid: element.id,
+                name: element.data()['name'],
+                exp: element.data()['exp'],
+                level: element.data()['level']));
+        };});
+
+
+      return friendalreadysignedin;}
+
+    
+
       // 허락해달라고 팝업띄우는 코드
-    }
+
     ///스트링 formatter추가
 ///
 
@@ -96,25 +118,29 @@ Future<bool> deleteFriend(FriendModel friendtoadd) async {
 }
 ///친구삭제하는 로직
 ///
-Future<FriendModel?> findUserFromPhone(String phoneNum) async {
-  var friend = await FirebaseFirestore.instance.collection('users').
-  where('phoneNumber', isEqualTo: phoneNum).get()
-  ;
 
-  if (friend.size != 0) {
+Future<FriendModel?> findUserFromPhone(String phoneNumber) async {
+  var friend =  await FirebaseFirestore.instance.collection('users').
+  where('phoneNumber',isEqualTo:phoneNumber).get();
+
+  if (friend.size!=0) {
+    print(friend.docs[0].data()['name']);
     return FriendModel(
         name: friend.docs[0].data()['name'],
-        phoneNumber: friend.docs[0].data()['phoneNumber'],
+        phoneNumber:friend.docs[0].data()['phoneNumber'],
         nickname: friend.docs[0].data()['nickname'],
         exp: friend.docs[0].data()['exp'],
         level: friend.docs[0].data()['level'],
         tokens: friend.docs[0].data()['tokens']??[],
-        uid: friend.docs[0].id,
+        uid:  friend.docs[0].id,
         profileImage: friend.docs[0].data()['profileImage']
     );
   }
+
   return null;
 }
+
+
 
 
 
