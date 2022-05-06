@@ -1,4 +1,6 @@
 
+
+
 import 'package:bybloom_tree/DBcontroller.dart';
 
 import 'package:bybloom_tree/auth/FriendModel.dart';
@@ -9,6 +11,9 @@ import 'package:bybloom_tree/auth/User.dart';
 import 'package:bybloom_tree/auth/FriendAdd.dart';
 
 TextEditingController textfield=TextEditingController();
+
+
+
 class FriendAddPage extends StatefulWidget{
 
 
@@ -64,7 +69,7 @@ class FriendState extends State<FriendAddPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: [
-                  DbController().possiblefriends!=null?Text("가입한 친구가없습니다."):Expanded(
+                  realpossiblefriends!=null?Text("가입한 친구가없습니다."):Expanded(
                     child: ListView.builder(
 
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -72,13 +77,13 @@ class FriendState extends State<FriendAddPage> {
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           title: Text(
-                            DbController().possiblefriends![index].name,
+                            realpossiblefriends![index].name,
                             style: TextStyle(
                                 fontSize: 18
                             ),
                           ),
                           leading: Image.asset(
-                              'assets/profile/${DbController().possiblefriends![index].profileImage}.png'),
+                              'assets/profile/${realpossiblefriends![index].profileImage}.png'),
 
                           trailing: InkWell(
                             onTap: (){
@@ -90,7 +95,7 @@ class FriendState extends State<FriendAddPage> {
                               color: Colors.grey.shade500,),
                           ),
                         );
-                      }, itemCount: DbController().possiblefriends!.length,
+                      }, itemCount: realpossiblefriends!.length,
                     ),
                   ),
 
@@ -211,3 +216,12 @@ class FriendState extends State<FriendAddPage> {
 
         )
     );
+
+    ///realpossiblefriends 에 내연락처중 가입한 친구이지만 나랑 친구아닌 친구들의 프렌드모델이 저장되어있음.
+    ///이거를 리스트뷰로 활요해서 위젯 구성하면 될거야!!
+    ///if(textfield.text.length==11){
+    //                             friendtoadd=await findUserFromPhone(textfield.text);}
+    //                             else {
+    //                             friendtoadd=await findUserFromName(textfield.text);
+    //                             }
+    ///위부분이 번호검색 이름검색 처리하는 부붐!!
