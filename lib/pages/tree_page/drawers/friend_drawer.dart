@@ -43,7 +43,7 @@ class FriendDrawer extends GetView<TreeController> {
 
                 List<FriendModel>? friendlist=await findfriendwithcontact(DbController.to.currentUserModel.value.phoneNumber);
                 showDialog(context: context, builder:(context){
-                  if(friendlist!.isEmpty){
+                  if(friendlist.isEmpty){
                     return const Card(
                         child:Text("아직 가입한 친구가없네요")
                     );

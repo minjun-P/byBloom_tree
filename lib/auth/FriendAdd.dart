@@ -14,7 +14,7 @@ Future<List<FriendModel>>  findfriendwithcontact(String mynumber) async {
    List<FriendModel> friendalreadysignedin=[];
     List<String> phoneenumberlist=[];
        if(mycontacts!=null) {
-         for (int i = 0; i < mycontacts!.length; i++) {
+         for (int i = 0; i < mycontacts.length; i++) {
            for (int j = 0; j < mycontacts[i].phones!.length; j++) {
              String phonenumber = mycontacts[i].phones![j].value as String;
              if (phonenumber.length != 11) {

@@ -24,7 +24,7 @@ class SignupPageFin extends GetView<SignupController> {
                   onPressed: () async {
 
                 List<FriendModel>? s=await findfriendwithcontact(controller.phoneCon.text);
-                s?.forEach((element) {
+                s.forEach((element) {
                 });
                 Get.to(const FriendAddPage());
 
