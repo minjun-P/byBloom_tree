@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 
-
-=======
->>>>>>> parent of 6cf3431 (Merge branch 'main' of https://github.com/minjun-P/byBloom_tree)
 import 'package:bybloom_tree/DBcontroller.dart';
 
 import 'package:bybloom_tree/auth/FriendModel.dart';
@@ -14,18 +10,11 @@ import 'package:bybloom_tree/auth/FriendAdd.dart';
 
 TextEditingController textfield=TextEditingController();
 class FriendAddPage extends StatefulWidget{
-<<<<<<< HEAD
+
 
 
   const FriendAddPage({
     Key? key,
-
-
-=======
-  FriendAddPage({
-    Key? key,
-
->>>>>>> parent of 6cf3431 (Merge branch 'main' of https://github.com/minjun-P/byBloom_tree)
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -38,26 +27,8 @@ class FriendState extends State<FriendAddPage> {
   FriendModel? friendtoadd = null;
   List<FriendModel> realpossiblefriends = [];
 
-<<<<<<< HEAD
-class FriendState extends State<FriendAddPage>{
-   FriendModel? friendtoadd=null;
 
-   FriendState({
-     Key? key,
-   }):super();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("친구검색"),),
-      body:
 
-            Container(
-
-              width: Get.width,
-              height: Get.height*0.8,
-
-              child: Column(
-=======
   FriendState({
     Key? key,
   }) :super();
@@ -88,13 +59,12 @@ class FriendState extends State<FriendAddPage>{
 
 
             child: Column(
->>>>>>> parent of 6cf3431 (Merge branch 'main' of https://github.com/minjun-P/byBloom_tree)
+
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
 
                 children: [
-<<<<<<< HEAD
-                  DbController()..isEmpty?Text("가입한 친구가없습니다."):Expanded(
+                  DbController().possiblefriends!=null?Text("가입한 친구가없습니다."):Expanded(
                     child: ListView.builder(
 
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -102,13 +72,13 @@ class FriendState extends State<FriendAddPage>{
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                           title: Text(
-                            friendincontact[index].name,
+                            DbController().possiblefriends![index].name,
                             style: TextStyle(
                                 fontSize: 18
                             ),
                           ),
                           leading: Image.asset(
-                              'assets/profile/${friendincontact[index].profileImage}.png'),
+                              'assets/profile/${DbController().possiblefriends![index].profileImage}.png'),
 
                           trailing: InkWell(
                             onTap: (){
@@ -120,18 +90,10 @@ class FriendState extends State<FriendAddPage>{
                               color: Colors.grey.shade500,),
                           ),
                         );
-                      }, itemCount: friendincontact.length,
+                      }, itemCount: DbController().possiblefriends!.length,
                     ),
                   ),
-                  Container(
-                      padding:EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
-                          border: Border.fromBorderSide(BorderSide(color:Colors.grey ,style: BorderStyle.solid,width: 3),
-                          )
-                      ),
-                      width: Get.width*0.7,
-=======
+
                   Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -144,12 +106,12 @@ class FriendState extends State<FriendAddPage>{
                           )
                       ),
                       width: Get.width * 0.7,
->>>>>>> parent of 6cf3431 (Merge branch 'main' of https://github.com/minjun-P/byBloom_tree)
+
                       child: Row(
                         children: [
                           InkWell(
 
-<<<<<<< HEAD
+
                           child:Icon(Icons.search),
                           onTap: () async {
                             if(textfield.text.length==11){
@@ -249,155 +211,3 @@ class FriendState extends State<FriendAddPage>{
 
         )
     );
-=======
-                            child: Icon(Icons.search),
-                            onTap: () async {
-                              if (textfield.text.length == 11) {
-                                friendtoadd =
-                                await findUserFromPhone(textfield.text);
-                              }
-                              else {
-                                friendtoadd =
-                                await findUserFromName(textfield.text);
-                              }
-                              setState(() {
-
-
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            width: Get.width * 0.5,
-                            child: TextFormField(
-                              decoration: InputDecoration(
-
-                                  labelText: "친구의 번호나 이름을 검색해보세요"
-                              ),
-                              controller: textfield,
-                            ),
-                          ),
-                        ],
-                      )),
-                  realpossiblefriends!.length != 0 ? Container(
-                    height: Get.height * 0.4,
-                    child: ListView.builder(
-
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              realpossiblefriends![index].name,
-                              style: TextStyle(
-                                  fontSize: 18
-                              ),
-                            ),
-                            leading: Image.asset(
-                                'assets/profile/${ realpossiblefriends![index]
-                                    .profileImage}.png'),
-
-                            trailing: InkWell(
-                              onTap: () {
-                                AddFriend(realpossiblefriends[index]);
-                              },
-                              child: Icon(Icons.person_add,
-                                color: Colors.grey.shade500,),
-                            ),
-                          );
-                        }, itemCount: realpossiblefriends!.length
-                    ),
-                  ) : Container(
-                    height: Get.height*0.4,
-                    child: Text('아직가입한친구가없네요'),
-                  ),
-
-
-                  SizedBox(
-                    height: 100,
-                  ),
-
-
-                  Container(
-                      child:
-                      friendtoadd == null ? Text("아직 가입하지 않은 친구네요.") :
-
-
-                      Container(
-                        width: Get.width * 0.7,
-                        height: Get.width * 0.3,
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadiusDirectional.all(
-                                  Radius.circular(20)),
-                              border: Border.fromBorderSide(BorderSide(
-                                  color: Colors.grey,
-                                  style: BorderStyle.solid,
-                                  width: 3))
-                          ),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Row(
-
-                                    children: [
-                                      CircleAvatar(backgroundColor: Colors.lime,
-                                        radius: 30,),
-                                      SizedBox(width: 20),
-
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start,
-                                        children: [
-                                          Text("${friendtoadd!.name}"),
-                                          Text(friendtoadd!.phoneNumber,
-                                            style: TextStyle(
-                                                color: Colors.grey),)
-                                        ],
-                                      )
-                                    ]
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    AddFriend(friendtoadd!);
-                                    Fluttertoast.showToast(
-                                        msg: "${friendtoadd!
-                                            .name}님 친구추가가 완료되었습니다.",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.grey,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0
-                                    );
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.person_add),
-
-                                    ],
-                                  ),
-                                )
-                              ]
-                          ),
-                        ),
-                      )
-
-                  )
-
->>>>>>> parent of 6cf3431 (Merge branch 'main' of https://github.com/minjun-P/byBloom_tree)
-
-                ]
-
-            )
-        )
-    );
-  }
-<<<<<<< HEAD
-=======
-}
-
-
->>>>>>> parent of 6cf3431 (Merge branch 'main' of https://github.com/minjun-P/byBloom_tree)
