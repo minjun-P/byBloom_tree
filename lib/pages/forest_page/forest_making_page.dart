@@ -51,7 +51,7 @@ class Forest_making_state extends State<ForestMakingPage> {
               ),
             ),
           );
-        }, child: Text('숲만들기',style: TextStyle(color: Colors.grey),))],
+        }, child: const Text('숲만들기',style: TextStyle(color: Colors.grey),))],
         title: const Text('숲에 함께할 친구고르기',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         backgroundColor: Colors.white,
         toolbarHeight: 50,
@@ -61,50 +61,50 @@ class Forest_making_state extends State<ForestMakingPage> {
           Column(
 
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
 
               Container(
-                padding:EdgeInsets.all(10),
-                decoration: BoxDecoration(
+                padding:const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
                   borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
                   border: Border.fromBorderSide(BorderSide(color:Colors.grey ,style: BorderStyle.solid,width: 3),
                   )
                 ),
                 width: Get.width*0.7,
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
 
                       labelText: "숲의 이름을 지어주세요"
                     ),
                     controller: s,
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              Container(
+              SizedBox(
                 height: Get.height*0.6,
                 child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
 
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
+                      return SizedBox(
                         width: 100,
                         height: 100,
                         child: ListTile(
                           title: Text(
                             DbController.to.currentUserModel.value.friendList[index].name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18
                             ),
                           ),
-                          leading: CircleAvatar(backgroundColor: Colors.lime,),
+                          leading: const CircleAvatar(backgroundColor: Colors.lime,),
                           trailing:InkWell(
                            child:checkbox[index]?
 
-                           Icon( Icons.check_circle, color: Colors.lightGreen):
-                           Icon( Icons.check_circle, color: Colors.grey),
+                           const Icon( Icons.check_circle, color: Colors.lightGreen):
+                           const Icon( Icons.check_circle, color: Colors.grey),
                          onTap: () async {
                              setState(()  {
                                checkbox[index]=!checkbox[index];
@@ -116,7 +116,6 @@ class Forest_making_state extends State<ForestMakingPage> {
                              if(checkbox[index]==false){
                                String? uid=await finduidFromPhone(DbController.to.currentUserModel.value.friendList[index].phoneNumber);
                                userlist.remove(types.User(id:uid!));}
-                             ;
                              }
                               )
                       )

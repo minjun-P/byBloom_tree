@@ -38,7 +38,7 @@ class Friend_deleting_state extends State<FriendDeletingPage> {
       Column(
 
         children: [
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
 
@@ -55,15 +55,15 @@ class Friend_deleting_state extends State<FriendDeletingPage> {
                     child: ListTile(
                         title: Text(
                           DbController.to.currentUserModel.value.friendList[index].name,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 18
                           ),
                         ),
-                        leading: CircleAvatar(backgroundColor: Colors.lime,),
+                        leading: const CircleAvatar(backgroundColor: Colors.lime,),
                         trailing:InkWell(
 
 
-                           child: Icon( MdiIcons.delete),
+                           child: const Icon( MdiIcons.delete),
 
                             onTap: ()  {
                                   deleteFriend(DbController.to.currentUserModel.value.friendList[index]) ;
