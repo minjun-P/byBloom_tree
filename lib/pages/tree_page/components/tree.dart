@@ -28,7 +28,7 @@ class Tree extends GetView<TreeController>{
           top: 0,
             child: controller.level<8
                 ?Image.asset('assets/tree/${controller.level}.gif',width: Get.width*0.9,fit: BoxFit.fitWidth)
-                :CircleAvatar(backgroundColor: Colors.red,radius: 100,child: Text('만렙이올시다'),)
+                :const CircleAvatar(backgroundColor: Colors.red,radius: 100,child: Text('만렙이올시다'),)
         )
           ,),
         Lottie.asset(

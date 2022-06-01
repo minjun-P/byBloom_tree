@@ -19,10 +19,10 @@ class PriorMissionB extends GetView<MissionController>{
           future: FirebaseFirestore.instance.collection('missions').orderBy('day',).get(),
           builder: (context, snapshot) {
             if (snapshot.hasError){
-              return Text('에러남');
+              return const Text('에러남');
             }
             if(snapshot.connectionState==ConnectionState.waiting){
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
             List<QueryDocumentSnapshot> docs = snapshot.data!.docs;
             // today doc 빼고, 오늘 이전인 doc 만 필터링
@@ -43,12 +43,12 @@ class PriorMissionB extends GetView<MissionController>{
               children: filteredDocs.map((document){
 
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.grey,
                         blurRadius: 2,
@@ -61,13 +61,13 @@ class PriorMissionB extends GetView<MissionController>{
                         .collection('category').doc('B').get(),
                     builder: (context, snapshot){
                       if (snapshot.hasError){
-                        return Text('에러남');
+                        return const Text('에러남');
                       }
                       if(snapshot.connectionState==ConnectionState.waiting){
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       }
                       return GestureDetector(
-                          child: Text(snapshot.data!.data()!['제목'],style: TextStyle(fontSize: 19,color: Color(0xff4A4A4A)),),
+                          child: Text(snapshot.data!.data()!['제목'],style: const TextStyle(fontSize: 19,color: Color(0xff4A4A4A)),),
                         onTap: (){
                           if (snapshot.data!.data()!['객관식']){
                             Get.to(()=>SelectionAnswer(prior: true,missionData: snapshot.data!.data()!,day: int.parse(document.id.replaceFirst('day', '')),));

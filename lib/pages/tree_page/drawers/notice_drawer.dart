@@ -13,20 +13,20 @@ class NoticeDrawer extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
       builder: (context, snapshot){
         if (snapshot.hasError){
-          return Text('error');
+          return const Text('error');
         }
         if (snapshot.connectionState == ConnectionState.waiting){
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         // user document 를 map 으로 변환
         Map<String,dynamic> data = snapshot.data!.data() as Map<String,dynamic>;
         if (data['waterFrom']==null){
-          return Text('');
+          return const Text('');
         } else {
           List list = data['waterFrom'];
           return ListView(
               children: [
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 ...list.map((element){
                   //  element 는 개별 Map - each 물 준 기록
                   String name = element['name'];
@@ -37,15 +37,8 @@ class NoticeDrawer extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text.rich(
-                            TextSpan(
-                                children: [
-                                  TextSpan(text: name, style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                                  TextSpan(text:'님이 물을 주고 가셨어요!!')
-                                ]
-                            )
-                        ),
-                        Text('${date.month}/${date.day}', style: TextStyle(color: Colors.grey, fontSize: 14),)
+                        Text('$name님이 물을 주고 가셨어요',style: const TextStyle(color: Color(0xff616161)),),
+                        Text('${date.month}/${date.day}', style: const TextStyle(color: Colors.grey, fontSize: 14),)
                       ],
                     ),
                   );

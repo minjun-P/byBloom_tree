@@ -1,6 +1,4 @@
 import 'package:bybloom_tree/auth/login_controller.dart';
-import 'package:bybloom_tree/main_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -32,10 +30,10 @@ class loginScreen extends GetView<LoginController> {
        crossAxisAlignment: CrossAxisAlignment.start,
        children: [
 
-         SizedBox(height: 30,),
-         Text('바이블룸 로그인',
+         const SizedBox(height: 30,),
+         const Text('바이블룸 로그인',
            style: TextStyle(color: Colors.green, fontSize: 40 ,fontWeight: FontWeight.bold ),),
-         SizedBox(height: 20,),
+         const SizedBox(height: 20,),
          Expanded(
            child: ListView(
              children: [
@@ -69,7 +67,7 @@ class loginScreen extends GetView<LoginController> {
                          ],
                        ),
                      ),
-                     SizedBox(height: 20,),
+                     const SizedBox(height: 20,),
                      Stack(
                        children: [
                          Form(
@@ -112,7 +110,7 @@ class loginScreen extends GetView<LoginController> {
                                    build: (context, time){
                                      return Text(
                                        time.toInt().toString()+' 초',
-                                       style: TextStyle(
+                                       style: const TextStyle(
                                            color: Colors.blue,
                                            fontSize: 14
                                        ),
@@ -143,7 +141,7 @@ class loginScreen extends GetView<LoginController> {
                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                    children: <Widget>[
                      TextButton(
-                         child: Text("인증번호받기"),
+                         child: const Text("인증번호받기"),
                          onPressed: () {
                            if(controller.loginpageKey1.currentState!.validate()){
                              loginWithPhone();
@@ -157,7 +155,7 @@ class loginScreen extends GetView<LoginController> {
 
                      ),
                      TextButton(
-                         child: Text("인증하고 로그인"),
+                         child: const Text("인증하고 로그인"),
                          onPressed: () {
                            if (controller.loginpageKey2.currentState!.validate()){
                              verifyOTP();
@@ -195,7 +193,7 @@ class loginScreen extends GetView<LoginController> {
        },
        codeSent: (String verificationId, int? resendToken) {
          verificationID = verificationId;
-           AlertDialog(
+           const AlertDialog(
              content: Text("인증번호 혹은 전화번호가 잘못되었습니다."),
            );
 

@@ -1,10 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bybloom_tree/notification_controller.dart';
-import 'package:bybloom_tree/pages/tree_page/Resignpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:get/get.dart';
 import 'package:bybloom_tree/auth/authservice.dart';
 import '../../siginup_page/pages/signup_page_main.dart';
@@ -23,47 +21,43 @@ class MenuDrawer extends StatelessWidget {
         child: Column(
 
           children: [
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
 
             Container(
-              padding: EdgeInsets.only(top:50,bottom: 20),
+              padding: const EdgeInsets.only(top:50,bottom: 20),
               child: InkWell(
                   onTap: (){
                     authservice.logout();
-                    Get.offAll(() => SignupPageMain(),
+                    Get.offAll(() => const SignupPageMain(),
                         transition: Transition.rightToLeftWithFade);
 
                   }, child:
 
               Column(
-                children: [
-                  Icon(Icons.logout),
-                  Text('로그아웃'),
+                children: const [
+                  Icon(Icons.logout,color: Color(0xff959595),),
+                  Text('로그아웃',style: TextStyle(color: Color(0xff959595)),),
                 ],
               )),
             ),
             Container(
-              padding: EdgeInsets.only(top:20,bottom: 20),
+              padding: const EdgeInsets.only(top:20,bottom: 20),
               child: InkWell(
                   onTap: (){
-
                     showresignPopup(context);
-
-
                   }, child:
-
               Column(
-                children: [
-                  Icon(Icons.no_accounts),
-                  Text('회원탈퇴'),
+                children: const [
+                  Icon(Icons.no_accounts,color: Color(0xff959595)),
+                  Text('회원탈퇴',style: TextStyle(color: Color(0xff959595)),),
                 ],
               )
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top:20,bottom: 20),
+              padding: const EdgeInsets.only(top:20,bottom: 20),
               child: Obx(()=>InkWell(
                   onTap: (){
                     Get.find<NotificationController>().pushalarmtrue.value=!Get.find<NotificationController>().pushalarmtrue.value;
@@ -73,8 +67,8 @@ class MenuDrawer extends StatelessWidget {
               Column(
                 children: [
                   Icon(Icons.doorbell,
-                    color: Get.find<NotificationController>().pushalarmtrue.value ? Colors.black:Colors.grey,),
-                  Text('푸쉬알람변경'),
+                    color: Get.find<NotificationController>().pushalarmtrue.value ? Colors.black:const Color(0xff959595),),
+                  const Text('푸쉬알람변경',style: TextStyle(color: Color(0xff959595)),),
                 ],
               ))
               ),
@@ -122,12 +116,12 @@ deleteallroomfromuser() {
       .where('userIds', arrayContains: FirebaseAuth.instance.currentUser!.uid)
       .orderBy('updatedAt', descending: true).snapshots();
   doc.forEach((element) {
-    element.docs.forEach((element) {
+    for (var element in element.docs) {
       var id=element.id;
       FirebaseFirestore.instance.collection("rooms").doc(id).update({
 
         "userIds":FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid]) });
-    });
+    }
   });
 }
 

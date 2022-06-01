@@ -23,10 +23,10 @@ class ProfileController extends GetxController with GetTickerProviderStateMixin{
         return temp.isNotEmpty;
       }).toList();
       int sum = 0;
-      filteredList.forEach((document){
+      for (var document in filteredList) {
         Map map = document.data() as Map;
         sum +=map.length;
-      });
+      }
       return sum;
     }));
 

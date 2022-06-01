@@ -22,13 +22,13 @@ Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
              }
              if (phonenumber != mynumber) {
                phoneenumberlist.add(phonenumber);
-             };
+             }
            }
-         };
+         }
        }
         var s = await FirebaseFirestore.instance.collection('users').get();
         List dbphoneenumberlist=[];
-        s.docs.forEach((element) {
+        for (var element in s.docs) {
           if(phoneenumberlist.contains(element.data()['phoneNumber'])){
             friendalreadysignedin.add(FriendModel(
                 tokens: element.data()['tokens'],
@@ -39,8 +39,9 @@ Future<List<FriendModel>?>  findfriendwithcontact(String mynumber) async {
                 name: element.data()['name'],
                 exp: element.data()['exp'],
                 level: element.data()['level']));
-        };});
-      return friendalreadysignedin;} // 허락해달라고 팝업띄우는 코드
+        }}
+      return friendalreadysignedin;
+} // 허락해달라고 팝업띄우는 코드
 
     ///스트링 formatter추가
 ///
@@ -54,6 +55,7 @@ Future<List<Contact>?>getPermission() async{
   } else if (status.isDenied){
     Permission.contacts.request(); // 허락해달라고 팝업띄우는 코드
   }
+  return null;
 }
 
 
@@ -70,13 +72,13 @@ Future<bool> AddFriendfromPhone(String phonenum) async {
         .getCurrentUser()
         ?.uid).update({'friendPhoneList':temp});
      return true;
-  };
+  }
   return false;
 }
 
 Future<bool> AddFriend(FriendModel friendtoadd) async {
 
-  if (friendtoadd!=null&& !DbController.to.currentUserModel.value.friendPhoneList.contains(friendtoadd.phoneNumber)){
+  if (!DbController.to.currentUserModel.value.friendPhoneList.contains(friendtoadd.phoneNumber)){
 
 
     List<String>?temp=DbController.to.currentUserModel.value.friendPhoneList;
@@ -88,13 +90,13 @@ Future<bool> AddFriend(FriendModel friendtoadd) async {
         .getCurrentUser()
         ?.uid).update({'friendPhoneList':temp});
     return true;
-  };
+  }
   return false;
 }
 ///친구추가하는 로직!!
 Future<bool> deleteFriend(FriendModel friendtoadd) async {
 
-  if (friendtoadd!=null&& DbController.to.currentUserModel.value.friendPhoneList.contains(friendtoadd.phoneNumber)){
+  if (DbController.to.currentUserModel.value.friendPhoneList.contains(friendtoadd.phoneNumber)){
 
 
     DbController.to.currentUserModel.value.friendPhoneList.remove(friendtoadd.phoneNumber);
@@ -103,7 +105,7 @@ Future<bool> deleteFriend(FriendModel friendtoadd) async {
         .getCurrentUser()
         ?.uid).update({'friendPhoneList': DbController.to.currentUserModel.value.friendPhoneList});
     return true;
-  };
+  }
   return false;
 }
 ///친구삭제하는 로직

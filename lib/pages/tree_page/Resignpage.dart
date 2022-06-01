@@ -1,7 +1,4 @@
-import 'package:bybloom_tree/auth/authservice.dart';
-import 'package:bybloom_tree/main_controller.dart';
 import 'package:bybloom_tree/pages/siginup_page/components/signup_textfield.dart';
-import 'package:bybloom_tree/pages/siginup_page/pages/siginup_page_fin.dart';
 import 'package:bybloom_tree/pages/siginup_page/signup_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +27,7 @@ class ResignPagePhone extends GetView<SignupController> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title:  Text('회원탈퇴',
+          title:  const Text('회원탈퇴',
             style: TextStyle(color: Colors.black, fontSize: 20),),
         ),
         body: Padding(
@@ -38,10 +35,10 @@ class ResignPagePhone extends GetView<SignupController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30,),
-              Text('핸드폰인증하기',
+              const SizedBox(height: 30,),
+              const Text('핸드폰인증하기',
                 style: TextStyle(color: Colors.black, fontSize: 20),),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Expanded(
                 child: ListView(
                   children: [
@@ -115,7 +112,7 @@ class ResignPagePhone extends GetView<SignupController> {
                                                 build: (context, time){
                                                   return Text(
                                                     time.toInt().toString()+' 초',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.blue,
                                                         fontSize: 14
                                                     ),
@@ -141,11 +138,11 @@ class ResignPagePhone extends GetView<SignupController> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(width: 25,),
+                                const SizedBox(width: 25,),
                                 Column(
                                   children: [
                                     OutlinedButton(
-                                        child: Text(
+                                        child: const Text(
                                           '인증번호 받기',
                                           style: TextStyle(color: Colors.black),
                                         ),
@@ -158,7 +155,7 @@ class ResignPagePhone extends GetView<SignupController> {
 
                                         },
                                         style: OutlinedButton.styleFrom(
-                                            side: BorderSide(color: Colors.green,width: 2)
+                                            side: const BorderSide(color: Colors.green,width: 2)
                                         )
                                     ),
                                     Obx(()=>
@@ -180,12 +177,12 @@ class ResignPagePhone extends GetView<SignupController> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 20,),
+                            const SizedBox(height: 20,),
                             Obx(()=>
                                 Visibility(
                                   visible: controller.phonesuc.value,
                                   child: OutlinedButton(
-                                    child: Text('회원탈퇴'),
+                                    child: const Text('회원탈퇴'),
                                     onPressed: ()async {
                                       Get.offAllNamed('/login');
                                       // Db room doc 사제
@@ -217,7 +214,7 @@ class ResignPagePhone extends GetView<SignupController> {
                                   ),
                                 ),
                             ),
-                            SizedBox(height: 20,),
+                            const SizedBox(height: 20,),
                           ]
                       ),
                     ),

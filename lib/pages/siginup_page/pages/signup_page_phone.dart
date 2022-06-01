@@ -31,11 +31,11 @@ class SignupPagePhone extends GetView<SignupController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SignupGauge(minusWidth: 80),
-              SizedBox(height: 30,),
-              Text('휴대폰 본인 인증',
+              const SignupGauge(minusWidth: 80),
+              const SizedBox(height: 30,),
+              const Text('휴대폰 본인 인증',
                 style: TextStyle(color: Colors.black, fontSize: 20),),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               Expanded(
                 child: ListView(
                   children: [
@@ -109,7 +109,7 @@ class SignupPagePhone extends GetView<SignupController> {
                                                 build: (context, time){
                                                   return Text(
                                                     time.toInt().toString()+' 초',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.blue,
                                                       fontSize: 14
                                                     ),
@@ -135,11 +135,11 @@ class SignupPagePhone extends GetView<SignupController> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(width: 25,),
+                                const SizedBox(width: 25,),
                                 Column(
                                   children: [
                                     OutlinedButton(
-                                      child: Text(
+                                      child: const Text(
                                           '인증번호 받기',
                                         style: TextStyle(color: Colors.black),
                                       ),
@@ -152,7 +152,7 @@ class SignupPagePhone extends GetView<SignupController> {
 
                                       },
                                         style: OutlinedButton.styleFrom(
-                                            side: BorderSide(color: Colors.green,width: 2)
+                                            side: const BorderSide(color: Colors.green,width: 2)
                                         )
                                     ),
                                     Obx(()=>
@@ -174,12 +174,12 @@ class SignupPagePhone extends GetView<SignupController> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 20,),
+                            const SizedBox(height: 20,),
                             Obx(()=>
                                 Visibility(
                                   visible: controller.phonesuc.value,
                                   child: OutlinedButton(
-                                    child: Text('회원가입 완료'),
+                                    child: const Text('회원가입 완료'),
                                     onPressed: (){
                                       // 디비에 계정 등록
                                       authservice.register(
@@ -193,12 +193,12 @@ class SignupPagePhone extends GetView<SignupController> {
                                           // 이미지 name.png 을 넣어주기
                                           profileImage: controller.profileList[controller.selectedProfile.value]
                                       );
-                                      Get.offAll(()=>SignupPageFin());
+                                      Get.offAll(()=>const SignupPageFin());
                                     },
                                   ),
                                 ),
                             ),
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                           ]
                       ),
                     ),

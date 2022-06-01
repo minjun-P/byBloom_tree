@@ -94,31 +94,22 @@ class DbController extends GetxController{
     // currentUserModel이 바뀔 때마다, 호출
     ever(currentUserModel,(_){
       _ as UserModel;
-      print('currentUserModel 업데이트');
       uploadFriend(currentUserModel.value);
 
     });
     possiblefriends=await findfriendwithcontact(currentUserModel.value.phoneNumber);
-    print("유저업데이트완료");
   }
 
   // 친구 만드는 메소드
-  void uploadFriend(UserModel currentUser){
-    try {
-      // 이미 만들어진 friendPhoneList 불러오고
-      List<String> friendPhoneList = currentUser.friendPhoneList;
-      // friendPhoneList 로 for 문
-      friendPhoneList.forEach((phoneNum) async {
-
-        FriendModel? myFriend= await findUserFromDb(phoneNum);
-        if(myFriend!=null){
-          currentUser.friendList.add(myFriend);
-        }
-
-      });
-
-    }catch(error){
-      print(error);
+  void uploadFriend(UserModel currentUser)async{
+    // 이미 만들어진 friendPhoneList 불러오고
+    List<String> friendPhoneList = currentUser.friendPhoneList;
+    // friendPhoneList 로 for 문
+    for (var phoneNum in friendPhoneList) {
+      FriendModel? myFriend= await findUserFromDb(phoneNum);
+      if(myFriend!=null){
+        currentUser.friendList.add(myFriend);
+      }
     }
   }
   // 디비에서 phoneNum 가져와서 하나하나 쿼리 => FriendModel 리턴

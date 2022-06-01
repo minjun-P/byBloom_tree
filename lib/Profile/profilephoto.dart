@@ -16,7 +16,7 @@ String? downloadURL;
 Future<String?> AddProfilePhoto() async {
   await getImage(true);
   print("이미지불러오기");//갤러리에서 사진가져오기
-  Addphoto s= new Addphoto();
+  Addphoto s= Addphoto();
   print(_photo);
   String? uploadsuccess= await s.uploadPhoto(_photo); //db에 업로드
   downloadURL= await storage.ref(uploadsuccess).getDownloadURL();

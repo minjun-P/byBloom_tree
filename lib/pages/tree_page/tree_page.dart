@@ -87,7 +87,7 @@ class TreePage extends GetView<TreeController> {
   }
   Widget buildCustomDrawer({required Widget child, bool left=true}){
     return Drawer(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: const Color(0xffF9F9F9),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             //좌측이냐 아니냐 따라서 값 다르게 매기기

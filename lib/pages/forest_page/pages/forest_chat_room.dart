@@ -7,8 +7,6 @@ import 'package:get/get.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
@@ -18,9 +16,7 @@ import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:bybloom_tree/pages/forest_page/forest_controller.dart';
-import 'package:bybloom_tree/pages/tree_page/tree_controller.dart' as tree;
 
-import '../forest_model.dart';
 
 /// 채팅방 UI
 /// 대강 만들어 놓긴 했는데 보내는 버튼도 안 넣어놨고
@@ -28,14 +24,14 @@ import '../forest_model.dart';
 /// 채팅 목록은 forest_model에서 가져왔으.
 
 class ForestChatRoom extends StatefulWidget {
-  ForestChatRoom({
+  const ForestChatRoom({
     Key? key,
     required this.room
   }) : super(key: key);
   final types.Room room;
   @override
   State<StatefulWidget> createState() {
-    return ForestChatState( room: this.room);
+    return ForestChatState( room: room);
   }
 }
 
@@ -98,21 +94,21 @@ class ForestChatState extends State<ForestChatRoom>{
     }
     return Scaffold(
       key: _ScaffoldKey,
-      endDrawer: buildCustomDrawer(child: ChatRoomDrawer(room: this.room),left: false),
+      endDrawer: buildCustomDrawer(child: ChatRoomDrawer(room: room),left: false),
       appBar: AppBar(
-        leading: IconButton(onPressed:(){ Navigator.pop(context);} ,icon: Icon(Icons.arrow_back),),
-        title: Text(this.room.name??""),
+        leading: IconButton(onPressed:(){ Navigator.pop(context);} ,icon: const Icon(Icons.arrow_back),),
+        title: Text(room.name??""),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: [ IconButton(onPressed: (){
           _ScaffoldKey.currentState?.openEndDrawer();
-        }, icon: Icon(Icons.folder))],
+        }, icon: const Icon(Icons.folder))],
       ),
 
       backgroundColor: const Color(0xffFAE7E2),
       body: StreamBuilder<types.Room>(
-        initialData: this.room,
-        stream: FirebaseChatCore.instance.room(this.room.id),
+        initialData: room,
+        stream: FirebaseChatCore.instance.room(room.id),
         builder: (context, snapshot) {
           return StreamBuilder<List<types.Message>>(
             initialData: const [],
@@ -125,18 +121,18 @@ class ForestChatState extends State<ForestChatRoom>{
 
                   customMessageBuilder: (types.CustomMessage s, {required int messageWidth} )=>
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         color: Colors.white,
-                        child: Text('${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다',style: TextStyle(color: Colors.black),),
+                        child: Text('${DbController.to.currentUserModel.value.name}님이 오늘의 미션을 모두 완료하셨습니다',style: const TextStyle(color: Colors.black),),
                         width: Get.width*0.8,
                       ),
 
 
                   messages: snapshot.data ?? [],
                   showUserNames: true,
-                  theme: DefaultChatTheme(
+                  theme: const DefaultChatTheme(
                       userNameTextStyle: TextStyle(color:Colors.black),
-                      backgroundColor: const Color(0xffFAE7E2),
+                      backgroundColor: Color(0xffFAE7E2),
                       inputBackgroundColor: Color(0xffF0F0F0),
                       primaryColor:Colors.white,
                       inputTextColor: Colors.black,
@@ -162,7 +158,7 @@ class ForestChatState extends State<ForestChatRoom>{
       ),
     );
   }
-  RxBool _isAttachmentUploading =RxBool(false);
+  final RxBool _isAttachmentUploading =RxBool(false);
 
   void _setAttachmentUploading(bool uploading) {
 
@@ -193,7 +189,7 @@ class ForestChatState extends State<ForestChatRoom>{
           uri: uri,
         );
 
-        FirebaseChatCore.instance.sendMessage(message, this.room.id);
+        FirebaseChatCore.instance.sendMessage(message, room.id);
         _setAttachmentUploading(false);
       } finally {
         _setAttachmentUploading(false);
@@ -231,7 +227,7 @@ class ForestChatState extends State<ForestChatRoom>{
 
         FirebaseChatCore.instance.sendMessage(
           message,
-          this.room.id,
+          room.id,
         );
         _setAttachmentUploading(false);
       } finally {
@@ -267,13 +263,13 @@ class ForestChatState extends State<ForestChatRoom>{
       ) {
     final updatedMessage = message.copyWith(previewData: previewData);
 
-    FirebaseChatCore.instance.updateMessage(updatedMessage, this.room.id);
+    FirebaseChatCore.instance.updateMessage(updatedMessage, room.id);
   }
 
   void _handleSendPressed(types.PartialText message) {
     FirebaseChatCore.instance.sendMessage(
       message,
-      this.room.id,
+      room.id,
     );
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"updatedAt":DateTime.now()});
     FirebaseFirestore.instance.collection('rooms').doc(room.id).update({"lastMessage":message.text});
@@ -449,38 +445,38 @@ class ChatRoomDrawer extends StatelessWidget {
           children: [
 
             Container(
-                padding:EdgeInsets.all(30)
+                padding:const EdgeInsets.all(30)
                 ,child: Column(
                   children: [
-                    SizedBox(height: 100,),
-                    Text('숲구성원',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                    Container(
+                    const SizedBox(height: 100,),
+                    const Text('숲구성원',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                    SizedBox(
                       height: Get.height*0.5,
-                      child: userexceptme.length>0?ListView.builder(itemBuilder:
+                      child: userexceptme.isNotEmpty?ListView.builder(itemBuilder:
                    (BuildContext context, int index) {
 
                       return ListTile(
-                     title: ((userexceptme[index].id=="unknown")?Text("탈퇴한회원"):Text(
+                     title: ((userexceptme[index].id=="unknown")?const Text("탈퇴한회원"):Text(
                      userexceptme[index].lastName??""+(userexceptme[index].firstName??""),
-                     style: TextStyle(
+                     style: const TextStyle(
                      fontSize: 18
                      ),
                      )),
                      leading:Image.asset('assets/profile/${userexceptme[index].imageUrl}.png') ,
                       );
                       },itemCount: userexceptme.length): Container(
-                        padding: EdgeInsets.all(30),
-                          child: Text("아직구성원이없어요")),
+                        padding: const EdgeInsets.all(30),
+                          child: const Text("아직구성원이없어요")),
                               )
                   ],
                 )),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
            Row(
              children: [
             Container(
-              padding: EdgeInsets.only(top:20,bottom: 20),
+              padding: const EdgeInsets.only(top:20,bottom: 20),
               child: InkWell(
                   onTap: (){
 
@@ -492,9 +488,9 @@ class ChatRoomDrawer extends StatelessWidget {
                   }, child:
 
               Container(
-                padding: EdgeInsets.all(30),
+                padding: const EdgeInsets.all(30),
                 child: Column(
-                  children: [
+                  children: const [
                     Icon(Icons.logout),
                     Text('방나가기'),
                   ],

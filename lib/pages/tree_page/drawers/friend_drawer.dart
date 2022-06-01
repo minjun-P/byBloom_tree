@@ -30,7 +30,7 @@ class FriendDrawer extends GetView<TreeController> {
               ,width: 80,height: 80,)
 
             ,
-            title: Text(DbController.to.currentUserModel.value.name,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
+            title: Text(DbController.to.currentUserModel.value.name,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 21),),
 
           ),
         ) ,
@@ -40,7 +40,7 @@ class FriendDrawer extends GetView<TreeController> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             InkWell(
-              child:Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
+              child:const Text('내 친구 목록', style: TextStyle(color: Colors.grey, fontSize: 14),),
               onTap: () async {
 
                 List<FriendModel>? friendlist=await findfriendwithcontact(DbController.to.currentUserModel.value.phoneNumber);
@@ -79,16 +79,21 @@ class FriendDrawer extends GetView<TreeController> {
 
             GestureDetector(
               onTap: (){
-
-              Get.to(()=>const FriendAddPage());
-
+                Get.to(()=>const FriendAddPage());
               },
 
-              child: Row(
-                children: const [
-                  Icon(Icons.search, color: Colors.grey,),
-                  Text('친구 검색',style: TextStyle(color: Colors.grey, fontSize: 14),)
-                ],
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xffEDEDED),
+                  borderRadius: BorderRadius.circular(15)
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                child: Row(
+                  children: const [
+                    Icon(Icons.search, color: Colors.grey,),
+                    Text('친구 찾기',style: TextStyle(color: Colors.grey, fontSize: 14),)
+                  ],
+                ),
               ),
             )
           ],
@@ -108,7 +113,7 @@ class FriendDrawer extends GetView<TreeController> {
                   child: ListTile(
                     title: Text(
                       DbController.to.currentUserModel.value.friendList[index].name,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 18
                       ),
                     ),

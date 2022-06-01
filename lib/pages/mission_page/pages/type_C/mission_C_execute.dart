@@ -29,7 +29,7 @@ class MissionCExecute extends GetView<MissionCController> {
                     ),
                   )
             ),
-            SizedBox(width: 20,)
+            const SizedBox(width: 20,)
           ],
         ),
         body: Padding(
@@ -40,8 +40,8 @@ class MissionCExecute extends GetView<MissionCController> {
             minLines: null,
             maxLines: null,
             cursorColor: Colors.black,
-            style: TextStyle(fontSize: 20),
-            decoration: InputDecoration(
+            style: const TextStyle(fontSize: 20),
+            decoration: const InputDecoration(
               hintText: '오늘 하루 감사했던 것들을 적어주세요',
               border: InputBorder.none
             ),

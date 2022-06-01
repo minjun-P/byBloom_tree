@@ -32,15 +32,15 @@ class ForestPage extends GetView<ForestController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('숲',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-        actions: [Text('숲만들기'),IconButton(onPressed:(){
+        actions: [const Text('숲만들기'),IconButton(onPressed:(){
 
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ForestMakingPage()),
+              MaterialPageRoute(builder: (context) => const ForestMakingPage()),
             );
 
 
-        }, icon: Icon(
+        }, icon: const Icon(
           Icons.add_box))],
         backgroundColor: Colors.white,
         toolbarHeight: 80,
@@ -52,7 +52,7 @@ class ForestPage extends GetView<ForestController> {
         initialData: const [],
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
+            return const Center(
             child:Text("아직 가입한 숲이없어요"));
 
           }
@@ -75,12 +75,12 @@ class ForestPage extends GetView<ForestController> {
                 }
                 else if (DbController.to.currentUserModel.value.uid==room.users[0].id) {
                   uid=room.users[1].id;}
-                 DbController.to.currentUserModel.value.friendList.forEach((element) {
+                 for (var element in DbController.to.currentUserModel.value.friendList) {
                     if(element.uid==uid){
                       name=element.name;
                       imageUrl=element.profileImage;
                     }
-                 });
+                 }
                 }
 
 
@@ -130,7 +130,7 @@ class ForestPage extends GetView<ForestController> {
                   height: 80,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(image: AssetImage('assets/profile/${imageUrl}.png')),
+                      image: DecorationImage(image: AssetImage('assets/profile/$imageUrl.png')),
                       ))  ,
                       const SizedBox(width: 15,),
                       Expanded(
@@ -141,7 +141,7 @@ class ForestPage extends GetView<ForestController> {
                             Text(name,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
                             Obx(
                               ()=> Text(
-                               controller.lastMessages[room.id]!=null?controller.lastMessages[room.id]:"최근메시지없",
+                               controller.lastMessages[room.id] ?? "최근메시지없",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(fontSize: 14),
@@ -165,7 +165,7 @@ class ForestPage extends GetView<ForestController> {
                                 borderRadius: BorderRadius.circular(10)
                             ),
                             alignment: Alignment.center,
-                            child: Text("0",style: const TextStyle(color: Colors.white,fontSize: 14),),
+                            child: const Text("0",style: TextStyle(color: Colors.white,fontSize: 14),),
                           )
                         ],
                       )

@@ -18,15 +18,15 @@ class SignupPageFin extends GetView<SignupController> {
             mainAxisSize: MainAxisSize.min,
             children: [
 
-              Text('이제 연락처로\n 친구들을 찾아보아요',style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
+              const Text('이제 연락처로\n 친구들을 찾아보아요',style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
               /// 연락처연동해서 가입자중 친구리스트만 받아와서 이를 리스트타일로 뿌려주는 로직구현
-              SizedBox(height: 40,),
+              const SizedBox(height: 40,),
               OutlinedButton(
                   onPressed: () async {
-                Get.to(FriendAddPage( ));
+                Get.to(const FriendAddPage( ));
                 List<FriendModel>? s=await findfriendwithcontact(controller.phoneCon.text);
-                s!.forEach((element) {
-                });
+                for (var element in s!) {
+                }
                 Get.to(const FriendAddPage());
 
 

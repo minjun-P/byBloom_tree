@@ -32,7 +32,7 @@ void main() async {
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
   // 국제화 사용하기 위해선 date formatting 필수
-  initializeDateFormatting().then((_)=>runApp(MyApp()));
+  initializeDateFormatting().then((_)=>runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
